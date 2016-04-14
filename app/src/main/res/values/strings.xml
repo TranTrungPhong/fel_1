@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">EnglishLearning</string>
+    <string name="username_login">Username</string>
+    <string name="password_login">Password</string>
+    <string name="titleApp">E-Learning</string>
+    <string name="text_login">Log In</string>
+    <string name="text_SignUp">Sign Up</string>
+    <string name="sign_up_title">Sign Up</string>
+    <string name="remember_login">Remenber log in</string>
+</resources>
