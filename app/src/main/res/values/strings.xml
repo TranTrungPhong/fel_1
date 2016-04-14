@@ -1,10 +1,21 @@
 <resources>
     <string name="app_name">EnglishLearning</string>
-    <string name="username_login">Username</string>
+    <string name="username_login">Email</string>
     <string name="password_login">Password</string>
     <string name="titleApp">E-Learning</string>
     <string name="text_login">Log In</string>
     <string name="text_SignUp">Sign Up</string>
     <string name="sign_up_title">Sign Up</string>
     <string name="remember_login">Remenber log in</string>
+    <string name="error_login">Có lỗi xảy ra</string>
+    <string name="login_done">Đăng nhập thành công</string>
+    <string name="tk_khongTonTai">Tài khoản không tồn tại.</string>
+    <string name="Exception">Exception</string>
+    <string name="StackTrace">StackTrace</string>
+    <string name="thongbao">Thông báo</string>
+    <string name="loading">Loading</string>
+    <string name="not_internet">Không có kết nối mạng !</string>
+    <string name="content_type">Content-Type</string>
+    <string name="application_json">application/json</string>
+    <string name="ok">OK</string>
 </resources>
