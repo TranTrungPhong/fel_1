@@ -17,6 +17,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.LoginActivity" android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

@@ -18,4 +18,13 @@
     <string name="content_type">Content-Type</string>
     <string name="application_json">application/json</string>
     <string name="ok">OK</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="confirmation_password">Confirmation password</string>
+    <string name="register">Register</string>
+    <string name="error_length_password">Password must least 6 character!</string>
+    <string name="error_password_confimation">Password confirmation not match!</string>
+    <string name="error_email">Please enter correct email !</string>
+    <string name="register_error">Register Error</string>
+    <string name="register_successfully">Register successfully!</string>
 </resources>

@@ -2,6 +2,7 @@ package com.framgia.fel1.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -62,6 +63,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.text_sign_up:
                 //TODO call Activity SignUp
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;
