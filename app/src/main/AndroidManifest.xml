@@ -30,12 +30,15 @@
         <activity android:name=".activity.HomeActivity" />
         <activity android:name=".activity.LearnedLessonActivity" />
         <activity android:name=".activity.NewLessonActivity" />
+<<<<<<< 73d2628762736a42725557ba0d16b38bb3609b21
         <activity
             android:name=".activity.WordListActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activity.ResultActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+=======
+>>>>>>> create new lesson
     </application>
 
 </manifest>

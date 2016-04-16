@@ -25,9 +25,7 @@ import com.framgia.fel1.model.Category;
 import com.framgia.fel1.model.User;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.ShowImage;
-
 import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.List;
 

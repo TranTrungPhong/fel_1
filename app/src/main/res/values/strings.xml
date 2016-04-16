@@ -86,4 +86,12 @@
     <string name="activities">Activities</string>
     <string name="back">Back</string>
     <string name="press_back_again_to_exit">Press back again to exit app</string>
+    <string name="lesson_name">Lesson Name</string>
+    <string name="submit">Submit</string>
+    <string name="cancell">Cancel</string>
+    <string name="hetbai">Out of lesson !</string>
+    <string name="thieu_word">Miss word !</string>
+    <string name="onListWordsClickItem">must implement OnListWordsClickItem</string>
+    <string name="no_data_to_speech">No Data</string>
+    <string name="err_cannot_read_list_lesson">Error cannot read list lesson</string>
 </resources>

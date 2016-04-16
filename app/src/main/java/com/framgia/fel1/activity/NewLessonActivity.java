@@ -1,5 +1,4 @@
 package com.framgia.fel1.activity;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
@@ -13,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.framgia.fel1.R;
 import com.framgia.fel1.adapter.NewLessonAdapter;
 import com.framgia.fel1.constant.APIService;
@@ -27,7 +25,6 @@ import com.framgia.fel1.model.Word;
 import com.framgia.fel1.util.ReadJson;
 
 import org.json.JSONException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
