@@ -8,12 +8,10 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
-
 import com.framgia.fel1.R;
 import com.framgia.fel1.activity.NewLessonActivity;
 import com.framgia.fel1.constant.Const;
 import com.framgia.fel1.model.Word;
-
 import java.util.ArrayList;
 import java.util.List;
 
