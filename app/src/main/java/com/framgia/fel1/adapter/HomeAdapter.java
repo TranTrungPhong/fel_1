@@ -64,7 +64,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.CategoryViewHo
         private TextView mTextCategoryId;
         private final View mView;
         private Category mCategory;
-
         public CategoryViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
@@ -81,4 +80,5 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.CategoryViewHo
     public interface OnListCategoryClickItem {
         public void onListCategoryClickItem(int position, Category category);
     }
+
 }

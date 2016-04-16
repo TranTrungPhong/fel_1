@@ -11,7 +11,10 @@ import com.framgia.fel1.model.Lesson;
 import com.framgia.fel1.model.User;
 import com.framgia.fel1.model.UserActivity;
 import com.framgia.fel1.model.Word;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by vuduychuong1994 on 4/18/16.
@@ -378,4 +381,25 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         return db.delete(tableName, columnName + " = ?", new String[]{value}) != 0;
     }
 
+    public List<Lesson> getListLesson() {
+        List<Lesson> lessonsList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String[] cols = {
+                COLUMN_ID,
+                COLUMN_NAME};
+        Cursor cursor =
+                db.query(TABLE_LESSON,null, null, null, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                Lesson lesson = new Lesson();
+                lesson.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+                lesson.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+                lessonsList.add(lesson);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return lessonsList;
+    }
 }

@@ -47,14 +47,20 @@
     <string name="lession_learned">Category</string>
     <string name="category_name">Category Name</string>
     <string name="id">id</string>
-    <string name="confirrn_signout">Bạn có muốn đăng xuất không ?</string>
+    <string name="confirrn_signout">You really wanna log out?</string>
     <string name="infor">Thông báo</string>
-    <string name="thoat">Thoát</string>
-    <string name="huy">Hủy</string>
+    <string name="thoat">OK</string>
+    <string name="huy">Cancel</string>
     <string name="response_null">Response category null</string>
     <string name="response_error">Response words error</string>
     <string name="response_done">Response words done</string>
     <string name="information_dialog">Thông báo</string>
-    <string name="confirm_signout">Bạn có muốn đăng xuất không ?</string>
-    <string name="cancel">Hủy</string>
+    <string name="cancel">Cancel</string>
+    <string name="status">Status</string>
+    <string name="misspage">Input can not be blank .</string>
+    <string name="page">Page :</string>
+    <string name="per_page">Per page :</string>
+    <string name="create_lesson">Create Lesson</string>
+    <string name="implement_listener">must implement OnListCategoryClickItem</string>
+    <string name="word">word</string>
 </resources>
