@@ -18,17 +18,21 @@ public class InternetUtils {
         boolean result = false;
         if (connectivityManager != null) {
             NetworkInfo networkInfo =
-                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-            if (networkInfo != null && networkInfo.isConnected()) {
+                    connectivityManager.getActiveNetworkInfo();
+            if (networkInfo != null
+                    && (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE
+                    || networkInfo.getType() == ConnectivityManager.TYPE_WIFI)) {
                 result = true;
             }
         }
         if (result) {
             return true;
         } else {
-            new AlertDialog.Builder(context).setTitle("Thông báo").setMessage(
-                    R.string.not_internet + "").setPositiveButton("OK",
-                    new DialogInterface.OnClickListener() {
+
+            new AlertDialog.Builder(context)
+                    .setTitle(R.string.infor)
+                    .setMessage(R.string.not_internet + "")
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();

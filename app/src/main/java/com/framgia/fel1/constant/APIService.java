@@ -25,4 +25,16 @@ public class APIService {
     public static final String SESSION_EMAIL = "email";
     public static final String SESSION_PASWORD = "password";
     public static final String SESSION_REMEMBER_ME = "remember_me";
+
+    public static final String PAGE = "page";
+    public static final String PER_PAGE = "per_page";
+    public static final String AUTH_TOKEN = "auth_token";
+    public static final String CATEGORY_ID = "category_id";
+    public static final String OPTION = "option";
+
+    public static final String LEARNED = "learned";
+    public static final String USER = "user";
+    public static final String NAME = "name";
+    public static final String EMAIL = "email";
+    public static final String AVATAR = "avater";
 }
