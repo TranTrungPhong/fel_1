@@ -18,4 +18,21 @@
     <string name="content_type">Content-Type</string>
     <string name="application_json">application/json</string>
     <string name="ok">OK</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="update">Update</string>
+    <string name="word_list">Word List</string>
+    <string name="lesson">Lesson</string>
+    <string name="category">Category</string>
+    <string name="name_user">Nguyen Van A</string>
+    <string name="email_user">example@railstutorial.org</string>
+    <string name="lession_learned">Category</string>
+    <string name="lesson_name">Lesson Name</string>
+    <string name="id">id</string>
+    <string name="confirrn_signout">Bạn có muốn đăng xuất không ?</string>
+    <string name="infor">Thông báo</string>
+    <string name="thoat">Thoát</string>
+    <string name="huy">Hủy</string>
+    <string name="response_null">Response category null</string>
+    <string name="response_error">Response words error</string>
+    <string name="response_done">Response words done</string>
 </resources>
