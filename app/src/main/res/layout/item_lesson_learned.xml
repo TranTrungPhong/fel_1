@@ -9,8 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_50"
         android:gravity="center_vertical"
-        android:text=""
         android:paddingLeft="@dimen/padding_50"
+        android:text=""
         android:textSize="@dimen/text_size_24" />
-
 </LinearLayout>

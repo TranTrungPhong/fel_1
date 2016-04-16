@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.framgia.fel1.model.Answer;
 import com.framgia.fel1.model.Category;
@@ -381,12 +382,9 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         return db.delete(tableName, columnName + " = ?", new String[]{value}) != 0;
     }
 
-    public List<Lesson> getListLesson() {
+    public List<Lesson> getListLesson() throws SQLiteException{
         List<Lesson> lessonsList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String[] cols = {
-                COLUMN_ID,
-                COLUMN_NAME};
         Cursor cursor =
                 db.query(TABLE_LESSON,null, null, null, null, null, null);
         if (cursor != null && cursor.moveToFirst()) {
@@ -402,4 +400,5 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         db.close();
         return lessonsList;
     }
+
 }

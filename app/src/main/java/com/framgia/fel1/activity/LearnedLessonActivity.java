@@ -99,7 +99,13 @@ public class LearnedLessonActivity extends Activity implements View.OnClickListe
                                             .show();
                                 } else {
                                     dialog.dismiss();
-                                    //Todo call new lesson activity
+                                    Intent intent = new Intent(LearnedLessonActivity.this,
+                                            NewLessonActivity.class);
+                                    intent.putExtra(Const.AUTH_TOKEN, mAuthToken);
+                                    intent.putExtra(Const.NAME, mNameCategory);
+                                    intent.putExtra(APIService.PAGE, page);
+                                    intent.putExtra(APIService.PER_PAGE, perPage);
+                                    startActivity(intent);
                                 }
                             }
                         })
