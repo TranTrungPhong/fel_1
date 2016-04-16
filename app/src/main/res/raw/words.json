@@ -1,0 +1,2804 @@
+{
+  "words" :[
+    {
+      "id": 1,
+      "result_id": 1,
+      "content": "Red",
+      "answers":
+      [
+        {
+          "id": 1,
+          "content": "Con chó",
+          "is_correct": false
+        },
+        {
+          "id": 2,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 3,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 4,
+          "content": "Màu đỏ",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "result_id": 2,
+      "content": "Name",
+      "answers":
+      [
+        {
+          "id": 5,
+          "content": "Tên",
+          "is_correct": true
+        },
+        {
+          "id": 6,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 7,
+          "content": "Thể thao",
+          "is_correct": false
+        },
+        {
+          "id": 8,
+          "content": "Đẹp trai",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "result_id": 3,
+      "content": "Idol",
+      "answers":
+      [
+        {
+          "id": 9,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 10,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 11,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 12,
+          "content": "Thần tượng",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "result_id": 4,
+      "content": "Chicken",
+      "answers":
+      [
+        {
+          "id": 13,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 14,
+          "content": "Con gà",
+          "is_correct": true
+        },
+        {
+          "id": 15,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 16,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "result_id": 5,
+      "content": "Table",
+      "answers":
+      [
+        {
+          "id": 17,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 18,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 19,
+          "content": "Cái bàn",
+          "is_correct": true
+        },
+        {
+          "id": 20,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "result_id": 6,
+      "content": "Close",
+      "answers":
+      [
+        {
+          "id": 21,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 22,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 23,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 24,
+          "content": "Đóng",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "result_id": 7,
+      "content": "Computer",
+      "answers":
+      [
+        {
+          "id": 25,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 26,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 27,
+          "content": "Máy tính",
+          "is_correct": true
+        },
+        {
+          "id": 28,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "result_id": 8,
+      "content": "Mouse",
+      "answers":
+      [
+        {
+          "id": 29,
+          "content": "Chuột",
+          "is_correct": true
+        },
+        {
+          "id": 30,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 31,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 32,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "result_id": 9,
+      "content": "Ticket",
+      "answers":
+      [
+        {
+          "id": 33,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 34,
+          "content": "Thẻ",
+          "is_correct": true
+        },
+        {
+          "id": 35,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 36,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "result_id": 10,
+      "content": "Shoes",
+      "answers":
+      [
+        {
+          "id": 37,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 38,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 39,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 40,
+          "content": "Giầy",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "result_id": 11,
+      "content": "Learning",
+      "answers":
+      [
+        {
+          "id": 41,
+          "content": "Học",
+          "is_correct": true
+        },
+        {
+          "id": 42,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 43,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 44,
+          "content": "Màu đỏ",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "result_id": 12,
+      "content": "Look",
+      "answers":
+      [
+        {
+          "id": 45,
+          "content": "Nhìn",
+          "is_correct": true
+        },
+        {
+          "id": 46,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 47,
+          "content": "Thể thao",
+          "is_correct": false
+        },
+        {
+          "id": 48,
+          "content": "Đẹp trai",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "result_id": 13,
+      "content": "Pen",
+      "answers":
+      [
+        {
+          "id": 49,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 50,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 51,
+          "content": "Bút chì",
+          "is_correct": true
+        },
+        {
+          "id": 52,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "result_id": 14,
+      "content": "Notebook",
+      "answers":
+      [
+        {
+          "id": 53,
+          "content": "Vở",
+          "is_correct": true
+        },
+        {
+          "id": 54,
+          "content": "Con gà",
+          "is_correct": false
+        },
+        {
+          "id": 55,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 56,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "result_id": 15,
+      "content": "Smart",
+      "answers":
+      [
+        {
+          "id": 57,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 58,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 59,
+          "content": "Thông minh",
+          "is_correct": true
+        },
+        {
+          "id": 60,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "result_id": 16,
+      "content": "Open",
+      "answers":
+      [
+        {
+          "id": 61,
+          "content": "Mở",
+          "is_correct": true
+        },
+        {
+          "id": 62,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 63,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 64,
+          "content": "Đóng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "result_id": 17,
+      "content": "Activity",
+      "answers":
+      [
+        {
+          "id": 65,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 66,
+          "content": "Hoạt động",
+          "is_correct": true
+        },
+        {
+          "id": 67,
+          "content": "Máy tính",
+          "is_correct": false
+        },
+        {
+          "id": 68,
+          "content": "Bơi lội",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "result_id": 18,
+      "content": "Listen",
+      "answers":
+      [
+        {
+          "id": 69,
+          "content": "Chuột",
+          "is_correct": false
+        },
+        {
+          "id": 70,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 71,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 72,
+          "content": "Nghe",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "result_id": 19,
+      "content": "History",
+      "answers":
+      [
+        {
+          "id": 73,
+          "content": "Lịch sử",
+          "is_correct": true
+        },
+        {
+          "id": 74,
+          "content": "Thẻ",
+          "is_correct": false
+        },
+        {
+          "id": 75,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 76,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "result_id": 20,
+      "content": "information",
+      "answers":
+      [
+        {
+          "id": 77,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 78,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 79,
+          "content": "Thông tin",
+          "is_correct": true
+        },
+        {
+          "id": 80,
+          "content": "Giầy",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "result_id": 21,
+      "content": "world",
+      "answers":
+      [
+        {
+          "id": 81,
+          "content": "Thế giới",
+          "is_correct": true
+        },
+        {
+          "id": 82,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 83,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 84,
+          "content": "Màu đỏ",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "result_id": 22,
+      "content": "map",
+      "answers":
+      [
+        {
+          "id": 85,
+          "content": "Bản đồ",
+          "is_correct": true
+        },
+        {
+          "id": 86,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 87,
+          "content": "Thể thao",
+          "is_correct": false
+        },
+        {
+          "id": 88,
+          "content": "Đẹp trai",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "result_id": 23,
+      "content": "family",
+      "answers":
+      [
+        {
+          "id": 89,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 90,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 91,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 92,
+          "content": "Gia đình",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "result_id": 24,
+      "content": "government",
+      "answers":
+      [
+        {
+          "id": 93,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 94,
+          "content": "Con gà",
+          "is_correct": false
+        },
+        {
+          "id": 95,
+          "content": "Chính phủ",
+          "is_correct": true
+        },
+        {
+          "id": 95,
+          "content": "Bức tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "result_id": 25,
+      "content": "health",
+      "answers":
+      [
+        {
+          "id": 97,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 98,
+          "content": "Sức khỏe",
+          "is_correct": true
+        },
+        {
+          "id": 99,
+          "content": "Cái bàn",
+          "is_correct": false
+        },
+        {
+          "id": 100,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "result_id": 26,
+      "content": "system",
+      "answers":
+      [
+        {
+          "id": 101,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 102,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 103,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 104,
+          "content": "Hệ thống",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "result_id": 27,
+      "content": "meat",
+      "answers":
+      [
+        {
+          "id": 105,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 106,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 107,
+          "content": "Thịt",
+          "is_correct": true
+        },
+        {
+          "id": 108,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "result_id": 28,
+      "content": "year",
+      "answers":
+      [
+        {
+          "id": 109,
+          "content": "Năm",
+          "is_correct": true
+        },
+        {
+          "id": 110,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 111,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 112,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "result_id": 29,
+      "content": "music",
+      "answers":
+      [
+        {
+          "id": 113,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 114,
+          "content": "Âm nhạc",
+          "is_correct": true
+        },
+        {
+          "id": 115,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 116,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 30,
+      "result_id": 30,
+      "content": "method",
+      "answers":
+      [
+        {
+          "id": 117,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 118,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 119,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 120,
+          "content": "Phương pháp",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 31,
+      "result_id": 31,
+      "content": "data",
+      "answers":
+      [
+        {
+          "id": 121,
+          "content": "Dữ liệu",
+          "is_correct": true
+        },
+        {
+          "id": 122,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 123,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 124,
+          "content": "Màu đỏ",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 32,
+      "result_id": 32,
+      "content": "understanding",
+      "answers":
+      [
+        {
+          "id": 125,
+          "content": "Tên",
+          "is_correct": false
+        },
+        {
+          "id": 126,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 127,
+          "content": "Thể thao",
+          "is_correct": false
+        },
+        {
+          "id": 128,
+          "content": "Hiểu biết",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 33,
+      "result_id": 33,
+      "content": "theory",
+      "answers":
+      [
+        {
+          "id": 129,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 130,
+          "content": "Lý thuyết",
+          "is_correct": true
+        },
+        {
+          "id": 131,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 132,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 34,
+      "result_id": 34,
+      "content": "law",
+      "answers":
+      [
+        {
+          "id": 133,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 134,
+          "content": "Con gà",
+          "is_correct": false
+        },
+        {
+          "id": 135,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 136,
+          "content": "Luật pháp",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 35,
+      "result_id": 35,
+      "content": "bird",
+      "answers":
+      [
+        {
+          "id": 137,
+          "content": "Con cá",
+          "is_correct": false
+        },
+        {
+          "id": 138,
+          "content": "Đau đớn",
+          "is_correct": false
+        },
+        {
+          "id": 139,
+          "content": "Con chim",
+          "is_correct": true
+        },
+        {
+          "id": 140,
+          "content": "Cỏ",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 36,
+      "result_id": 36,
+      "content": "literature",
+      "answers":
+      [
+        {
+          "id": 141,
+          "content": "Văn chương",
+          "is_correct": false
+        },
+        {
+          "id": 142,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 143,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 144,
+          "content": "Mưa",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 37,
+      "result_id": 37,
+      "content": "problem",
+      "answers":
+      [
+        {
+          "id": 145,
+          "content": "Cái quần",
+          "is_correct": false
+        },
+        {
+          "id": 146,
+          "content": "Đầu tóc",
+          "is_correct": false
+        },
+        {
+          "id": 147,
+          "content": "Bầu trời",
+          "is_correct": true
+        },
+        {
+          "id": 148,
+          "content": "Vấn đề",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 38,
+      "result_id": 38,
+      "content": "software",
+      "answers":
+      [
+        {
+          "id": 149,
+          "content": "Chuột",
+          "is_correct": false
+        },
+        {
+          "id": 150,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 151,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 152,
+          "content": "Phần mềm",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 39,
+      "result_id": 39,
+      "content": "control",
+      "answers":
+      [
+        {
+          "id": 153,
+          "content": "Điểu khiển",
+          "is_correct": true
+        },
+        {
+          "id": 154,
+          "content": "Thẻ",
+          "is_correct": false
+        },
+        {
+          "id": 155,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 156,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 40,
+      "result_id": 40,
+      "content": "knowledge",
+      "answers":
+      [
+        {
+          "id": 157,
+          "content": "Sáng tạo",
+          "is_correct": false
+        },
+        {
+          "id": 158,
+          "content": "Tìm tòi",
+          "is_correct": false
+        },
+        {
+          "id": 159,
+          "content": "Kiến thức",
+          "is_correct": false
+        },
+        {
+          "id": 160,
+          "content": "Phát triển",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 41,
+      "result_id": 41,
+      "content": "power",
+      "answers":
+      [
+        {
+          "id": 161,
+          "content": "Quyền lực",
+          "is_correct": true
+        },
+        {
+          "id": 162,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 163,
+          "content": "Sức mạnh",
+          "is_correct": false
+        },
+        {
+          "id": 164,
+          "content": "Danh tiếng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 42,
+      "result_id": 42,
+      "content": "ability",
+      "answers":
+      [
+        {
+          "id": 165,
+          "content": "Khả năng",
+          "is_correct": true
+        },
+        {
+          "id": 166,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 167,
+          "content": "Thể thao",
+          "is_correct": false
+        },
+        {
+          "id": 168,
+          "content": "Đẹp trai",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 43,
+      "result_id": 43,
+      "content": "economics",
+      "answers":
+      [
+        {
+          "id": 169,
+          "content": "Tiền đồ",
+          "is_correct": false
+        },
+        {
+          "id": 170,
+          "content": "Kinh tế học",
+          "is_correct": true
+        },
+        {
+          "id": 171,
+          "content": "Tài sản",
+          "is_correct": false
+        },
+        {
+          "id": 172,
+          "content": "Tiền tệ",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 44,
+      "result_id": 44,
+      "content": "love",
+      "answers":
+      [
+        {
+          "id": 173,
+          "content": "Em bé",
+          "is_correct": false
+        },
+        {
+          "id": 174,
+          "content": "Tình yêu",
+          "is_correct": true
+        },
+        {
+          "id": 175,
+          "content": "Nhà nghỉ",
+          "is_correct": false
+        },
+        {
+          "id": 176,
+          "content": "Bao cao su",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 45,
+      "result_id": 45,
+      "content": "science",
+      "answers":
+      [
+        {
+          "id": 177,
+          "content": "Khoa học",
+          "is_correct": true
+        },
+        {
+          "id": 178,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 179,
+          "content": "Cái bàn",
+          "is_correct": false
+        },
+        {
+          "id": 180,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 46,
+      "result_id": 46,
+      "content": "library",
+      "answers":
+      [
+        {
+          "id": 181,
+          "content": "Hầm",
+          "is_correct": false
+        },
+        {
+          "id": 182,
+          "content": "Thùng chứa",
+          "is_correct": false
+        },
+        {
+          "id": 183,
+          "content": "Nhà kho",
+          "is_correct": false
+        },
+        {
+          "id": 184,
+          "content": "Thư viện",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 47,
+      "result_id": 47,
+      "content": "nature",
+      "answers":
+      [
+        {
+          "id": 185,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 186,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 187,
+          "content": "Máy tính",
+          "is_correct": false
+        },
+        {
+          "id": 188,
+          "content": "Bản chất",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 48,
+      "result_id": 48,
+      "content": "product",
+      "answers":
+      [
+        {
+          "id": 189,
+          "content": "Sản phẩm",
+          "is_correct": true
+        },
+        {
+          "id": 190,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 191,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 192,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 49,
+      "result_id": 49,
+      "content": "idea",
+      "answers":
+      [
+        {
+          "id": 193,
+          "content": "Tưởng tượng",
+          "is_correct": false
+        },
+        {
+          "id": 194,
+          "content": "Giấc mơ",
+          "is_correct": false
+        },
+        {
+          "id": 195,
+          "content": "Câu nói",
+          "is_correct": false
+        },
+        {
+          "id": 196,
+          "content": "Ý kiến",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 50,
+      "result_id": 50,
+      "content": "temperature",
+      "answers":
+      [
+        {
+          "id": 197,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 198,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 199,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 200,
+          "content": "Nhiệt độ",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 51,
+      "result_id": 51,
+      "content": "investment",
+      "answers":
+      [
+        {
+          "id": 201,
+          "content": "Khóa luận",
+          "is_correct": false
+        },
+        {
+          "id":202,
+          "content": "Chính trị",
+          "is_correct": false
+        },
+        {
+          "id": 203,
+          "content": "Đầu tư",
+          "is_correct": true
+        },
+        {
+          "id": 204,
+          "content": "Đào tạo",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 52,
+      "result_id": 52,
+      "content": "area",
+      "answers":
+      [
+        {
+          "id": 205,
+          "content": "Khu vực",
+          "is_correct": true
+        },
+        {
+          "id": 206,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 207,
+          "content": "Thể thao",
+          "is_correct": false
+        },
+        {
+          "id": 208,
+          "content": "Đẹp trai",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 53,
+      "result_id": 53,
+      "content": "society",
+      "answers":
+      [
+        {
+          "id": 209,
+          "content": "Tập thể",
+          "is_correct": false
+        },
+        {
+          "id": 210,
+          "content": "Tương lai",
+          "is_correct": false
+        },
+        {
+          "id": 211,
+          "content": "Xã hội",
+          "is_correct": true
+        },
+        {
+          "id": 212,
+          "content": "Lý luận",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 54,
+      "result_id": 54,
+      "content": "story",
+      "answers":
+      [
+        {
+          "id": 213,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 214,
+          "content": "Câu chuyện",
+          "is_correct": true
+        },
+        {
+          "id": 215,
+          "content": "Lịch sử",
+          "is_correct": false
+        },
+        {
+          "id": 216,
+          "content": "Tranh ảnh",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 55,
+      "result_id": 55,
+      "content": "industry",
+      "answers":
+      [
+        {
+          "id": 217,
+          "content": "Ngành công nghiệp",
+          "is_correct": true
+        },
+        {
+          "id": 218,
+          "content": "Ngành nông nghiệp",
+          "is_correct": false
+        },
+        {
+          "id": 219,
+          "content": "Hàng không",
+          "is_correct": false
+        },
+        {
+          "id": 230,
+          "content": "Đường thủy",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 56,
+      "result_id": 56,
+      "content": "oven",
+      "answers":
+      [
+        {
+          "id": 231,
+          "content": "Gác mái",
+          "is_correct": false
+        },
+        {
+          "id": 232,
+          "content": "Ống khói",
+          "is_correct": false
+        },
+        {
+          "id": 233,
+          "content": "Nhà tắm",
+          "is_correct": false
+        },
+        {
+          "id": 234,
+          "content": "Lò nướng",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 57,
+      "result_id": 57,
+      "content": "community",
+      "answers":
+      [
+        {
+          "id": 235,
+          "content": "Bạn bè",
+          "is_correct": false
+        },
+        {
+          "id": 236,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 237,
+          "content": "Cộng đồng",
+          "is_correct": true
+        },
+        {
+          "id": 238,
+          "content": "Độc thân",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 58,
+      "result_id": 58,
+      "content": "definition",
+      "answers":
+      [
+        {
+          "id": 239,
+          "content": "Định nghĩa",
+          "is_correct": true
+        },
+        {
+          "id": 240,
+          "content": "Quyết định",
+          "is_correct": false
+        },
+        {
+          "id": 241,
+          "content": "Thắc mắc",
+          "is_correct": false
+        },
+        {
+          "id": 242,
+          "content": "Đề nghị",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 59,
+      "result_id": 59,
+      "content": "safety",
+      "answers":
+      [
+        {
+          "id": 243,
+          "content": "Sự mát mẻ",
+          "is_correct": false
+        },
+        {
+          "id": 244,
+          "content": "Sự an toàn",
+          "is_correct": true
+        },
+        {
+          "id": 245,
+          "content": "Sự sung sướng",
+          "is_correct": false
+        },
+        {
+          "id": 246,
+          "content": "Sự đam mê",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 60,
+      "result_id": 60,
+      "content": "quality",
+      "answers":
+      [
+        {
+          "id": 247,
+          "content": "Đảm bảo",
+          "is_correct": false
+        },
+        {
+          "id": 248,
+          "content": "Quản lý",
+          "is_correct": false
+        },
+        {
+          "id": 249,
+          "content": "Kế hoạch",
+          "is_correct": false
+        },
+        {
+          "id": 250,
+          "content": "Chất lượng",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 61,
+      "result_id": 61,
+      "content": "development",
+      "answers":
+      [
+        {
+          "id": 251,
+          "content": "Óc chó",
+          "is_correct": false
+        },
+        {
+          "id": 252,
+          "content": "Tìm hiểu",
+          "is_correct": false
+        },
+        {
+          "id": 253,
+          "content": "Phát triển",
+          "is_correct": true
+        },
+        {
+          "id": 254,
+          "content": "Đi lên",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 62,
+      "result_id": 62,
+      "content": "language",
+      "answers":
+      [
+        {
+          "id": 255,
+          "content": "Ngôn ngữ",
+          "is_correct": true
+        },
+        {
+          "id": 256,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 257,
+          "content": "Từ mới",
+          "is_correct": false
+        },
+        {
+          "id": 258,
+          "content": "Ngữ pháp",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 63,
+      "result_id": 63,
+      "content": "variety",
+      "answers":
+      [
+        {
+          "id": 259,
+          "content": "Đầy",
+          "is_correct": false
+        },
+        {
+          "id": 260,
+          "content": "Bung",
+          "is_correct": false
+        },
+        {
+          "id": 261,
+          "content": "Nhiều",
+          "is_correct": true
+        },
+        {
+          "id": 262,
+          "content": "Mãi mãi",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 64,
+      "result_id": 64,
+      "content": "Organization",
+      "answers":
+      [
+        {
+          "id": 263,
+          "content": "Cơ quan",
+          "is_correct": true
+        },
+        {
+          "id": 264,
+          "content": "Nhà máy",
+          "is_correct": false
+        },
+        {
+          "id": 265,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 266,
+          "content": "Sân vận động",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 65,
+      "result_id": 65,
+      "content": "equipment",
+      "answers":
+      [
+        {
+          "id": 267,
+          "content": "Ngu ngốc",
+          "is_correct": false
+        },
+        {
+          "id": 268,
+          "content": "Ngọc Trinh",
+          "is_correct": false
+        },
+        {
+          "id": 269,
+          "content": "Thiết bị",
+          "is_correct": true
+        },
+        {
+          "id": 270,
+          "content": "Bà Tưng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 66,
+      "result_id": 66,
+      "content": "physics",
+      "answers":
+      [
+        {
+          "id": 271,
+          "content": "Địa lý",
+          "is_correct": false
+        },
+        {
+          "id": 272,
+          "content": "Khoa học",
+          "is_correct": false
+        },
+        {
+          "id": 273,
+          "content": "Văn học",
+          "is_correct": false
+        },
+        {
+          "id": 274,
+          "content": "Vật lý",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 67,
+      "result_id": 67,
+      "content": "analysis",
+      "answers":
+      [
+        {
+          "id": 275,
+          "content": "Nghiên cứu",
+          "is_correct": true
+        },
+        {
+          "id": 276,
+          "content": "Học hành",
+          "is_correct": false
+        },
+        {
+          "id": 277,
+          "content": "Cơn đau",
+          "is_correct": true
+        },
+        {
+          "id": 278,
+          "content": "Mệt vl",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 68,
+      "result_id": 68,
+      "content": "policy",
+      "answers":
+      [
+        {
+          "id": 279,
+          "content": "Chính sách",
+          "is_correct": true
+        },
+        {
+          "id": 280,
+          "content": "Quyền lợi",
+          "is_correct": false
+        },
+        {
+          "id": 281,
+          "content": "Phần thưởng",
+          "is_correct": false
+        },
+        {
+          "id": 282,
+          "content": "Quà cáp",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 69,
+      "result_id": 69,
+      "content": "technology",
+      "answers":
+      [
+        {
+          "id": 283,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 284,
+          "content": "Công nghiệp",
+          "is_correct": false
+        },
+        {
+          "id": 285,
+          "content": "Công nghệ",
+          "is_correct": false
+        },
+        {
+          "id": 286,
+          "content": "Công tôn sách",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 70,
+      "result_id": 70,
+      "content": "army",
+      "answers":
+      [
+        {
+          "id": 287,
+          "content": "Thế giới",
+          "is_correct": false
+        },
+        {
+          "id": 288,
+          "content": "Lính thủy",
+          "is_correct": false
+        },
+        {
+          "id": 289,
+          "content": "Công an",
+          "is_correct": false
+        },
+        {
+          "id": 290,
+          "content": "Quân đội",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 71,
+      "result_id": 71,
+      "content": "environment",
+      "answers":
+      [
+        {
+          "id": 291,
+          "content": "Không khí",
+          "is_correct": false
+        },
+        {
+          "id": 292,
+          "content": "Chân không",
+          "is_correct": false
+        },
+        {
+          "id": 293,
+          "content": "Môi trường",
+          "is_correct": false
+        },
+        {
+          "id": 294,
+          "content": "Khói bụi",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 72,
+      "result_id": 72,
+      "content": "article",
+      "answers":
+      [
+        {
+          "id": 295,
+          "content": "Điều khoản",
+          "is_correct": true
+        },
+        {
+          "id": 296,
+          "content": "Đúng đắn",
+          "is_correct": false
+        },
+        {
+          "id": 297,
+          "content": "Cơ hội",
+          "is_correct": false
+        },
+        {
+          "id": 298,
+          "content": "Trải nghiệm",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 73,
+      "result_id": 73,
+      "content": "goal",
+      "answers":
+      [
+        {
+          "id": 299,
+          "content": "Tiêu đề",
+          "is_correct": false
+        },
+        {
+          "id": 300,
+          "content": "Công cụ",
+          "is_correct": false
+        },
+        {
+          "id": 301,
+          "content": "Mục đích",
+          "is_correct": true
+        },
+        {
+          "id": 302,
+          "content": "Thành công",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 74,
+      "result_id": 74,
+      "content": "audience",
+      "answers":
+      [
+        {
+          "id": 303,
+          "content": "Khán giả",
+          "is_correct": true
+        },
+        {
+          "id": 304,
+          "content": "Con gà",
+          "is_correct": true
+        },
+        {
+          "id": 305,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 306,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 75,
+      "result_id": 75,
+      "content": "marriage",
+      "answers":
+      [
+        {
+          "id": 307,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 308,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 309,
+          "content": "hôn nhân",
+          "is_correct": true
+        },
+        {
+          "id": 310,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 76,
+      "result_id": 76,
+      "content": "combination",
+      "answers":
+      [
+        {
+          "id": 311,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 312,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 313,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 314,
+          "content": "Phối hợp",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 77,
+      "result_id": 77,
+      "content": "medicine",
+      "answers":
+      [
+        {
+          "id": 315,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 316,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 317,
+          "content": "Y học",
+          "is_correct": true
+        },
+        {
+          "id": 318,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 78,
+      "result_id": 78,
+      "content": "philosophy",
+      "answers":
+      [
+        {
+          "id": 319,
+          "content": "Triết học",
+          "is_correct": true
+        },
+        {
+          "id": 320,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 321,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 322,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 79,
+      "result_id": 79,
+      "content": "communication",
+      "answers":
+      [
+        {
+          "id": 323,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 324,
+          "content": "Liên lạc",
+          "is_correct": true
+        },
+        {
+          "id": 325,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 326,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 80,
+      "result_id": 80,
+      "content": "chemistry",
+      "answers":
+      [
+        {
+          "id": 327,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 328,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 329,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 330,
+          "content": "Hóa học",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 81,
+      "result_id": 81,
+      "content": "disease",
+      "answers":
+      [
+        {
+          "id": 331,
+          "content": "Ung thư",
+          "is_correct": false
+        },
+        {
+          "id": 332,
+          "content": "Thuốc",
+          "is_correct": false
+        },
+        {
+          "id": 333,
+          "content": "Tiêm chủng",
+          "is_correct": false
+        },
+        {
+          "id": 334,
+          "content": "Căn bệnh",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 82,
+      "result_id": 82,
+      "content": "energy",
+      "answers":
+      [
+        {
+          "id": 335,
+          "content": "tên lửa",
+          "is_correct": true
+        },
+        {
+          "id": 336,
+          "content": "Tổng lực",
+          "is_correct": false
+        },
+        {
+          "id": 337,
+          "content": "Năng lượng",
+          "is_correct": false
+        },
+        {
+          "id": 338,
+          "content": "Lựu đạn",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 83,
+      "result_id": 83,
+      "content": "advertising",
+      "answers":
+      [
+        {
+          "id": 339,
+          "content": "Bán hàng",
+          "is_correct": false
+        },
+        {
+          "id": 340,
+          "content": "Quảng cáo",
+          "is_correct": true
+        },
+        {
+          "id": 341,
+          "content": "Nong bức",
+          "is_correct": false
+        },
+        {
+          "id": 342,
+          "content": "Dọn dẹp",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 84,
+      "result_id": 84,
+      "content": "apartment",
+      "answers":
+      [
+        {
+          "id": 1000,
+          "content": "Chung cư",
+          "is_correct": false
+        },
+        {
+          "id": 343,
+          "content": "Căn hộ",
+          "is_correct": true
+        },
+        {
+          "id": 344,
+          "content": "Pháo đài",
+          "is_correct": false
+        },
+        {
+          "id": 345,
+          "content": "Con đường",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 85,
+      "result_id": 85,
+      "content": "education",
+      "answers":
+      [
+        {
+          "id": 346,
+          "content": "Đào tạo",
+          "is_correct": false
+        },
+        {
+          "id": 347,
+          "content": "Dạy học",
+          "is_correct": false
+        },
+        {
+          "id": 348,
+          "content": "Sự giáo dục",
+          "is_correct": true
+        },
+        {
+          "id": 349,
+          "content": "Học hỏi",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 86,
+      "result_id": 86,
+      "content": "moment",
+      "answers":
+      [
+        {
+          "id": 350,
+          "content": "Một lần",
+          "is_correct": false
+        },
+        {
+          "id": 351,
+          "content": "Chốc lát",
+          "is_correct": true
+        },
+        {
+          "id": 352,
+          "content": "Nhanh chậm",
+          "is_correct": false
+        },
+        {
+          "id": 353,
+          "content": "Thời gian",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 87,
+      "result_id": 87,
+      "content": "painting",
+      "answers":
+      [
+        {
+          "id": 354,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 355,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 356,
+          "content": "Bức tranh",
+          "is_correct": true
+        },
+        {
+          "id": 357,
+          "content": "Bức tường",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 88,
+      "result_id": 88,
+      "content": "politics",
+      "answers":
+      [
+        {
+          "id": 358,
+          "content": "Chính trị",
+          "is_correct": true
+        },
+        {
+          "id": 359,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 360,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 361,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 89,
+      "result_id": 89,
+      "content": "attention",
+      "answers":
+      [
+        {
+          "id": 362,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 363,
+          "content": "Chú ý",
+          "is_correct": true
+        },
+        {
+          "id": 364,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 365,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 90,
+      "result_id": 90,
+      "content": "decision",
+      "answers":
+      [
+        {
+          "id": 366,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 367,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 368,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 369,
+          "content": "Phán quyết",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 91,
+      "result_id": 91,
+      "content": "wood",
+      "answers":
+      [
+        {
+          "id": 370,
+          "content": "Đá",
+          "is_correct": false
+        },
+        {
+          "id": 371,
+          "content": "Nước",
+          "is_correct": false
+        },
+        {
+          "id": 372,
+          "content": "Cỏ",
+          "is_correct": false
+        },
+        {
+          "id": 373,
+          "content": "Gỗ",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 92,
+      "result_id": 92,
+      "content": "competition",
+      "answers":
+      [
+        {
+          "id": 374,
+          "content": "Cuộc thi",
+          "is_correct": true
+        },
+        {
+          "id": 375,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 376,
+          "content": "Thể thao",
+          "is_correct": false
+        },
+        {
+          "id": 377,
+          "content": "Đẹp trai",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 93,
+      "result_id": 93,
+      "content": "distribution",
+      "answers":
+      [
+        {
+          "id": 378,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 379,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 380,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 381,
+          "content": "Phân phát",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 94,
+      "result_id": 94,
+      "content": "entertainment",
+      "answers":
+      [
+        {
+          "id": 382,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 383,
+          "content": "Giải trí",
+          "is_correct": true
+        },
+        {
+          "id": 384,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 385,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 95,
+      "result_id": 95,
+      "content": "population",
+      "answers":
+      [
+        {
+          "id": 386,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 387,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 388,
+          "content": "Dân số",
+          "is_correct": true
+        },
+        {
+          "id": 389,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 96,
+      "result_id": 96,
+      "content": "president",
+      "answers":
+      [
+        {
+          "id": 390,
+          "content": "Bí thư",
+          "is_correct": false
+        },
+        {
+          "id": 391,
+          "content": "Thứ trưởng",
+          "is_correct": false
+        },
+        {
+          "id": 392,
+          "content": "Giám đốc",
+          "is_correct": false
+        },
+        {
+          "id": 393,
+          "content": "Chủ tịch",
+          "is_correct": true
+        }
+      ]
+    },
+    {
+      "id": 97,
+      "result_id": 97,
+      "content": "category",
+      "answers":
+      [
+        {
+          "id": 394,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 395,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 396,
+          "content": "Thể loại",
+          "is_correct": true
+        },
+        {
+          "id": 397,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 98,
+      "result_id": 98,
+      "content": "cigarette",
+      "answers":
+      [
+        {
+          "id": 398,
+          "content": "Thuốc lá",
+          "is_correct": true
+        },
+        {
+          "id": 399,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 400,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 401,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 99,
+      "result_id": 99,
+      "content": "performance",
+      "answers":
+      [
+        {
+          "id": 402,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 403,
+          "content": "Hiệu suất",
+          "is_correct": true
+        },
+        {
+          "id": 404,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 405,
+          "content": "Thần tượng",
+          "is_correct": false
+        }
+      ]
+    },
+    {
+      "id": 100,
+      "result_id": 100,
+      "content": "appearance",
+      "answers":
+      [
+        {
+          "id": 406,
+          "content": "Trò chơi",
+          "is_correct": false
+        },
+        {
+          "id": 407,
+          "content": "Tình yêu",
+          "is_correct": false
+        },
+        {
+          "id": 408,
+          "content": "Ngôi nhà",
+          "is_correct": false
+        },
+        {
+          "id": 409,
+          "content": "Xuất hiện",
+          "is_correct": true
+        }
+      ]
+    }
+  ]
+}

@@ -29,6 +29,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.HomeActivity" />
         <activity android:name=".activity.LearnedLessonActivity" />
+        <activity android:name=".activity.NewLessonActivity" />
     </application>
 
 </manifest>

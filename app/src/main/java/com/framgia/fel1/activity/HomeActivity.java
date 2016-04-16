@@ -24,9 +24,7 @@ import com.framgia.fel1.model.Category;
 import com.framgia.fel1.model.User;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.ShowImage;
-
 import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,7 +78,9 @@ public class HomeActivity extends Activity implements View.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_update_show_user:
-                //TODO call activity aupdate user
+                Intent intentUpdate = new Intent(HomeActivity.this,UpdateProfileActivity.class);
+                intentUpdate.putExtra(Const.USER,mUser);
+                startActivity(intentUpdate);
                 break;
             case R.id.button_sign_out_show_user:
                 showSignOutDialog();

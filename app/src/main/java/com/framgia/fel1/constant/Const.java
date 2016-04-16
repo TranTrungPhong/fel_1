@@ -30,4 +30,11 @@ public interface Const {
     String MESSAGE = "message";
     int ACTION_PICK_IMAGE = 2324;
     String IMAGE_TYPE = "image/*";
+    String WORD = "word";
+    int COUNT_LESSON = 50;
+    int MAX_COUNT_WORDS = 100;
+    int POSITION_ANSWER_1 = 0;
+    int POSITION_ANSWER_2 = 1;
+    int POSITION_ANSWER_3 = 2;
+    int POSITION_ANSWER_4 = 3;
 }

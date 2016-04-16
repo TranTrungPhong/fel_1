@@ -63,4 +63,12 @@
     <string name="create_lesson">Create Lesson</string>
     <string name="implement_listener">must implement OnListCategoryClickItem</string>
     <string name="word">word</string>
+    <string name="lesson_name">Lesson Name</string>
+    <string name="submit">Submit</string>
+    <string name="cancell">Cancel</string>
+    <string name="hetbai">Out of lesson !</string>
+    <string name="thieu_word">Miss word !</string>
+    <string name="onListWordsClickItem">must implement OnListWordsClickItem</string>
+    <string name="no_data_to_speech">No Data</string>
+    <string name="err_cannot_read_list_lesson">Error cannot read list lesson</string>
 </resources>
