@@ -117,6 +117,15 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
     }
 
     @Override
+    protected void onPause() {
+        if (mTextToSpeech != null) {
+            mTextToSpeech.stop();
+            mTextToSpeech.shutdown();
+        }
+        super.onPause();
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_submit:

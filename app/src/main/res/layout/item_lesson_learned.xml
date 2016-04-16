@@ -12,6 +12,9 @@
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/padding_50"
         android:text=""
+<<<<<<< b71bbd0c36c644fd0d7e02d2ed1808fc9c7d5a67
         android:textColor="@android:color/white"
+=======
+>>>>>>> create new lesson
         android:textSize="@dimen/text_size_24" />
 </LinearLayout>
