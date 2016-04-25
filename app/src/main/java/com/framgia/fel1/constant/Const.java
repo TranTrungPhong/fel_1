@@ -1,9 +1,10 @@
 package com.framgia.fel1.constant;
 
 /**
- * Created by vuduychuong1994 on 4/18/16.
+ * Created by vuduychuong1994 on 4/19/16.
  */
 public interface Const {
+    int PASSWORD_MIN_LENGTH = 5;
     String ID = "id";
     String ACTIVITIES = "activities";
     String CONTENT = "content";
@@ -24,4 +25,7 @@ public interface Const {
     String ADMIN = "admin";
     String AUTH_TOKEN = "auth_token";
     String UPDATED_AT = "updated_at";
+    String PASSWORD = "password";
+    String PASSWORD_CONFIRMATION = "password_confirmation";
+    String MESSAGE = "message";
 }
