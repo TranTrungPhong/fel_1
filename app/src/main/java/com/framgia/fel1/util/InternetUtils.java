@@ -13,11 +13,12 @@ import com.framgia.fel1.R;
  */
 public class InternetUtils {
     public static boolean isInternetConnected(Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager)
-                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         boolean result = false;
         if (connectivityManager != null) {
-            NetworkInfo networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            NetworkInfo networkInfo =
+                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             if (networkInfo != null && networkInfo.isConnected()) {
                 result = true;
             }
@@ -25,10 +26,9 @@ public class InternetUtils {
         if (result) {
             return true;
         } else {
-            new AlertDialog.Builder(context)
-                    .setTitle("Thông báo")
-                    .setMessage(R.string.not_internet + "")
-                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            new AlertDialog.Builder(context).setTitle("Thông báo").setMessage(
+                    R.string.not_internet + "").setPositiveButton("OK",
+                    new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();

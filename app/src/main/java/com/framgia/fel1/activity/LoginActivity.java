@@ -15,11 +15,13 @@ import android.widget.Toast;
 
 import com.framgia.fel1.R;
 import com.framgia.fel1.constant.APIService;
+import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.util.HashMap;
 
 public class LoginActivity extends Activity implements View.OnClickListener {
     private EditText mEditTextEmail;
