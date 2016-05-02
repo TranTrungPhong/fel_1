@@ -37,4 +37,12 @@ public interface Const {
     int POSITION_ANSWER_2 = 1;
     int POSITION_ANSWER_3 = 2;
     int POSITION_ANSWER_4 = 3;
+    String CATEGORY_ID = "category_id";
+    String OPTION = "option";
+    String ALL_WORD = "all_word";
+    String ANSWER = "Answer";
+    String CATEGORY = "category";
+    int COLUMN_WORD_LIST = 2;
+    String LEARNED = "learned";
+    String NO_LEARN = "no_learn";
 }

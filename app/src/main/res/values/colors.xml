@@ -8,4 +8,5 @@
     <color name="bgButtonLogin">#E65100</color>
     <color name="ColorHint">#bc2556</color>
     <color name="colorText">#00BFA5</color>
+    <color name="gray">#dfdfdf</color>
 </resources>

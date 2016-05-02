@@ -37,6 +37,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,
     private static final String TAG = "HomeActivity";
     private Button mButtonUpdate;
     private Button mButtonSignUp;
+    private Button mButtonShowWordList;
     private ImageView mImageViewAvatar;
     private TextView mTextViewName;
     private TextView mTextViewEmail;
@@ -56,6 +57,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,
     private void initView() {
         mButtonSignUp = (Button) findViewById(R.id.button_sign_out_show_user);
         mButtonUpdate = (Button) findViewById(R.id.button_update_show_user);
+        mButtonShowWordList = (Button) findViewById(R.id.button_wordlist_show_user);
         mImageViewAvatar = (ImageView) findViewById(R.id.image_show_user_avatar);
         mTextViewName = (TextView) findViewById(R.id.text_show_user_name);
         mTextViewEmail = (TextView) findViewById(R.id.text_show_user_email);
@@ -72,6 +74,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,
         new LoadCategory().execute();
         mButtonUpdate.setOnClickListener(this);
         mButtonSignUp.setOnClickListener(this);
+        mButtonShowWordList.setOnClickListener(this);
     }
 
     @Override
@@ -84,6 +87,10 @@ public class HomeActivity extends Activity implements View.OnClickListener,
                 break;
             case R.id.button_sign_out_show_user:
                 showSignOutDialog();
+                break;
+            case R.id.button_wordlist_show_user:
+                Intent intentWordList = new Intent(HomeActivity.this, WordListActivity.class);
+                startActivity(intentWordList);
                 break;
         }
 

@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.framgia.fel1.model.Answer;
 import com.framgia.fel1.model.Category;
 import com.framgia.fel1.model.Lesson;
+import com.framgia.fel1.model.Result;
 import com.framgia.fel1.model.User;
 import com.framgia.fel1.model.UserActivity;
 import com.framgia.fel1.model.Word;
@@ -22,7 +23,7 @@ import java.util.List;
  */
 public class MySqliteHelper extends SQLiteOpenHelper {
     //Database Config
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "EnglishLearning.db";
     //Table name
     public static final String TABLE_USER = "user";
@@ -31,6 +32,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public static final String TABLE_LESSON = "lesson";
     public static final String TABLE_WORD = "word";
     public static final String TABLE_ANSWER = "answer";
+    public static final String TABLE_RESULT = "result";
     //Column name
     public static final String COLUMN_ID = "id";
     public static final String COLUMN_NAME = "name";
@@ -47,6 +49,10 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_RESULT_ID = "result_id";
     public static final String COLUMN_WORD_ID = "word_id";
     public static final String COLUMN_IS_CORRECT = "is_correct";
+    public static final String COLUMN_ID_USER = "id_user";
+    public static final String COLUMN_ID_LESSON = "id_lesson";
+    public static final String COLUMN_ID_WORD = "id_word";
+    public static final String COLUMN_ID_ANSWER = "id_answer";
 
     public MySqliteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -93,13 +99,20 @@ public class MySqliteHelper extends SQLiteOpenHelper {
                         .append(COLUMN_WORD_ID).append(" INTEGER, ")
                         .append(COLUMN_CONTENT).append(" INTEGER, ")
                         .append(COLUMN_IS_CORRECT).append(" INTEGER)");
+        StringBuffer createResultTable =
+                new StringBuffer().append("CREATE TABLE ").append(TABLE_RESULT + " (")
+                        .append(COLUMN_ID + " INTEGER PRIMARY KEY, ")
+                        .append(COLUMN_ID_USER).append(" INTEGER, ")
+                        .append(COLUMN_ID_LESSON).append(" INTEGER, ")
+                        .append(COLUMN_ID_WORD).append(" INTEGER, ")
+                        .append(COLUMN_ID_ANSWER).append(" INTEGER)");
         db.execSQL(createUserTable.toString());
         db.execSQL(createUserActivityTable.toString());
         db.execSQL(createCategoryTable.toString());
         db.execSQL(createLessonTable.toString());
         db.execSQL(createWordTable.toString());
         db.execSQL(createAnswerTable.toString());
-
+        db.execSQL(createResultTable.toString());
 
     }
 
@@ -111,6 +124,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_LESSON);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORD);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_ANSWER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RESULT);
         onCreate(db);
     }
 
@@ -373,6 +387,51 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         }
         return db.update(TABLE_WORD, cv, COLUMN_ID + " = ?",
                 new String[]{String.valueOf(answer.getId())});
+    }
+    //endregion
+
+    //region RESULT
+    //Add Answer
+    public long addResult(Result result) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        if (result != null) {
+            cv.put(COLUMN_ID, result.getId());
+            cv.put(COLUMN_ID_USER, result.getIdUser());
+            cv.put(COLUMN_ID_LESSON, result.getIdLesson());
+            cv.put(COLUMN_ID_WORD, result.getIdWord());
+            cv.put(COLUMN_ID_ANSWER, result.getIdAnswer());
+        }
+        return db.insert(TABLE_RESULT, null, cv);
+    }
+    // Read Answer
+    public Result getResult(int id) {
+        Result result = new Result();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor =
+                db.query(TABLE_RESULT, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)},
+                        null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            result.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+            result.setIdUser(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_USER)));
+            result.setIdLesson(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_LESSON)));
+            result.setIdAnswer(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_ANSWER)));
+        }
+        return result;
+    }
+    // Update Word
+    public long updateResult(Result result) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        if (result != null) {
+            cv.put(COLUMN_ID, result.getId());
+            cv.put(COLUMN_ID_USER, result.getIdUser());
+            cv.put(COLUMN_ID_LESSON, result.getIdLesson());
+            cv.put(COLUMN_ID_WORD, result.getIdWord());
+            cv.put(COLUMN_ID_ANSWER, result.getIdAnswer());
+        }
+        return db.update(TABLE_RESULT, cv, COLUMN_ID + " = ?",
+                new String[]{String.valueOf(result.getId())});
     }
     //endregion
 
