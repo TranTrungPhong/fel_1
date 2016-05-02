@@ -28,4 +28,6 @@ public interface Const {
     String PASSWORD = "password";
     String PASSWORD_CONFIRMATION = "password_confirmation";
     String MESSAGE = "message";
+    int ACTION_PICK_IMAGE = 2324;
+    String IMAGE_TYPE = "image/*";
 }
