@@ -135,5 +135,8 @@ public class LearnedLessonActivity extends Activity implements View.OnClickListe
     @Override
     public void onClickItemLessonLearned(int position, Lesson lesson) {
         // TODO call lesson or word list
+        Intent intent = new Intent(LearnedLessonActivity.this, ResultActivity.class);
+        intent.putExtra(Const.LESSON, lesson);
+        startActivity(intent);
     }
 }

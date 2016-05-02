@@ -82,4 +82,5 @@
     <string name="error_export_tsv">Export TSV file failed</string>
     <string name="error_export_csv">Export CSV file failed</string>
     <string name="error_export_pdf">Export PDF file failed</string>
+    <string name="title_result_lesson">Lesson</string>
 </resources>
