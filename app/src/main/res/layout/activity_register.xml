@@ -27,7 +27,7 @@
                 android:gravity="center"
                 android:text="@string/register"
                 android:textColor="@color/textColorLogin"
-                android:textSize="@dimen/test_size_20"/>
+                android:textSize="@dimen/text_size_20"/>
         </android.support.v7.widget.Toolbar>
         <EditText
             android:id="@+id/edit_name"
