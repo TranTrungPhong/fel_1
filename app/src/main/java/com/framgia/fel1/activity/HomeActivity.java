@@ -109,7 +109,11 @@ public class HomeActivity extends Activity implements View.OnClickListener,
 
     @Override
     public void onListCategoryClickItem(int position, Category category) {
-        //TODO call activity Lesson Learned
+        Intent intentLessonLearned = new Intent(HomeActivity.this, LearnedLessonActivity.class);
+        intentLessonLearned.putExtra(Const.AUTH_TOKEN, mAuthToken);
+        intentLessonLearned.putExtra(Const.ID, mListCategory.get(position).getId());
+        intentLessonLearned.putExtra(Const.NAME, mListCategory.get(position).getName());
+        startActivity(intentLessonLearned);
     }
 
     private class LoadCategory extends AsyncTask<String, String, String> {

@@ -22,4 +22,6 @@
     <dimen name="text_size_10">10sp</dimen>
     <dimen name="text_size_15">15sp</dimen>
     <dimen name="text_size_24">24sp</dimen>
+    <dimen name="width_200">200dp</dimen>
+    <dimen name="text_size_40">40sp</dimen>
 </resources>
