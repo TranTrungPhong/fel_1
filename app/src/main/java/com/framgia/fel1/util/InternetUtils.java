@@ -25,20 +25,16 @@ public class InternetUtils {
                 result = true;
             }
         }
-        if (result) {
-            return true;
-        } else {
-
+        if(!result)
             new AlertDialog.Builder(context)
                     .setTitle(R.string.infor)
-                    .setMessage(R.string.not_internet + "")
+                    .setMessage(context.getResources().getString(R.string.not_internet))
                     .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
                         }
                     }).show();
-            return false;
-        }
+        return result;
     }
 }

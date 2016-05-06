@@ -160,6 +160,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     //intent.putExtra(Const.USER, user);
                     mMySqliteHelper.addUser(user);
                     startActivity(intent);
+                    finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

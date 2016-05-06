@@ -51,6 +51,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,
     private String mAuthToken;
     private User mUser;
     private MySqliteHelper mMySqliteHelper;
+    private Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,6 +138,18 @@ public class HomeActivity extends Activity implements View.OnClickListener,
         intentLessonLearned.putExtra(Const.NAME, mListCategory.get(position).getName());
         intentLessonLearned.putExtra(Const.USER, mUser);
         startActivity(intentLessonLearned);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mToast == null)
+            mToast = Toast.makeText(HomeActivity.this, R.string.press_back_again_to_exit,
+                                    Toast.LENGTH_SHORT);
+        if(mToast.getView().isShown()){
+            super.onBackPressed();
+        } else {
+            mToast.show();
+        }
     }
 
     private class LoadCategory extends AsyncTask<String, String, String> {

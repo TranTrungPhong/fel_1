@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.framgia.fel1.R;
@@ -18,8 +19,11 @@ import com.framgia.fel1.model.User;
 import com.framgia.fel1.util.CheckRequire;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.io.IOException;
+import java.util.Iterator;
 
 public class RegisterActivity extends AppCompatActivity {
     private static final String TAG = "RegisterActivity";
@@ -29,6 +33,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText mEditPassword;
     private EditText mEditPasswordConfirmation;
     private Button mButtonRegister;
+    private LinearLayout mLayoutLoading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,13 +55,15 @@ public class RegisterActivity extends AppCompatActivity {
         mEditPassword = (EditText) findViewById(R.id.edit_password);
         mEditPasswordConfirmation = (EditText) findViewById(R.id.edit_password_confirmation);
         mButtonRegister = (Button) findViewById(R.id.button_register);
+        mLayoutLoading = (LinearLayout) findViewById(R.id.layout_loading);
+        mLayoutLoading.setVisibility(View.GONE);
     }
 
     private void setEvent() {
         mButtonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (CheckRequire.checkEmail(getApplicationContext(), mEditEmail) &&
+                if ( CheckRequire.checkEmail(getApplicationContext(), mEditEmail) &&
                         CheckRequire.checkPassword(getApplicationContext(), mEditPassword,
                                 mEditPasswordConfirmation)) {
                     mEditEmail.setError(null);
@@ -79,59 +86,77 @@ public class RegisterActivity extends AppCompatActivity {
         String email = mEditEmail.getText().toString();
         String password = mEditPassword.getText().toString();
         String passwordConfirmation = mEditPasswordConfirmation.getText().toString();
-        ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if (!InternetUtils.isInternetConnected(RegisterActivity.this)) {
-                cancel(true);
-            }
-            progressDialog = new ProgressDialog(RegisterActivity.this);
-            progressDialog.setMessage(getResources().getString(R.string.loading));
-            progressDialog.show();
+            mLayoutLoading.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected String doInBackground(String... params) {
-            if (isCancelled()) {
-                return null;
-            }
-            JSONObject jsonObject = new JSONObject();
-            JSONObject object = new JSONObject();
-            try {
-                jsonObject.put(Const.NAME, name);
-                jsonObject.put(Const.EMAIL, email);
-                jsonObject.put(Const.PASSWORD, password);
-                jsonObject.put(Const.PASSWORD_CONFIRMATION, passwordConfirmation);
-                object.put(Const.USER, jsonObject);
-                return HttpRequest.postJSON(APIService.URL_API_SIGNUP, object,
-                        APIService.METHOD_POST);
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return null;
-            }
+                JSONObject jsonObject = new JSONObject();
+                JSONObject object = new JSONObject();
+                try {
+                    jsonObject.put(Const.NAME, name);
+                    jsonObject.put(Const.EMAIL, email);
+                    jsonObject.put(Const.PASSWORD, password);
+                    jsonObject.put(Const.PASSWORD_CONFIRMATION, passwordConfirmation);
+                    object.put(Const.USER, jsonObject);
+                    String response = null;
+                    try {
+                        response = HttpRequest.postJsonRequest(APIService.URL_API_SIGNUP, object,
+                                                               APIService.METHOD_POST);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return response;
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            return null;
         }
 
         @Override
         protected void onPostExecute(String response) {
-            progressDialog.dismiss();
-            if (response == null) {
-                Toast.makeText(RegisterActivity.this, R.string.register_error,
-                        Toast.LENGTH_SHORT).show();
-            } else {
+            mLayoutLoading.setVisibility(View.GONE);
+            if ( response != null ) {
                 try {
                     User user = new User(response);
-                    if (user != null) {
+                    if ( user.getId() != 0 ) {
                         Toast.makeText(RegisterActivity.this, R.string.register_successfully,
-                                Toast.LENGTH_SHORT).show();
+                                       Toast.LENGTH_SHORT).show();
                         onBackPressed();
+                    } else {
+                        StringBuilder message = new StringBuilder();
+                        JSONObject jsonObject =
+                                new JSONObject(response).getJSONObject(Const.MESSAGE);
+                        Iterator<String> iter = jsonObject.keys();
+                        while (iter.hasNext()) {
+                            String key = iter.next();
+                            message.append(key).append(" : ");
+                            try {
+                                JSONArray value = jsonObject.getJSONArray(key);
+                                for (int i = 0; i < value.length(); i++) {
+                                    message.append(value.get(i));
+                                    if ( i < value.length() - 1 ) {
+                                        message.append(", ");
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            if ( iter.hasNext() )
+                                message.append("\n");
+                        }
+
+                        Toast.makeText(RegisterActivity.this, message.toString(),
+                                       Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(RegisterActivity.this, R.string.register_error,
-                            Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, response.toString());
+                                   Toast.LENGTH_SHORT).show();
                 }
             }
         }

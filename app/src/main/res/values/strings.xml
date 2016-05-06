@@ -83,9 +83,7 @@
     <string name="error_export_csv">Export CSV file failed</string>
     <string name="error_export_pdf">Export PDF file failed</string>
     <string name="title_result_lesson">Lesson</string>
-<<<<<<< HEAD
-=======
     <string name="activities">Activities</string>
     <string name="back">Back</string>
->>>>>>> dea6d94933d897a8b06b3f13efd2c54e994bbd90
+    <string name="press_back_again_to_exit">Press back again to exit app</string>
 </resources>
