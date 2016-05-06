@@ -1,6 +1,8 @@
 package com.framgia.fel1.activity;
 
 import android.content.Intent;
+import android.os.Build;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,6 +18,7 @@ import com.framgia.fel1.model.Lesson;
 import com.framgia.fel1.model.Word;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ResultActivity extends AppCompatActivity
         implements ResultAdapter.OnListFragmentInteractionListener {
@@ -27,6 +30,7 @@ public class ResultActivity extends AppCompatActivity
     private Intent mData;
     private Lesson mLesson;
     private MySqliteHelper mSqliteHelper;
+    private TextToSpeech mTextToSpeech;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +39,35 @@ public class ResultActivity extends AppCompatActivity
         setView();
         setData();
         setEvent();
+    }
+
+    @Override
+    protected void onResume() {
+        mTextToSpeech = new TextToSpeech(ResultActivity.this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status != TextToSpeech.ERROR) {
+                    mTextToSpeech.setLanguage(Locale.US);
+                }
+            }
+        });
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        if(mTextToSpeech.isSpeaking()) {
+            mTextToSpeech.stop();
+            mTextToSpeech.shutdown();
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(mTextToSpeech.isSpeaking())
+            mTextToSpeech.stop();
+        super.onDestroy();
     }
 
     private void setView() {
@@ -75,5 +108,11 @@ public class ResultActivity extends AppCompatActivity
     @Override
     public void onClickSpeakListener(int position, Word word) {
         //TODO: Speaking word
+        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String utteranceId = this.hashCode() + "";
+            mTextToSpeech.speak(word.getContent(), TextToSpeech.QUEUE_FLUSH, null, utteranceId);
+        } else {
+            mTextToSpeech.speak(word.getContent(), TextToSpeech.QUEUE_FLUSH, null);
+        }
     }
 }

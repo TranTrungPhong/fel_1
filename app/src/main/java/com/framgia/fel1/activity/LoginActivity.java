@@ -3,6 +3,7 @@ package com.framgia.fel1.activity;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +22,8 @@ import com.framgia.fel1.model.User;
 import com.framgia.fel1.model.UserActivity;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,6 +53,16 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         mMySqliteHelper = new MySqliteHelper(this);
         mEditTextEmail = (EditText) findViewById(R.id.edit_username_login);
         mEditTextPassword = (EditText) findViewById(R.id.edit_password_login);
+        mEditTextEmail.setCompoundDrawables(new IconicsDrawable(LoginActivity.this)
+                                                    .icon(FontAwesome.Icon.faw_envelope)
+                                                    .color(Color.GRAY)
+                                                    .sizeRes(R.dimen.icon_size),
+                                            null, null, null);
+        mEditTextPassword.setCompoundDrawables(new IconicsDrawable(LoginActivity.this)
+                                                       .icon(FontAwesome.Icon.faw_lock)
+                                                       .color(Color.GRAY)
+                                                       .sizeRes(R.dimen.icon_size),
+                                               null, null, null);
         mCheckBoxRememberMe = (CheckBox) findViewById(R.id.chechbox_remember);
         mTextviewSignup = (TextView) findViewById(R.id.text_sign_up);
         mButtonLogin = (Button) findViewById(R.id.button_login);

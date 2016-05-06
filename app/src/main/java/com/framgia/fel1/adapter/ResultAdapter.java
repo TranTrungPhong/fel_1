@@ -13,6 +13,8 @@ import com.framgia.fel1.R;
 import com.framgia.fel1.model.Answer;
 import com.framgia.fel1.model.ItemList2;
 import com.framgia.fel1.model.Word;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.iconics.IconicsDrawable;
 import java.util.List;
 
 /**
@@ -74,6 +76,9 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
             }
             i++;
         }
+        holder.mImageSpeak.setImageDrawable(
+                new IconicsDrawable(mContext).icon(FontAwesome.Icon.faw_volume_up).colorRes(
+                        R.color.colorAccent).sizeRes(R.dimen.icon_size));
         holder.mImageSpeak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
