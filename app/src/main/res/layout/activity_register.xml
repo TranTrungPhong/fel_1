@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackgroundLogin"
+    android:background="@color/colorsplash"
     tools:context="com.framgia.fel1.activity.RegisterActivity">
 
     <ScrollView
@@ -13,10 +13,11 @@
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:id="@+id/layout_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/activity_horizontal_margin">
+            android:layout_height="@dimen/abc_action_bar_default_height_material"
+            android:layout_marginBottom="@dimen/activity_marginTop_40"
+            android:orientation="vertical">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -41,35 +42,62 @@
                 android:id="@+id/edit_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="@dimen/activity_horizontal_margin"
+                android:background="@drawable/border_view"
+                android:drawablePadding="@dimen/drawable_padding"
                 android:hint="@string/name"
-                android:inputType="textPersonName"/>
+                android:inputType="textPersonName"
+                android:padding="@dimen/activity_horizontal_margin"/>
 
             <EditText
                 android:id="@+id/edit_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@drawable/border_view"
+                android:drawablePadding="@dimen/drawable_padding"
                 android:hint="@string/email"
-                android:inputType="textEmailAddress"/>
+                android:inputType="textEmailAddress"
+                android:padding="@dimen/activity_horizontal_margin"/>
 
             <EditText
                 android:id="@+id/edit_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@drawable/border_view"
+                android:drawablePadding="@dimen/drawable_padding"
                 android:hint="@string/password_login"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword"
+                android:padding="@dimen/activity_horizontal_margin"/>
 
             <EditText
                 android:id="@+id/edit_password_confirmation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@drawable/border_view"
+                android:drawablePadding="@dimen/drawable_padding"
                 android:hint="@string/confirmation_password"
-                android:inputType="textPassword"/>
+                android:inputType="textPassword"
+                android:padding="@dimen/activity_horizontal_margin"/>
 
             <Button
                 android:id="@+id/button_register"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/abc_action_button_min_height_material"
-                android:text="@string/register"/>
+                android:layout_marginBottom="@dimen/activity_horizontal_margin"
+                android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginRight="@dimen/activity_horizontal_margin"
+                android:background="@drawable/button_background"
+                android:text="@string/register"
+                android:textColor="@android:color/white"/>
         </LinearLayout>
     </ScrollView>
 
@@ -77,8 +105,8 @@
         android:id="@+id/layout_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/darker_gray"
         android:alpha="0.8"
+        android:background="@android:color/darker_gray"
         android:gravity="center">
 
         <ProgressBar

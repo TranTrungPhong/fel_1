@@ -1,6 +1,7 @@
 package com.framgia.fel1.activity;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,9 @@ import com.framgia.fel1.model.User;
 import com.framgia.fel1.util.CheckRequire;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
+import com.framgia.fel1.util.ReadJson;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.iconics.IconicsDrawable;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText mEditPasswordConfirmation;
     private Button mButtonRegister;
     private LinearLayout mLayoutLoading;
+    private LinearLayout mLayoutContent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +61,25 @@ public class RegisterActivity extends AppCompatActivity {
         mEditPasswordConfirmation = (EditText) findViewById(R.id.edit_password_confirmation);
         mButtonRegister = (Button) findViewById(R.id.button_register);
         mLayoutLoading = (LinearLayout) findViewById(R.id.layout_loading);
+        mLayoutContent = (LinearLayout) findViewById(R.id.layout_content);
+        mLayoutContent.setVisibility(View.VISIBLE);
         mLayoutLoading.setVisibility(View.GONE);
+        mEditName.setCompoundDrawables(new IconicsDrawable(RegisterActivity.this)
+                                                .icon(FontAwesome.Icon.faw_user)
+                                                .color(Color.GRAY)
+                                                .sizeRes(R.dimen.icon_size), null, null, null);
+        mEditEmail.setCompoundDrawables(new IconicsDrawable(RegisterActivity.this)
+                                                .icon(FontAwesome.Icon.faw_envelope)
+                                                .color(Color.GRAY)
+                                                .sizeRes(R.dimen.icon_size), null, null, null);
+        mEditPassword.setCompoundDrawables(new IconicsDrawable(RegisterActivity.this)
+                                                .icon(FontAwesome.Icon.faw_lock)
+                                                .color(Color.GRAY)
+                                                .sizeRes(R.dimen.icon_size), null, null, null);
+        mEditPasswordConfirmation.setCompoundDrawables(new IconicsDrawable(RegisterActivity.this)
+                                                .icon(FontAwesome.Icon.faw_lock)
+                                                .color(Color.GRAY)
+                                                .sizeRes(R.dimen.icon_size), null, null, null);
     }
 
     private void setEvent() {
@@ -91,6 +114,7 @@ public class RegisterActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             mLayoutLoading.setVisibility(View.VISIBLE);
+            mLayoutContent.setVisibility(View.GONE);
         }
 
         @Override
@@ -120,43 +144,25 @@ public class RegisterActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String response) {
             mLayoutLoading.setVisibility(View.GONE);
+            mLayoutContent.setVisibility(View.VISIBLE);
             if ( response != null ) {
                 try {
                     User user = new User(response);
                     if ( user.getId() != 0 ) {
+
                         Toast.makeText(RegisterActivity.this, R.string.register_successfully,
                                        Toast.LENGTH_SHORT).show();
                         onBackPressed();
                     } else {
-                        StringBuilder message = new StringBuilder();
-                        JSONObject jsonObject =
-                                new JSONObject(response).getJSONObject(Const.MESSAGE);
-                        Iterator<String> iter = jsonObject.keys();
-                        while (iter.hasNext()) {
-                            String key = iter.next();
-                            message.append(key).append(" : ");
-                            try {
-                                JSONArray value = jsonObject.getJSONArray(key);
-                                for (int i = 0; i < value.length(); i++) {
-                                    message.append(value.get(i));
-                                    if ( i < value.length() - 1 ) {
-                                        message.append(", ");
-                                    }
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            if ( iter.hasNext() )
-                                message.append("\n");
-                        }
-
-                        Toast.makeText(RegisterActivity.this, message.toString(),
+                        String message = ReadJson.parseErrorJson(response);
+                        Toast.makeText(RegisterActivity.this, message,
                                        Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(RegisterActivity.this, R.string.register_error,
                                    Toast.LENGTH_SHORT).show();
+                    Log.d(TAG, response.toString());
                 }
             }
         }

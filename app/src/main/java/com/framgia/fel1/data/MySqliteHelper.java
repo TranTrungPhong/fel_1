@@ -483,51 +483,6 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     }
     //endregion
 
-    //region RESULT
-    //Add Answer
-    public long addResult(Result result) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        if (result != null) {
-            cv.put(COLUMN_ID, result.getId());
-            cv.put(COLUMN_ID_USER, result.getIdUser());
-            cv.put(COLUMN_ID_LESSON, result.getIdLesson());
-            cv.put(COLUMN_ID_WORD, result.getIdWord());
-            cv.put(COLUMN_ID_ANSWER, result.getIdAnswer());
-        }
-        return db.insert(TABLE_RESULT, null, cv);
-    }
-    // Read Answer
-    public Result getResult(int id) {
-        Result result = new Result();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor =
-                db.query(TABLE_RESULT, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)},
-                        null, null, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            result.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
-            result.setIdUser(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_USER)));
-            result.setIdLesson(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_LESSON)));
-            result.setIdAnswer(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_ANSWER)));
-        }
-        return result;
-    }
-    // Update Word
-    public long updateResult(Result result) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues cv = new ContentValues();
-        if (result != null) {
-            cv.put(COLUMN_ID, result.getId());
-            cv.put(COLUMN_ID_USER, result.getIdUser());
-            cv.put(COLUMN_ID_LESSON, result.getIdLesson());
-            cv.put(COLUMN_ID_WORD, result.getIdWord());
-            cv.put(COLUMN_ID_ANSWER, result.getIdAnswer());
-        }
-        return db.update(TABLE_RESULT, cv, COLUMN_ID + " = ?",
-                new String[]{String.valueOf(result.getId())});
-    }
-    //endregion
-
     // Delete table
     public boolean deleteTable(String tableName, String columnName, String value) {
         SQLiteDatabase db = this.getWritableDatabase();

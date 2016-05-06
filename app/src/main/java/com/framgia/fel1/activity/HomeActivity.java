@@ -116,6 +116,8 @@ public class HomeActivity extends Activity implements View.OnClickListener,
                 .setPositiveButton(R.string.thoat, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                        startActivity(intent);
                         finish();
                     }
                 })

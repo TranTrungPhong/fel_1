@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,9 +28,13 @@ import com.framgia.fel1.model.User;
 import com.framgia.fel1.util.CheckRequire;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
+import com.framgia.fel1.util.ReadJson;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.iconics.IconicsDrawable;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 public class UpdateProfileActivity extends AppCompatActivity {
     public static final String TAG = "UpdateProfileActivity";
@@ -96,6 +101,27 @@ public class UpdateProfileActivity extends AppCompatActivity {
         mEditPasswordConfirmation = (EditText) findViewById(R.id.edit_password_confirmation);
         mEditName = (EditText) findViewById(R.id.edit_name);
         mImageAvatar = (ImageView) findViewById(R.id.image_avatar);
+
+        mEditName.setCompoundDrawables(new IconicsDrawable(UpdateProfileActivity.this)
+                                               .icon(FontAwesome.Icon.faw_user)
+                                               .color(Color.GRAY)
+                                               .sizeRes(R.dimen.icon_size), null, null, null);
+        mEditEmail.setCompoundDrawables(new IconicsDrawable(UpdateProfileActivity.this)
+                                                .icon(FontAwesome.Icon.faw_envelope)
+                                                .color(Color.GRAY)
+                                                .sizeRes(R.dimen.icon_size), null, null, null);
+        mEditNewPassword.setCompoundDrawables(new IconicsDrawable(UpdateProfileActivity.this)
+                                                   .icon(FontAwesome.Icon.faw_lock)
+                                                   .color(Color.GRAY)
+                                                   .sizeRes(R.dimen.icon_size), null, null, null);
+        mEditPasswordConfirmation
+                .setCompoundDrawables(new IconicsDrawable(UpdateProfileActivity.this)
+                                                               .icon(FontAwesome.Icon.faw_lock)
+                                                               .color(Color.GRAY)
+                                                               .sizeRes(R.dimen.icon_size),
+                                                               null, null, null);
+
+
         if (mUser != null) {
             mEditEmail.setText(mUser.getEmail());
             mEditName.setText(mUser.getName());
@@ -168,21 +194,27 @@ public class UpdateProfileActivity extends AppCompatActivity {
             String response = null;
             try {
                 // change bitmap Image to base64 string
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                mBitmapAvatar.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                byte[] byteArray = byteArrayOutputStream.toByteArray();
-                String bitmapEncoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                if(mBitmapAvatar != null) {
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    mBitmapAvatar.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                    byte[] byteArray = byteArrayOutputStream.toByteArray();
+                    String bitmapEncoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    jsonObject.put(Const.AVATAR, bitmapEncoded);
+                }
                 //make JsonObject
                 jsonObject.put(Const.NAME, name);
                 jsonObject.put(Const.EMAIL, email);
                 jsonObject.put(Const.PASSWORD, password);
                 jsonObject.put(Const.PASSWORD_CONFIRMATION, passwordConfirm);
-                jsonObject.put(Const.AVATAR, bitmapEncoded);
                 jsonObject.put(Const.AUTH_TOKEN, mUser.getAuthToken());
                 JSONObject jsonObjectPost = new JSONObject();
                 jsonObjectPost.put(Const.USER, jsonObject);
-                response = HttpRequest.postJSON(APIService.URL_UPDATE_PROFILE, jsonObjectPost,
-                        APIService.METHOD_POST);
+                try {
+                    response = HttpRequest.postJsonRequest(APIService.URL_UPDATE_PROFILE, jsonObjectPost,
+                            APIService.METHOD_POST);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return response;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -192,25 +224,26 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-            progressDialog.dismiss();
+            if(progressDialog.isShowing())
+                progressDialog.dismiss();
             if (response == null) {
                 Toast.makeText(UpdateProfileActivity.this, R.string.error_update_profile,
                         Toast.LENGTH_SHORT).show();
             } else {
                 try {
                     User user = new User(response);
-                    if (user != null) {
+                    if ( user.getId() != 0 ) {
                         Toast.makeText(UpdateProfileActivity.this, R.string.update_successfully,
                                 Toast.LENGTH_SHORT).show();
-                        //TODO: Go to HomeActivity
-                        /* waiting home Activity merged
-
                         Intent homeItent =
                                 new Intent(UpdateProfileActivity.this, HomeActivity.class);
                         homeItent.putExtra(Const.USER, mUser);
                         startActivity(homeItent);
                         finish();
-                        */
+                    } else {
+                        String message = ReadJson.parseErrorJson(response);
+                        Toast.makeText(UpdateProfileActivity.this, message,
+                                       Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
