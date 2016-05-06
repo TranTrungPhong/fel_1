@@ -341,7 +341,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         if ( cursor.getCount() > 0 && cursor.moveToFirst() ) {
             do {
                 Word word = new Word();
-                word.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_WORD)));
+                word.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
                 word.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
                 word.setLessonId(cursor.getInt(cursor.getColumnIndex(COLUMN_LESSON_ID)));
                 word.setResultId(cursor.getInt(cursor.getColumnIndex(COLUMN_RESULT_ID)));

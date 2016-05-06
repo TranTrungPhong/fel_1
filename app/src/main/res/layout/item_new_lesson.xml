@@ -15,10 +15,7 @@
             android:layout_height="@dimen/height_50"
             android:layout_weight="1"
             android:gravity="center_vertical"
-<<<<<<< b71bbd0c36c644fd0d7e02d2ed1808fc9c7d5a67
             android:textColor="@android:color/white"
-=======
->>>>>>> create new lesson
             android:textSize="@dimen/text_size_24" />
 
         <TextView
@@ -28,10 +25,7 @@
             android:layout_weight="1"
             android:drawableRight="@drawable/ic_speech"
             android:gravity="center_vertical"
-<<<<<<< b71bbd0c36c644fd0d7e02d2ed1808fc9c7d5a67
             android:textColor="@android:color/white"
-=======
->>>>>>> create new lesson
             android:textSize="@dimen/text_size_24" />
 
     </LinearLayout>
@@ -47,10 +41,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-<<<<<<< b71bbd0c36c644fd0d7e02d2ed1808fc9c7d5a67
             android:textColor="@android:color/white"
-=======
->>>>>>> create new lesson
             android:textSize="@dimen/text_size_10" />
 
         <RadioButton
@@ -58,10 +49,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-<<<<<<< b71bbd0c36c644fd0d7e02d2ed1808fc9c7d5a67
             android:textColor="@android:color/white"
-=======
->>>>>>> create new lesson
             android:textSize="@dimen/text_size_10" />
 
         <RadioButton
@@ -69,10 +57,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-<<<<<<< b71bbd0c36c644fd0d7e02d2ed1808fc9c7d5a67
             android:textColor="@android:color/white"
-=======
->>>>>>> create new lesson
             android:textSize="@dimen/text_size_10" />
 
         <RadioButton
@@ -80,10 +65,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-<<<<<<< b71bbd0c36c644fd0d7e02d2ed1808fc9c7d5a67
             android:textColor="@android:color/white"
-=======
->>>>>>> create new lesson
             android:textSize="@dimen/text_size_10" />
     </RadioGroup>
 </LinearLayout>

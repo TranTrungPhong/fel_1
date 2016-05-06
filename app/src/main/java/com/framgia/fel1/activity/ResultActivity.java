@@ -3,6 +3,7 @@ package com.framgia.fel1.activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -24,7 +25,7 @@ public class ResultActivity extends AppCompatActivity
     private List<Word> mWordList;
     private Toolbar mToolbar;
     private Intent mData;
-    private Lesson mLesson = new Lesson();
+    private Lesson mLesson;
     private MySqliteHelper mSqliteHelper;
 
     @Override
@@ -39,11 +40,13 @@ public class ResultActivity extends AppCompatActivity
     private void setView() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setTitle(null);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mWordList = new ArrayList<>();
         mResultAdapter = new ResultAdapter(ResultActivity.this, mWordList);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(ResultActivity.this));
         mRecyclerView.setAdapter(mResultAdapter);
     }
 
@@ -51,8 +54,9 @@ public class ResultActivity extends AppCompatActivity
         mData = getIntent();
         mLesson = (Lesson) mData.getSerializableExtra(Const.LESSON);
         if ( mLesson != null ) {
+            mWordList.clear();
             mSqliteHelper = new MySqliteHelper(ResultActivity.this);
-            mWordList = mSqliteHelper.getListWordByLesson(mLesson.getId());
+            mWordList.addAll(mSqliteHelper.getListWordByLesson(mLesson.getId()));
             mResultAdapter.notifyDataSetChanged();
         }
 

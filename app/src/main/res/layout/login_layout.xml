@@ -41,13 +41,8 @@
         android:drawableLeft="@drawable/ic_lock"
         android:hint="@string/password_login"
         android:inputType="textPassword"
-<<<<<<< b71bbd0c36c644fd0d7e02d2ed1808fc9c7d5a67
         android:textColor="@android:color/white"
         android:textColorHint="@android:color/white" />
-=======
-        android:textColor="@android:color/black"
-        android:textColorHint="@color/ColorHint" />
->>>>>>> create new lesson
 
     <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/chechbox_remember"
