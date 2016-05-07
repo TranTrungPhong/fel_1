@@ -19,7 +19,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/padding_20"
             android:text="@string/id"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/text_size_15" />
 
         <TextView
@@ -30,7 +30,7 @@
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/padding_50"
             android:text="@string/category_name"
-            android:textColor="@android:color/black"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/text_size_15" />
     </LinearLayout>
 </LinearLayout>

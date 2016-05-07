@@ -30,10 +30,11 @@
             android:layout_weight="1"
             android:layout_height="@dimen/height_50"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@android:color/white"
+            android:background="#616161"
             android:hint="@string/username_login"
-            android:textColor="@android:color/black"
-            android:textColorHint="@color/ColorHint" />
+            android:textColor="@android:color/white"
+            android:drawableLeft="@drawable/ic_account"
+            android:textColorHint="@android:color/white" />
 
         <EditText
             android:id="@+id/edit_password_login"
@@ -42,10 +43,11 @@
             android:layout_marginLeft="@dimen/fab_margin"
             android:layout_height="@dimen/height_50"
             android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@android:color/white"
+            android:background="#616161"
             android:hint="@string/password_login"
-            android:textColor="@android:color/black"
-            android:textColorHint="@color/ColorHint" />
+            android:drawableLeft="@drawable/ic_lock"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white" />
     </LinearLayout>
 
     <android.support.v7.widget.AppCompatCheckBox
@@ -61,7 +63,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_16"
-        android:background="@color/bgButtonLogin"
+        android:background="@drawable/button_background"
         android:text="@string/text_login"
         android:textColor="@android:color/white" />
 
