@@ -90,7 +90,6 @@ public class HomeActivity extends Activity implements View.OnClickListener,
         switch (v.getId()) {
             case R.id.button_update_show_user:
                 Intent intentUpdate = new Intent(HomeActivity.this, UpdateProfileActivity.class);
-                intentUpdate.putExtra(Const.USER, mUser);
                 startActivity(intentUpdate);
                 break;
             case R.id.button_sign_out_show_user:
