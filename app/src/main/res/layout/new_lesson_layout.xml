@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:textColor="@android:color/white"
         android:text="@string/lesson"
         android:textSize="@dimen/text_size_40" />
 
@@ -18,6 +19,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/lesson_name"
+        android:textColor="@android:color/white"
         android:textSize="@dimen/text_size_20" />
 
 
@@ -31,6 +33,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="@drawable/button_background"
+            android:textColor="@android:color/white"
             android:text="@string/submit" />
 
         <Button
@@ -38,6 +42,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="@drawable/button_background"
+            android:textColor="@android:color/white"
             android:text="@string/cancell" />
     </LinearLayout>
 
@@ -47,6 +53,8 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/listview_word_new_lesson"
+            android:background="@drawable/bg_recycle"
+            android:padding="@dimen/padding_20"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </ScrollView>
