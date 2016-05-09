@@ -26,7 +26,8 @@
         <activity
             android:name=".activity.UpdateProfileActivity"
             android:label="@string/title_activity_update_profile"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".activity.HomeActivity" />
         <activity android:name=".activity.LearnedLessonActivity" />
         <activity android:name=".activity.NewLessonActivity" />

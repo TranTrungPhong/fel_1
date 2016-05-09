@@ -85,4 +85,5 @@
     <string name="title_result_lesson">Lesson</string>
     <string name="activities">Activities</string>
     <string name="back">Back</string>
+    <string name="press_back_again_to_exit">Press back again to exit app</string>
 </resources>
