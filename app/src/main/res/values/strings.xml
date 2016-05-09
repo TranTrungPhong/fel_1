@@ -63,4 +63,24 @@
     <string name="create_lesson">Create Lesson</string>
     <string name="implement_listener">must implement OnListCategoryClickItem</string>
     <string name="word">word</string>
+    <string name="lesson_name">Lesson Name</string>
+    <string name="submit">Submit</string>
+    <string name="cancell">Cancel</string>
+    <string name="hetbai">Out of lesson !</string>
+    <string name="thieu_word">Miss word !</string>
+    <string name="onListWordsClickItem">must implement OnListWordsClickItem</string>
+    <string name="no_data_to_speech">No Data</string>
+    <string name="err_cannot_read_list_lesson">Error cannot read list lesson</string>
+    <string name="title_word_list">Word List</string>
+    <string name="error_get_word_list">Error get word list</string>
+    <string name="export_pdf">Export PDF</string>
+    <string name="export_csv">Export CSV</string>
+    <string name="export_tsv">Export TSV</string>
+    <string name="export_csv_success">Export CSV format success</string>
+    <string name="export_tsv_success">Export TSV format success</string>
+    <string name="export_pdf_success">Export PDF file success</string>
+    <string name="error_export_tsv">Export TSV file failed</string>
+    <string name="error_export_csv">Export CSV file failed</string>
+    <string name="error_export_pdf">Export PDF file failed</string>
+    <string name="title_result_lesson">Lesson</string>
 </resources>

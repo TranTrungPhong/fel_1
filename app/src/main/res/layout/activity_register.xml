@@ -34,29 +34,39 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/name"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
             android:inputType="textPersonName"/>
         <EditText
             android:id="@+id/edit_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/email"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
             android:inputType="textEmailAddress"/>
         <EditText
             android:id="@+id/edit_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password_login"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
             android:inputType="textPassword"/>
         <EditText
             android:id="@+id/edit_password_confirmation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/confirmation_password"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/white"
             android:inputType="textPassword"/>
         <Button
             android:id="@+id/button_register"
             android:layout_width="match_parent"
             android:layout_height="@dimen/abc_action_button_min_height_material"
+            android:background="@drawable/button_background"
+            android:textColor="@android:color/white"
             android:text="@string/register"/>
     </LinearLayout>
 </ScrollView>

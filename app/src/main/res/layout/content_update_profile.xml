@@ -23,6 +23,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/email"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
                 android:inputType="textEmailAddress"/>
 
             <EditText
@@ -30,6 +32,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/new_password_update"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
                 android:inputType="textPassword"/>
 
             <EditText
@@ -37,12 +41,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/retype_password"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
                 android:inputType="textPassword"/>
             <EditText
                 android:id="@+id/edit_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/full_name"
+                android:textColor="@android:color/white"
+                android:textColorHint="@android:color/white"
                 android:inputType="textPersonName"
                 />
             <ImageView

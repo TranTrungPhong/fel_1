@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.framgia.fel1.R;
 import com.framgia.fel1.constant.APIService;
 import com.framgia.fel1.constant.Const;
+import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.User;
 import com.framgia.fel1.util.CheckRequire;
 import com.framgia.fel1.util.HttpRequest;
@@ -43,13 +44,16 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private User mUser;
     private Intent mData;
     private Bitmap mBitmapAvatar = null;
+    private MySqliteHelper mMySqliteHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_profile);
         mData = getIntent();
-        mUser = (User) mData.getSerializableExtra(Const.USER);
+        //mUser = (User) mData.getSerializableExtra(Const.USER);
+        mMySqliteHelper = new MySqliteHelper(this);
+        mUser = mMySqliteHelper.getUser();
         setView();
         setEvent();
     }

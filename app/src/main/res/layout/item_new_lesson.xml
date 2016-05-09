@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorBackgroundLogin"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/text_stt_new_word"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/height_50"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_24" />
+
+        <TextView
+            android:id="@+id/text_content_word_new"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/height_50"
+            android:layout_weight="1"
+            android:drawableRight="@drawable/ic_mics"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_24" />
+
+    </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/radiogroup"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_50"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radiobutton_a"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_10" />
+
+        <RadioButton
+            android:id="@+id/radiobutton_b"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_10" />
+
+        <RadioButton
+            android:id="@+id/radiobutton_c"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_10" />
+
+        <RadioButton
+            android:id="@+id/radiobutton_d"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/text_size_10" />
+    </RadioGroup>
+</LinearLayout>
