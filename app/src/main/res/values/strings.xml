@@ -87,4 +87,5 @@
     <string name="back">Back</string>
     <string name="press_back_again_to_exit">Press back again to exit app</string>
     <string name="user_activities">User Activities</string>
+    <string name="message_invalid">message</string>
 </resources>

@@ -30,6 +30,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,9 +123,13 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 jsonObject.put(APIService.SESSION_REMEMBER_ME, mCheckBoxRememMe);
                 JSONObject jsonObjectPost = new JSONObject();
                 jsonObjectPost.put(APIService.SESSION, jsonObject);
-                response = HttpRequest.postJSON(APIService.URL_API_SIGNIN,
-                        jsonObjectPost,
-                        APIService.METHOD_POST);
+                try {
+                    response = HttpRequest.postJsonRequest(APIService.URL_API_SIGNIN,
+                            jsonObjectPost,
+                            APIService.METHOD_POST);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 return response;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -143,41 +148,53 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 Toast.makeText(LoginActivity.this, R.string.error_login, Toast.LENGTH_SHORT)
                         .show();
             } else {
-                Toast.makeText(LoginActivity.this, R.string.login_done, Toast.LENGTH_SHORT).show();
+                String responseInvalid =null;
                 try {
-                    JSONObject jsonObjectUser = new JSONObject(s);
-                    JSONObject response = jsonObjectUser.optJSONObject(Const.USER);
-                    JSONArray jsonArrayAct = response.optJSONArray(Const.ACTIVITIES);
-                    List<UserActivity> listUserActivity = new ArrayList<>();
-                    for (int i = 0; i < jsonArrayAct.length(); i++) {
-                        JSONObject joActivity = jsonArrayAct.optJSONObject(i);
-                        UserActivity userActivity = new UserActivity(
-                                Integer.parseInt(joActivity.optString(Const.ID)),
-                                joActivity.optString(Const.CONTENT),
-                                joActivity.optString(Const.CREATED_AT)
-                        );
-                        listUserActivity.add(userActivity);
-                        mMySqliteHelper.addUserActivity(userActivity);
-                    }
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    User user = new User(
-                            Integer.parseInt(response.getString(Const.ID)),
-                            response.optString(Const.NAME),
-                            response.optString(Const.EMAIL),
-                            response.optString(Const.AVATAR),
-                            Boolean.parseBoolean(response.optString(Const.ADMIN)),
-                            response.optString(Const.AUTH_TOKEN),
-                            response.optString(Const.CREATED_AT),
-                            response.optString(Const.UPDATED_AT),
-                            Integer.parseInt(response.optString(Const.LEARNED_WORDS)),
-                            listUserActivity
-                    );
-                    //intent.putExtra(Const.USER, user);
-                    mMySqliteHelper.addUser(user);
-                    startActivity(intent);
-                    finish();
+                    JSONObject jsonObject = new JSONObject(s);
+                     responseInvalid = jsonObject.optString(getString(R.string.message_invalid));
                 } catch (JSONException e) {
                     e.printStackTrace();
+                }
+                if(responseInvalid!=null){
+                    Toast.makeText(LoginActivity.this, responseInvalid, Toast.LENGTH_SHORT)
+                            .show();
+                }else {
+                    Toast.makeText(LoginActivity.this, R.string.login_done, Toast.LENGTH_SHORT).show();
+                    try {
+                        JSONObject jsonObjectUser = new JSONObject(s);
+                        JSONObject response = jsonObjectUser.optJSONObject(Const.USER);
+                        JSONArray jsonArrayAct = response.optJSONArray(Const.ACTIVITIES);
+                        List<UserActivity> listUserActivity = new ArrayList<>();
+                        for (int i = 0; i < jsonArrayAct.length(); i++) {
+                            JSONObject joActivity = jsonArrayAct.optJSONObject(i);
+                            UserActivity userActivity = new UserActivity(
+                                    Integer.parseInt(joActivity.optString(Const.ID)),
+                                    joActivity.optString(Const.CONTENT),
+                                    joActivity.optString(Const.CREATED_AT)
+                            );
+                            listUserActivity.add(userActivity);
+                            mMySqliteHelper.addUserActivity(userActivity);
+                        }
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        User user = new User(
+                                Integer.parseInt(response.getString(Const.ID)),
+                                response.optString(Const.NAME),
+                                response.optString(Const.EMAIL),
+                                response.optString(Const.AVATAR),
+                                Boolean.parseBoolean(response.optString(Const.ADMIN)),
+                                response.optString(Const.AUTH_TOKEN),
+                                response.optString(Const.CREATED_AT),
+                                response.optString(Const.UPDATED_AT),
+                                Integer.parseInt(response.optString(Const.LEARNED_WORDS)),
+                                listUserActivity
+                        );
+                        //intent.putExtra(Const.USER, user);
+                        mMySqliteHelper.addUser(user);
+                        startActivity(intent);
+                        finish();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
