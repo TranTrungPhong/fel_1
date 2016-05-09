@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.widget.ProgressBar;
 
 import com.framgia.fel1.R;
+import com.framgia.fel1.data.MySqliteHelper;
+import com.framgia.fel1.model.User;
 
 
 /**
@@ -18,12 +20,17 @@ public class SplashScreenActivity extends Activity {
     private Handler mHandlerProgrees = new Handler();
     private static final int MAX_PROGRESSBAR = 100;
     private static final int PROGRESSBAR = 0;
+    private MySqliteHelper mMySqliteHelper;
+    private User mUser;
+    private Intent mIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen_layout);
         initView();
+        mMySqliteHelper = new MySqliteHelper(this);
+        mUser = mMySqliteHelper.getUser();
         loadProgreesBar();
     }
 
@@ -48,9 +55,13 @@ public class SplashScreenActivity extends Activity {
                     });
                 }
                 if (mStatusProgrees >= MAX_PROGRESSBAR) {
-                    Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                    if(mUser.getName() != null){
+                        mIntent = new Intent(SplashScreenActivity.this, HomeActivity.class);
+                    }else {
+                        mIntent = new Intent(SplashScreenActivity.this, LoginActivity.class);
+                    }
+                        startActivity(mIntent);
+                        finish();
                 }
             }
         }).start();

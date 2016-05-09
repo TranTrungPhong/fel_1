@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -54,15 +55,15 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         mEditTextEmail = (EditText) findViewById(R.id.edit_username_login);
         mEditTextPassword = (EditText) findViewById(R.id.edit_password_login);
         mEditTextEmail.setCompoundDrawables(new IconicsDrawable(LoginActivity.this)
-                                                    .icon(FontAwesome.Icon.faw_envelope)
-                                                    .color(Color.GRAY)
-                                                    .sizeRes(R.dimen.icon_size),
-                                            null, null, null);
+                        .icon(FontAwesome.Icon.faw_envelope)
+                        .color(Color.GRAY)
+                        .sizeRes(R.dimen.icon_size),
+                null, null, null);
         mEditTextPassword.setCompoundDrawables(new IconicsDrawable(LoginActivity.this)
-                                                       .icon(FontAwesome.Icon.faw_lock)
-                                                       .color(Color.GRAY)
-                                                       .sizeRes(R.dimen.icon_size),
-                                               null, null, null);
+                        .icon(FontAwesome.Icon.faw_lock)
+                        .color(Color.GRAY)
+                        .sizeRes(R.dimen.icon_size),
+                null, null, null);
         mCheckBoxRememberMe = (CheckBox) findViewById(R.id.chechbox_remember);
         mTextviewSignup = (TextView) findViewById(R.id.text_sign_up);
         mButtonLogin = (Button) findViewById(R.id.button_login);
@@ -156,6 +157,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                 joActivity.optString(Const.CREATED_AT)
                         );
                         listUserActivity.add(userActivity);
+                        mMySqliteHelper.addUserActivity(userActivity);
                     }
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     User user = new User(
