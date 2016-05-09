@@ -101,7 +101,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
         mEditPasswordConfirmation = (EditText) findViewById(R.id.edit_password_confirmation);
         mEditName = (EditText) findViewById(R.id.edit_name);
         mImageAvatar = (ImageView) findViewById(R.id.image_avatar);
-
+        mFab.setImageDrawable(new IconicsDrawable(UpdateProfileActivity.this)
+                                      .icon(FontAwesome.Icon.faw_check)
+                                      .color(Color.GREEN));
         mEditName.setCompoundDrawables(new IconicsDrawable(UpdateProfileActivity.this)
                                                .icon(FontAwesome.Icon.faw_user)
                                                .color(Color.GRAY)
