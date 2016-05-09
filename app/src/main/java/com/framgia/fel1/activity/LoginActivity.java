@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.framgia.fel1.R;
 import com.framgia.fel1.constant.APIService;
 import com.framgia.fel1.constant.Const;
+import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.User;
 import com.framgia.fel1.model.UserActivity;
 import com.framgia.fel1.util.HttpRequest;
@@ -36,6 +37,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private TextView mTextviewSignup;
     private ProgressDialog progressDialog;
     private int mCheckBoxRememMe = 0;
+    private MySqliteHelper mMySqliteHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     }
 
     private void initView() {
+        mMySqliteHelper = new MySqliteHelper(this);
         mEditTextEmail = (EditText) findViewById(R.id.edit_username_login);
         mEditTextPassword = (EditText) findViewById(R.id.edit_password_login);
         mCheckBoxRememberMe = (CheckBox) findViewById(R.id.chechbox_remember);
@@ -154,7 +157,8 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             Integer.parseInt(response.optString(Const.LEARNED_WORDS)),
                             listUserActivity
                     );
-                    intent.putExtra(Const.USER, user);
+                    //intent.putExtra(Const.USER, user);
+                    mMySqliteHelper.addUser(user);
                     startActivity(intent);
                 } catch (JSONException e) {
                     e.printStackTrace();

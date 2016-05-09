@@ -19,6 +19,7 @@ import com.framgia.fel1.constant.APIService;
 import com.framgia.fel1.constant.Const;
 import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.Lesson;
+import com.framgia.fel1.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,7 @@ public class LearnedLessonActivity extends Activity implements View.OnClickListe
     private MySqliteHelper mMySqliteHelper;
     private AlertDialog.Builder alertDialogBuilder;
     private AlertDialog mAlertDialog;
+    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +68,12 @@ public class LearnedLessonActivity extends Activity implements View.OnClickListe
 
     private void initData() {
         Intent receiveIntent = getIntent();
+        //mUser = (User) receiveIntent.getSerializableExtra(Const.USER);
         mAuthToken = receiveIntent.getStringExtra(Const.AUTH_TOKEN);
         mNameCategory = receiveIntent.getStringExtra(Const.NAME);
         mCategorId = receiveIntent.getIntExtra(Const.ID, -1);
         mMySqliteHelper = new MySqliteHelper(LearnedLessonActivity.this);
+        mUser = mMySqliteHelper.getUser();
         mLearnedLessonsList.clear();
         mLearnedLessonsList = mMySqliteHelper.getListLesson();
         mLessonLearnedAdapter = new LessonLearnedAdapter(this, mLearnedLessonsList);
@@ -135,5 +139,9 @@ public class LearnedLessonActivity extends Activity implements View.OnClickListe
     @Override
     public void onClickItemLessonLearned(int position, Lesson lesson) {
         // TODO call lesson or word list
+        Intent intent = new Intent(LearnedLessonActivity.this, ResultActivity.class);
+        intent.putExtra(Const.LESSON, lesson);
+        intent.putExtra(Const.USER, mUser);
+        startActivity(intent);
     }
 }

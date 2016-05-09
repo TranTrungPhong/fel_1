@@ -58,8 +58,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (CheckRequire.checkEmail(getApplicationContext(), mEditEmail) &&
                         CheckRequire.checkPassword(getApplicationContext(), mEditPassword,
-                                mEditPasswordConfirmation) &&
-                        InternetUtils.isInternetConnected(getApplicationContext())) {
+                                mEditPasswordConfirmation)) {
                     mEditEmail.setError(null);
                     mEditPassword.setError(null);
                     mEditPasswordConfirmation.setError(null);

@@ -19,12 +19,15 @@ import com.framgia.fel1.R;
 import com.framgia.fel1.adapter.HomeAdapter;
 import com.framgia.fel1.constant.APIService;
 import com.framgia.fel1.constant.Const;
+import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.ArrayCategory;
 import com.framgia.fel1.model.Category;
 import com.framgia.fel1.model.User;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.ShowImage;
+
 import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +40,8 @@ public class HomeActivity extends Activity implements View.OnClickListener,
     private static final String TAG = "HomeActivity";
     private Button mButtonUpdate;
     private Button mButtonSignUp;
+    private Button mButtonShowWordList;
+    private Button mButtonShowActivity;
     private ImageView mImageViewAvatar;
     private TextView mTextViewName;
     private TextView mTextViewEmail;
@@ -45,6 +50,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,
     private List<Category> mListCategory = new ArrayList<>();
     private String mAuthToken;
     private User mUser;
+    private MySqliteHelper mMySqliteHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +60,11 @@ public class HomeActivity extends Activity implements View.OnClickListener,
     }
 
     private void initView() {
+        mMySqliteHelper = new MySqliteHelper(this);
         mButtonSignUp = (Button) findViewById(R.id.button_sign_out_show_user);
         mButtonUpdate = (Button) findViewById(R.id.button_update_show_user);
+        mButtonShowWordList = (Button) findViewById(R.id.button_wordlist_show_user);
+        mButtonShowActivity = (Button) findViewById(R.id.button_show_activities);
         mImageViewAvatar = (ImageView) findViewById(R.id.image_show_user_avatar);
         mTextViewName = (TextView) findViewById(R.id.text_show_user_name);
         mTextViewEmail = (TextView) findViewById(R.id.text_show_user_email);
@@ -63,8 +72,9 @@ public class HomeActivity extends Activity implements View.OnClickListener,
         mRecyclerViewCategory.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mHomeAdapter = new HomeAdapter(this, mListCategory);
         mRecyclerViewCategory.setAdapter(mHomeAdapter);
-        Intent intent = getIntent();
-        mUser = (User) intent.getSerializableExtra(Const.USER);
+        mUser = mMySqliteHelper.getUser();
+        //Intent intent = getIntent();
+        //mUser = (User) intent.getSerializableExtra(Const.USER);
         new ShowImage(mImageViewAvatar).execute(mUser.getAvatar());
         mTextViewName.setText(mUser.getName());
         mTextViewEmail.setText(mUser.getEmail());
@@ -72,18 +82,30 @@ public class HomeActivity extends Activity implements View.OnClickListener,
         new LoadCategory().execute();
         mButtonUpdate.setOnClickListener(this);
         mButtonSignUp.setOnClickListener(this);
+        mButtonShowWordList.setOnClickListener(this);
+        mButtonShowActivity.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_update_show_user:
-                Intent intentUpdate = new Intent(HomeActivity.this,UpdateProfileActivity.class);
-                intentUpdate.putExtra(Const.USER,mUser);
+                Intent intentUpdate = new Intent(HomeActivity.this, UpdateProfileActivity.class);
+                intentUpdate.putExtra(Const.USER, mUser);
                 startActivity(intentUpdate);
                 break;
             case R.id.button_sign_out_show_user:
                 showSignOutDialog();
+                break;
+            case R.id.button_wordlist_show_user:
+                Intent intentWordList = new Intent(HomeActivity.this, WordListActivity.class);
+                startActivity(intentWordList);
+                break;
+            case R.id.button_show_activities:
+                Intent intentActivities = new Intent();
+                startActivity(intentActivities);
+                break;
+            default:
                 break;
         }
 
@@ -113,6 +135,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,
         intentLessonLearned.putExtra(Const.AUTH_TOKEN, mAuthToken);
         intentLessonLearned.putExtra(Const.ID, mListCategory.get(position).getId());
         intentLessonLearned.putExtra(Const.NAME, mListCategory.get(position).getName());
+        intentLessonLearned.putExtra(Const.USER, mUser);
         startActivity(intentLessonLearned);
     }
 

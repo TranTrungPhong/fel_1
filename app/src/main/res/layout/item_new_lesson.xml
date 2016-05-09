@@ -23,7 +23,7 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/height_50"
             android:layout_weight="1"
-            android:drawableRight="@drawable/ic_speech"
+            android:drawableRight="@drawable/ic_mics"
             android:gravity="center_vertical"
             android:textColor="@android:color/white"
             android:textSize="@dimen/text_size_24" />

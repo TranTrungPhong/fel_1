@@ -1,4 +1,5 @@
 package com.framgia.fel1.activity;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteException;
@@ -7,10 +8,12 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.framgia.fel1.R;
 import com.framgia.fel1.adapter.NewLessonAdapter;
 import com.framgia.fel1.constant.APIService;
@@ -18,9 +21,13 @@ import com.framgia.fel1.constant.Const;
 import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.Answer;
 import com.framgia.fel1.model.Lesson;
+import com.framgia.fel1.model.Result;
+import com.framgia.fel1.model.User;
 import com.framgia.fel1.model.Word;
 import com.framgia.fel1.util.ReadJson;
+
 import org.json.JSONException;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +38,7 @@ import java.util.Locale;
  */
 public class NewLessonActivity extends Activity implements View.OnClickListener,
         NewLessonAdapter.OnListWordsClickItem {
-    public static String mReadWord ;
+    public static String mReadWord;
     private List<Word> mListWordNewLesson = new ArrayList<>();
     private NewLessonAdapter mNewLessonAdapter;
     private RecyclerView mListViewWordNewLesson;
@@ -47,6 +54,7 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
     private Lesson mLesson;
     private int mPerPage;
     private int mPage;
+    private User mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +88,8 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
 
     private void initData() {
         Intent intent = getIntent();
+        //mUser = (User) intent.getSerializableExtra(Const.USER);
+        mUser = mMySqliteHelper.getUser();
         mAuthToken = intent.getStringExtra(Const.AUTH_TOKEN);
         mNameCategory = intent.getStringExtra(Const.NAME);
         mPage = Integer.parseInt(intent.getStringExtra(APIService.PAGE));
@@ -87,8 +97,8 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
         List<Lesson> lessonsList = new ArrayList<>();
         try {
             lessonsList = mMySqliteHelper.getListLesson();
-        }catch (SQLiteException e){
-            Toast.makeText(this, R.string.err_cannot_read_list_lesson,Toast.LENGTH_SHORT).show();
+        } catch (SQLiteException e) {
+            Toast.makeText(this, R.string.err_cannot_read_list_lesson, Toast.LENGTH_SHORT).show();
         }
         mCountLesson = lessonsList.size();
         if (mCountLesson > Const.COUNT_LESSON) {
@@ -121,6 +131,15 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
         switch (v.getId()) {
             case R.id.button_submit:
                 mCountLesson++;
+                for (Word word : mLesson.getWords()) {
+                    Result mResult = new Result(
+                            mUser.getId(),
+                            word.getLessonId(),
+                            word.getId(),
+                            word.getResultId());
+                    mMySqliteHelper.addResult(mResult);
+//                    Log.i("Phong","Word "+word.getContent());
+                }
                 mMySqliteHelper.addLesson(mLesson);
                 for (Word word : mListWordNewLesson) {
                     mMySqliteHelper.addWord(word);
