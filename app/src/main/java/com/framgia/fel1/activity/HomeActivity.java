@@ -25,7 +25,9 @@ import com.framgia.fel1.model.Category;
 import com.framgia.fel1.model.User;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.ShowImage;
+
 import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,7 +102,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,
                 startActivity(intentWordList);
                 break;
             case R.id.button_show_activities:
-                Intent intentActivities = new Intent();
+                Intent intentActivities = new Intent(HomeActivity.this, UserActionActivity.class);
                 startActivity(intentActivities);
                 break;
             default:
@@ -118,6 +120,8 @@ public class HomeActivity extends Activity implements View.OnClickListener,
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                         startActivity(intent);
+                        mMySqliteHelper.deleteTable(MySqliteHelper.TABLE_USER);
+                        mMySqliteHelper.deleteTable(MySqliteHelper.TABLE_USER_ACTIVITY);
                         finish();
                     }
                 })
@@ -141,10 +145,10 @@ public class HomeActivity extends Activity implements View.OnClickListener,
 
     @Override
     public void onBackPressed() {
-        if(mToast == null)
+        if (mToast == null)
             mToast = Toast.makeText(HomeActivity.this, R.string.press_back_again_to_exit,
-                                    Toast.LENGTH_SHORT);
-        if(mToast.getView().isShown()){
+                    Toast.LENGTH_SHORT);
+        if (mToast.getView().isShown()) {
             super.onBackPressed();
         } else {
             mToast.show();

@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.framgia.fel1.constant.Const;
 import com.framgia.fel1.model.Answer;
 import com.framgia.fel1.model.Category;
 import com.framgia.fel1.model.Lesson;
@@ -489,6 +491,11 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         return db.delete(tableName, columnName + " = ?", new String[]{value}) != 0;
     }
 
+    public boolean deleteTable(String tableName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(tableName, null,null) != 0;
+    }
+
     public List<Lesson> getListLesson() throws SQLiteException{
         List<Lesson> lessonsList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -526,6 +533,24 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         }
         db.close();
         return user;
+    }
+
+    public List<UserActivity> getListUserActivity() {
+        List<UserActivity> activityList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_USER_ACTIVITY, null, null, null, null, null, Const.ID+" DESC");
+        if ( cursor != null && cursor.moveToFirst() ) {
+            while (!cursor.isAfterLast()) {
+                UserActivity userActivity = new UserActivity();
+                userActivity.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+                userActivity.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
+                userActivity.setCreated_at(cursor.getString(cursor.getColumnIndex(COLUMN_CREATED_AT)));
+                activityList.add(userActivity);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return activityList;
     }
 
 }

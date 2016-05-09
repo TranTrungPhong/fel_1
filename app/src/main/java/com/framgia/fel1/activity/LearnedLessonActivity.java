@@ -54,7 +54,11 @@ public class LearnedLessonActivity extends Activity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        mLessonLearnedAdapter.notifyDataSetChanged();
+        mLearnedLessonsList.clear();
+        mLearnedLessonsList.addAll(mMySqliteHelper.getListLesson());
+        if (mLessonLearnedAdapter != null) {
+            mLessonLearnedAdapter.notifyDataSetChanged();
+        }
     }
 
     private void initView() {
