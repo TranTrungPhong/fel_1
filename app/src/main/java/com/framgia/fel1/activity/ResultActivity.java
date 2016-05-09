@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import com.framgia.fel1.R;
 import com.framgia.fel1.adapter.ResultAdapter;
-import com.framgia.fel1.constant.APIService;
 import com.framgia.fel1.constant.Const;
 import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.Lesson;
@@ -65,8 +64,10 @@ public class ResultActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        if(mTextToSpeech.isSpeaking())
+        if(mTextToSpeech.isSpeaking()) {
             mTextToSpeech.stop();
+            mTextToSpeech.shutdown();
+        }
         super.onDestroy();
     }
 
