@@ -338,15 +338,11 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public List<Word> getListWordByLesson(int idLesson) {
         List<Word> wordList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_WORD, null, COLUMN_LESSON_ID + " = ?",
+        Cursor cursor = db.query(TABLE_RESULT, null, COLUMN_ID_LESSON + " = ?",
                                  new String[]{String.valueOf(idLesson)}, null, null, null);
         if ( cursor.getCount() > 0 && cursor.moveToFirst() ) {
             do {
-                Word word = new Word();
-                word.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
-                word.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
-                word.setLessonId(cursor.getInt(cursor.getColumnIndex(COLUMN_LESSON_ID)));
-                word.setResultId(cursor.getInt(cursor.getColumnIndex(COLUMN_RESULT_ID)));
+                Word word = getWord(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_WORD)));
                 word.setAnswers(getListAnswerByWord(word.getId()));
                 wordList.add(word);
             }

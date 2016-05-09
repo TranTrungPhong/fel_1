@@ -46,4 +46,6 @@ public interface Const {
     String LEARNED = "learned";
     String NO_LEARN = "no_learn";
     String LESSON_ID = "lesson_id";
+    String MY_PREFERENCE = "preference";
+    String REMEMBER = "remember";
 }

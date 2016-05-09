@@ -54,7 +54,7 @@
             android:layout_width="@dimen/width_150"
             android:layout_height="@dimen/width_150"
             android:layout_alignParentLeft="true"
-            android:background="@drawable/ic_icon_fels" />
+            android:src="@drawable/ic_icon_fels" />
 
         <TextView
             android:id="@+id/text_show_user_name"

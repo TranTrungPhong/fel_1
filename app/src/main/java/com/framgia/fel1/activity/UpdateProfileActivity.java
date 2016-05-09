@@ -1,7 +1,9 @@
 package com.framgia.fel1.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -50,6 +52,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private Intent mData;
     private Bitmap mBitmapAvatar = null;
     private MySqliteHelper mMySqliteHelper;
+    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +61,11 @@ public class UpdateProfileActivity extends AppCompatActivity {
         mData = getIntent();
         //mUser = (User) mData.getSerializableExtra(Const.USER);
         mMySqliteHelper = new MySqliteHelper(this);
-        mUser = mMySqliteHelper.getUser();
+        mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
+        int id = mSharedPreferences.getInt(Const.ID, -1);
+        if(id != -1)
+            mUser = mMySqliteHelper.getUser(id);
+        else finish();
         setView();
         setEvent();
     }
@@ -81,6 +88,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     cursor.close();
                     mBitmapAvatar = BitmapFactory.decodeFile(picturePath);
                     mImageAvatar.setImageBitmap(mBitmapAvatar);
+                    mUser.setAvatar(picturePath);
+                    MySqliteHelper mySqliteHelper = new MySqliteHelper(UpdateProfileActivity.this);
+                    mySqliteHelper.updateUser(mUser);
                 } else {
                     mBitmapAvatar = null;
                     Toast.makeText(getApplicationContext(), R.string.error_get_image,
@@ -101,6 +111,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
         mEditPasswordConfirmation = (EditText) findViewById(R.id.edit_password_confirmation);
         mEditName = (EditText) findViewById(R.id.edit_name);
         mImageAvatar = (ImageView) findViewById(R.id.image_avatar);
+        Bitmap bitmap = BitmapFactory.decodeFile(mUser.getAvatar());
+        if(bitmap != null)
+            mImageAvatar.setImageBitmap(bitmap);
         mFab.setImageDrawable(new IconicsDrawable(UpdateProfileActivity.this)
                                       .icon(FontAwesome.Icon.faw_check)
                                       .color(Color.GREEN));
@@ -183,7 +196,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 cancel(true);
             }
             progressDialog = new ProgressDialog(UpdateProfileActivity.this);
-            progressDialog.setMessage(R.string.loading + "");
+            progressDialog.setMessage(getResources().getString(R.string.loading));
             progressDialog.show();
         }
 

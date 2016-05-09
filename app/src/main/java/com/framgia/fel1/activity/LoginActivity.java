@@ -2,10 +2,13 @@ package com.framgia.fel1.activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.Preference;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -43,6 +46,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     private ProgressDialog progressDialog;
     private int mCheckBoxRememMe = 0;
     private MySqliteHelper mMySqliteHelper;
+    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +159,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if(responseInvalid!=null){
+                if(!responseInvalid.equals("")){
                     Toast.makeText(LoginActivity.this, responseInvalid, Toast.LENGTH_SHORT)
                             .show();
                 }else {
@@ -190,6 +194,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                         );
                         //intent.putExtra(Const.USER, user);
                         mMySqliteHelper.addUser(user);
+                        mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE,
+                                                                  Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = mSharedPreferences.edit();
+                        editor.putBoolean(Const.REMEMBER, mCheckBoxRememberMe.isChecked());
+                        editor.putInt(Const.ID, user.getId());
+                        editor.apply();
                         startActivity(intent);
                         finish();
                     } catch (JSONException e) {

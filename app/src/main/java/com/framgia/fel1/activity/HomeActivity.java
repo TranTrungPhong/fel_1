@@ -2,8 +2,12 @@ package com.framgia.fel1.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -52,12 +56,21 @@ public class HomeActivity extends Activity implements View.OnClickListener,
     private User mUser;
     private MySqliteHelper mMySqliteHelper;
     private Toast mToast;
+    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_screen_layout);
         initView();
+    }
+
+    @Override
+    protected void onResume() {
+        Bitmap bitmap = BitmapFactory.decodeFile(mUser.getAvatar());
+        if(bitmap != null)
+            mImageViewAvatar.setImageBitmap(bitmap);
+        super.onResume();
     }
 
     private void initView() {
@@ -73,7 +86,12 @@ public class HomeActivity extends Activity implements View.OnClickListener,
         mRecyclerViewCategory.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mHomeAdapter = new HomeAdapter(this, mListCategory);
         mRecyclerViewCategory.setAdapter(mHomeAdapter);
-        mUser = mMySqliteHelper.getUser();
+        mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
+        int id = mSharedPreferences.getInt(Const.ID, -1);
+        if(id != -1)
+            mUser = mMySqliteHelper.getUser(id);
+        else
+            finish();
         //Intent intent = getIntent();
         //mUser = (User) intent.getSerializableExtra(Const.USER);
         new ShowImage(mImageViewAvatar).execute(mUser.getAvatar());
@@ -120,8 +138,9 @@ public class HomeActivity extends Activity implements View.OnClickListener,
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                         startActivity(intent);
-                        mMySqliteHelper.deleteTable(MySqliteHelper.TABLE_USER);
-                        mMySqliteHelper.deleteTable(MySqliteHelper.TABLE_USER_ACTIVITY);
+                        mSharedPreferences.edit().putBoolean(Const.REMEMBER, false);
+//                        mMySqliteHelper.deleteTable(MySqliteHelper.TABLE_USER);
+//                        mMySqliteHelper.deleteTable(MySqliteHelper.TABLE_USER_ACTIVITY);
                         finish();
                     }
                 })
