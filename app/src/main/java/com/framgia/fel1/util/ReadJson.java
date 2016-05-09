@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -26,6 +27,31 @@ import java.util.List;
 public class ReadJson {
     private static final String TAG = "ReadJson";
     private Context mContext;
+
+    public static String parseErrorJson(String response) throws JSONException {
+        StringBuilder message = new StringBuilder();
+        JSONObject jsonObject =
+                new JSONObject(response).getJSONObject(Const.MESSAGE);
+        Iterator<String> iter = jsonObject.keys();
+        while (iter.hasNext()) {
+            String key = iter.next();
+            message.append(key).append(" : ");
+            try {
+                JSONArray value = jsonObject.getJSONArray(key);
+                for (int i = 0; i < value.length(); i++) {
+                    message.append(value.get(i));
+                    if ( i < value.length() - 1 ) {
+                        message.append(", ");
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if ( iter.hasNext() )
+                message.append("\n");
+        }
+        return message.toString();
+    }
 
     public ReadJson(Context context) {
         this.mContext = context;

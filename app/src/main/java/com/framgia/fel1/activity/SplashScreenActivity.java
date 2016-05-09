@@ -50,6 +50,7 @@ public class SplashScreenActivity extends Activity {
                 if (mStatusProgrees >= MAX_PROGRESSBAR) {
                     Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
                     startActivity(intent);
+                    finish();
                 }
             }
         }).start();

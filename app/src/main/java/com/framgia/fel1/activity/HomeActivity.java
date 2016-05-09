@@ -25,9 +25,7 @@ import com.framgia.fel1.model.Category;
 import com.framgia.fel1.model.User;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.ShowImage;
-
 import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +49,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,
     private String mAuthToken;
     private User mUser;
     private MySqliteHelper mMySqliteHelper;
+    private Toast mToast;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +90,6 @@ public class HomeActivity extends Activity implements View.OnClickListener,
         switch (v.getId()) {
             case R.id.button_update_show_user:
                 Intent intentUpdate = new Intent(HomeActivity.this, UpdateProfileActivity.class);
-                intentUpdate.putExtra(Const.USER, mUser);
                 startActivity(intentUpdate);
                 break;
             case R.id.button_sign_out_show_user:
@@ -102,7 +100,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,
                 startActivity(intentWordList);
                 break;
             case R.id.button_show_activities:
-                Intent intentActivities = new Intent();
+                Intent intentActivities = new Intent(HomeActivity.this,UserActionActivity.class);
                 startActivity(intentActivities);
                 break;
             default:
@@ -118,6 +116,8 @@ public class HomeActivity extends Activity implements View.OnClickListener,
                 .setPositiveButton(R.string.thoat, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                        startActivity(intent);
                         finish();
                     }
                 })
@@ -137,6 +137,18 @@ public class HomeActivity extends Activity implements View.OnClickListener,
         intentLessonLearned.putExtra(Const.NAME, mListCategory.get(position).getName());
         intentLessonLearned.putExtra(Const.USER, mUser);
         startActivity(intentLessonLearned);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(mToast == null)
+            mToast = Toast.makeText(HomeActivity.this, R.string.press_back_again_to_exit,
+                                    Toast.LENGTH_SHORT);
+        if(mToast.getView().isShown()){
+            super.onBackPressed();
+        } else {
+            mToast.show();
+        }
     }
 
     private class LoadCategory extends AsyncTask<String, String, String> {

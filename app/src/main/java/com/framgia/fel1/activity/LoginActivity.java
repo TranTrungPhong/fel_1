@@ -143,6 +143,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                 joActivity.optString(Const.CREATED_AT)
                         );
                         listUserActivity.add(userActivity);
+                        mMySqliteHelper.addUserActivity(userActivity);
                     }
                     Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     User user = new User(
@@ -160,6 +161,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                     //intent.putExtra(Const.USER, user);
                     mMySqliteHelper.addUser(user);
                     startActivity(intent);
+                    finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
