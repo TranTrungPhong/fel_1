@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -131,6 +132,7 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
         switch (v.getId()) {
             case R.id.button_submit:
                 mCountLesson++;
+<<<<<<< HEAD
                 for (int i = 0; i < mLesson.getWords().size(); i++) {
                     mResult = new Result(
                             mUser.getId(),
@@ -138,6 +140,16 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
                             mLesson.getWords().get(i).getLessonId(),
                             mLesson.getWords().get(i).getResultId());
                     mMySqliteHelper.addResult(mResult);
+=======
+                for (Word word : mLesson.getWords()) {
+                    Result mResult = new Result(
+                            mUser.getId(),
+                            word.getLessonId(),
+                            word.getId(),
+                            word.getResultId());
+                    mMySqliteHelper.addResult(mResult);
+//                    Log.i("Phong","Word "+word.getContent());
+>>>>>>> dea6d94933d897a8b06b3f13efd2c54e994bbd90
                 }
                 mMySqliteHelper.addLesson(mLesson);
                 for (Word word : mListWordNewLesson) {

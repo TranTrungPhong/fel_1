@@ -442,7 +442,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         if ( result != null ) {
-            cv.put(COLUMN_ID, result.getId());
+            //cv.put(COLUMN_ID, result.getId());
             cv.put(COLUMN_ID_USER, result.getIdUser());
             cv.put(COLUMN_ID_LESSON, result.getIdLesson());
             cv.put(COLUMN_ID_WORD, result.getIdWord());

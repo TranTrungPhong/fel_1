@@ -41,6 +41,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,
     private Button mButtonUpdate;
     private Button mButtonSignUp;
     private Button mButtonShowWordList;
+    private Button mButtonShowActivity;
     private ImageView mImageViewAvatar;
     private TextView mTextViewName;
     private TextView mTextViewEmail;
@@ -63,6 +64,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,
         mButtonSignUp = (Button) findViewById(R.id.button_sign_out_show_user);
         mButtonUpdate = (Button) findViewById(R.id.button_update_show_user);
         mButtonShowWordList = (Button) findViewById(R.id.button_wordlist_show_user);
+        mButtonShowActivity = (Button) findViewById(R.id.button_show_activities);
         mImageViewAvatar = (ImageView) findViewById(R.id.image_show_user_avatar);
         mTextViewName = (TextView) findViewById(R.id.text_show_user_name);
         mTextViewEmail = (TextView) findViewById(R.id.text_show_user_email);
@@ -81,6 +83,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,
         mButtonUpdate.setOnClickListener(this);
         mButtonSignUp.setOnClickListener(this);
         mButtonShowWordList.setOnClickListener(this);
+        mButtonShowActivity.setOnClickListener(this);
     }
 
     @Override
@@ -97,6 +100,12 @@ public class HomeActivity extends Activity implements View.OnClickListener,
             case R.id.button_wordlist_show_user:
                 Intent intentWordList = new Intent(HomeActivity.this, WordListActivity.class);
                 startActivity(intentWordList);
+                break;
+            case R.id.button_show_activities:
+                Intent intentActivities = new Intent();
+                startActivity(intentActivities);
+                break;
+            default:
                 break;
         }
 

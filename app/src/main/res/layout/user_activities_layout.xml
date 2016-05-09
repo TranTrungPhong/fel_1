@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:background="@color/colorBackgroundLogin"
+    android:layout_height="match_parent">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="User Activities"
+        android:textSize="@dimen/text_size_40"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="@dimen/margin_16"
+        />
+    <Button
+        android:id="@+id/button_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/back"
+        android:layout_gravity="center"
+        />
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycle_view_activities"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_recycle"
+        android:padding="@dimen/padding_20" />
+</LinearLayout>
