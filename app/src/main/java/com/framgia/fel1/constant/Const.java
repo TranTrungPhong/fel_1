@@ -32,7 +32,7 @@ public interface Const {
     String IMAGE_TYPE = "image/*";
     String WORD = "word";
     int COUNT_LESSON = 50;
-    int MAX_COUNT_WORDS = 100;
+    int MAX_COUNT_WORDS = 97;
     int POSITION_ANSWER_1 = 0;
     int POSITION_ANSWER_2 = 1;
     int POSITION_ANSWER_3 = 2;

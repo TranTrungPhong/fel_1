@@ -44,6 +44,7 @@ public class WordListActivity extends AppCompatActivity
     private int mCategoryId;
     private Toolbar mToolbar;
     private Spinner mSpinner;
+    private ArrayList<String> mListSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +81,7 @@ public class WordListActivity extends AppCompatActivity
     }
 
     private void setListSpinner() {
-        List<String> mListSpinner = new ArrayList<>();
+        mListSpinner = new ArrayList<>();
         mListSpinner.add(Const.ALL_WORD);
         mListSpinner.add(Const.LEARNED);
         mListSpinner.add(Const.NO_LEARN);
@@ -165,9 +166,10 @@ public class WordListActivity extends AppCompatActivity
     private void exportTsv() throws IOException {
         String fileName;
         if(mData.getStringExtra(Const.CATEGORY_ID) != null) {
-            fileName = Const.CATEGORY + "_" + mData.getStringExtra(Const.CATEGORY_ID);
+            fileName = Const.CATEGORY + "_" + mData.getStringExtra(Const.CATEGORY_ID) + "_" +
+                    mListSpinner.get(mSpinner.getSelectedItemPosition());
         } else {
-            fileName = Const.CATEGORY + "_" + Const.ALL_WORD;
+            fileName = Const.CATEGORY + "_" + mListSpinner.get(mSpinner.getSelectedItemPosition());
         }
         StringBuilder builder = new StringBuilder();
         String columnStr = "\"" + Const.WORD + "\"\t " + "\"" + Const.ANSWER + "\"";
@@ -186,7 +188,13 @@ public class WordListActivity extends AppCompatActivity
     }
 
     private void exportCsv() throws IOException {
-        String fileName = Const.CATEGORY + "_" + mData.getStringExtra(Const.CATEGORY_ID);
+        String fileName;
+        if(mData.getStringExtra(Const.CATEGORY_ID) != null) {
+            fileName = Const.CATEGORY + "_" + mData.getStringExtra(Const.CATEGORY_ID) + "_" +
+                    mListSpinner.get(mSpinner.getSelectedItemPosition());
+        } else {
+            fileName = Const.CATEGORY + "_" + mListSpinner.get(mSpinner.getSelectedItemPosition());
+        }
         StringBuilder stringBuilder = new StringBuilder();
         String columnString = Const.WORD + ", " + Const.ANSWER;
         stringBuilder.append(columnString);
@@ -204,7 +212,13 @@ public class WordListActivity extends AppCompatActivity
     }
 
     private void exportPdf() throws IOException, DocumentException {
-        String fileName = Const.CATEGORY + "_" + mData.getStringExtra(Const.CATEGORY_ID);
+        String fileName;
+        if(mData.getStringExtra(Const.CATEGORY_ID) != null) {
+            fileName = Const.CATEGORY + "_" + mData.getStringExtra(Const.CATEGORY_ID) + "_" +
+                    mListSpinner.get(mSpinner.getSelectedItemPosition());
+        } else {
+            fileName = Const.CATEGORY + "_" + mListSpinner.get(mSpinner.getSelectedItemPosition());
+        }
         ArrayList<String> arrayList = new ArrayList<>();
         arrayList.add(Const.WORD);
         arrayList.add(Const.ANSWER);

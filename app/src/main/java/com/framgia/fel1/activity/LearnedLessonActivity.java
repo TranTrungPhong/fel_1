@@ -7,8 +7,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +33,7 @@ import java.util.List;
 /**
  * Created by PhongTran on 04/18/2016.
  */
-public class LearnedLessonActivity extends Activity implements View.OnClickListener,
+public class LearnedLessonActivity extends AppCompatActivity implements View.OnClickListener,
         LessonLearnedAdapter.OnClickItemLessonLearned {
     private RecyclerView mRecyclerLessonLearned;
     private LessonLearnedAdapter mLessonLearnedAdapter;
@@ -48,6 +50,7 @@ public class LearnedLessonActivity extends Activity implements View.OnClickListe
     private SharedPreferences mSharedPreferences;
     private List<Result> mListResult;
     private List<Lesson> mLearnedLessonsListResume = new ArrayList<>();
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +64,16 @@ public class LearnedLessonActivity extends Activity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
+        int id = mSharedPreferences.getInt(Const.ID, -1);
+        if (id != -1) {
+            mUser = mMySqliteHelper.getUser(id);
+            mListResult = mMySqliteHelper.getListResultByUser(mUser.getId());
+        } else {
+            finish();
+        }
+        
         mLearnedLessonsList.clear();
+        mLearnedLessonsListResume.clear();
         for (Result result: mListResult) {
             mLearnedLessonsListResume.addAll(mMySqliteHelper.getListLesson(result.getIdLesson()));
         }
@@ -72,12 +84,24 @@ public class LearnedLessonActivity extends Activity implements View.OnClickListe
     }
 
     private void initView() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_lesson);
+        setSupportActionBar(mToolbar);
+        mToolbar.setTitle(null);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mButtonCreateLesson = (Button) findViewById(R.id.button_create_lesson);
         mButtonWordList = (Button) findViewById(R.id.button_word_list);
         mButtonCreateLesson.setOnClickListener(this);
         mButtonWordList.setOnClickListener(this);
         mRecyclerLessonLearned = (RecyclerView) findViewById(R.id.listview_words);
         mRecyclerLessonLearned.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     private void initData() {

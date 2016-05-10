@@ -136,11 +136,12 @@ public class HomeActivity extends Activity implements View.OnClickListener,
                 .setPositiveButton(R.string.thoat, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences.Editor editor = mSharedPreferences.edit();
+                        editor.putBoolean(Const.REMEMBER, false);
+                        editor.remove(Const.ID);
+                        editor.apply();
                         Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                         startActivity(intent);
-                        mSharedPreferences.edit().putBoolean(Const.REMEMBER, false);
-//                        mMySqliteHelper.deleteTable(MySqliteHelper.TABLE_USER);
-//                        mMySqliteHelper.deleteTable(MySqliteHelper.TABLE_USER_ACTIVITY);
                         finish();
                     }
                 })

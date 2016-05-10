@@ -24,23 +24,57 @@
             android:text="@string/title_word_list"
             android:textColor="@color/textColorLogin"
             android:textSize="@dimen/abc_text_size_title_material_toolbar"/>
+
         <Spinner
             android:id="@+id/spinner"
-            style="@style/AppTheme.NoActionBar"
-            android:layout_gravity="right"
-            android:spinnerMode="dropdown"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:dropDownVerticalOffset="?attr/actionBarSize"
+            android:popupBackground="@color/textColorLogin"
+            android:spinnerMode="dropdown"/>
+
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorText"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/text_content"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:layout_weight="1"
+                    android:text="@string/word"
+                    android:textAppearance="?attr/textAppearanceListItem"/>
+
+                <TextView
+                    android:id="@+id/text_detail"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/text_margin"
+                    android:layout_weight="1"
+                    android:text="@string/answer"
+                    android:textAppearance="?attr/textAppearanceListItem"/>
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/layout_load"
