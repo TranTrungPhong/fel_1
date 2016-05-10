@@ -25,7 +25,7 @@ import java.util.List;
  */
 public class MySqliteHelper extends SQLiteOpenHelper {
     //Database Config
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 3;
     public static final String DATABASE_NAME = "EnglishLearning.db";
     //Table name
     public static final String TABLE_USER = "user";
@@ -70,9 +70,10 @@ public class MySqliteHelper extends SQLiteOpenHelper {
                         " INTEGER, ").append(COLUMN_AUTH_TOKEN).append(" TEXT, ").append(
                         COLUMN_CREATED_AT).append(" TEXT, ").append(COLUMN_UPDATED_AT).append(
                         " TEXT, ").append(COLUMN_LEARNED_WORDS).append(" INTEGER)");
-        StringBuffer createUserActivityTable = new StringBuffer().append("CREATE TABLE ").append(
-                TABLE_USER_ACTIVITY + " (").append(COLUMN_ID + " INTEGER PRIMARY KEY, ").append(
-                COLUMN_CONTENT).append(" TEXT, ").append(COLUMN_CREATED_AT).append(" TEXT)");
+        StringBuffer createUserActivityTable = new StringBuffer().append("CREATE TABLE ")
+                .append(TABLE_USER_ACTIVITY + " (").append(COLUMN_ID + " INTEGER PRIMARY KEY, ")
+                .append(COLUMN_ID_USER + " INTEGER, ")
+                .append(COLUMN_CONTENT).append(" TEXT, ").append(COLUMN_CREATED_AT).append(" TEXT)");
         StringBuffer createCategoryTable =
                 new StringBuffer().append("CREATE TABLE ").append(TABLE_CATEGORY + " (").append(
                         COLUMN_ID + " INTEGER PRIMARY KEY, ").append(COLUMN_NAME).append(
@@ -182,11 +183,12 @@ public class MySqliteHelper extends SQLiteOpenHelper {
 
     //region USERACTIVITY
     // Add UserActivity
-    public long addUserActivity(UserActivity userActivity) {
+    public long addUserActivity(UserActivity userActivity, int idUser) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         if ( userActivity != null ) {
             cv.put(COLUMN_ID, userActivity.getId());
+            cv.put(COLUMN_ID_USER, idUser);
             cv.put(COLUMN_CONTENT, userActivity.getContent());
             cv.put(COLUMN_CREATED_AT, userActivity.getCreated_at());
         }
@@ -572,7 +574,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_USER_ACTIVITY,
                 null,
-                COLUMN_ID + " = ?",
+                COLUMN_ID_USER + " = ?",
                 new String[]{String.valueOf(id)},
                 null,
                 null,
