@@ -29,13 +29,15 @@ public class ShowImage extends AsyncTask<String, Void, Bitmap> {
             bitmap = BitmapFactory.decodeStream(in);
         } catch (Exception e) {
             hasError = true;
+            bitmap = BitmapFactory.decodeFile(url);
             e.printStackTrace();
         }
         return bitmap;
     }
 
     protected void onPostExecute(Bitmap result) {
-        if (!hasError) {
+//        if (!hasError) {
+        if(result != null){
             mImageView.setImageBitmap(result);
         }
     }

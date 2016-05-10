@@ -2,8 +2,10 @@ package com.framgia.fel1.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,6 +43,7 @@ public class LearnedLessonActivity extends Activity implements View.OnClickListe
     private AlertDialog.Builder alertDialogBuilder;
     private AlertDialog mAlertDialog;
     private User mUser;
+    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +80,11 @@ public class LearnedLessonActivity extends Activity implements View.OnClickListe
         mNameCategory = receiveIntent.getStringExtra(Const.NAME);
         mCategorId = receiveIntent.getIntExtra(Const.ID, -1);
         mMySqliteHelper = new MySqliteHelper(LearnedLessonActivity.this);
-        mUser = mMySqliteHelper.getUser();
+        mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
+        int id = mSharedPreferences.getInt(Const.ID, -1);
+        if(id != -1)
+            mUser = mMySqliteHelper.getUser(id);
+        else finish();
         mLearnedLessonsList.clear();
         mLearnedLessonsList = mMySqliteHelper.getListLesson();
         mLessonLearnedAdapter = new LessonLearnedAdapter(this, mLearnedLessonsList);

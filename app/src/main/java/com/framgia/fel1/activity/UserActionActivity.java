@@ -1,6 +1,8 @@
 package com.framgia.fel1.activity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,6 +40,7 @@ public class UserActionActivity extends Activity {
     private User mUser;
     private List<UserActivity> mListActivities = new ArrayList<>();
     private UserActionAdapter mUserActionAdapter;
+    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +58,11 @@ public class UserActionActivity extends Activity {
 
     private void initView() {
         mMySqliteHelper = new MySqliteHelper(this);
-        mUser = mMySqliteHelper.getUser();
+        mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
+        int id = mSharedPreferences.getInt(Const.ID, -1);
+        if(id != -1)
+            mUser = mMySqliteHelper.getUser(id);
+        else finish();
         mButtonBack = (Button) findViewById(R.id.button_back);
         mRecyclerViewUserAction = (RecyclerView) findViewById(R.id.recycle_view_activities);
         mRecyclerViewUserAction.setLayoutManager(new LinearLayoutManager(UserActionActivity.this));

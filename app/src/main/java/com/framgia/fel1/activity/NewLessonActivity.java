@@ -1,6 +1,8 @@
 package com.framgia.fel1.activity;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteException;
 import android.os.Build;
 import android.os.Bundle;
@@ -53,6 +55,7 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
     private int mPerPage;
     private int mPage;
     private User mUser;
+    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +90,11 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
     private void initData() {
         Intent intent = getIntent();
         //mUser = (User) intent.getSerializableExtra(Const.USER);
-        mUser = mMySqliteHelper.getUser();
+        mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
+        int id = mSharedPreferences.getInt(Const.ID, -1);
+        if(id != -1)
+            mUser = mMySqliteHelper.getUser(id);
+        else finish();
         mAuthToken = intent.getStringExtra(Const.AUTH_TOKEN);
         mNameCategory = intent.getStringExtra(Const.NAME);
         mPage = Integer.parseInt(intent.getStringExtra(APIService.PAGE));
