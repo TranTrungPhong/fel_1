@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import com.framgia.fel1.constant.APIService;
 import com.framgia.fel1.constant.Const;
 import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.Lesson;
+import com.framgia.fel1.model.Result;
 import com.framgia.fel1.model.User;
 
 import java.util.ArrayList;
@@ -44,6 +46,8 @@ public class LearnedLessonActivity extends Activity implements View.OnClickListe
     private AlertDialog mAlertDialog;
     private User mUser;
     private SharedPreferences mSharedPreferences;
+    private List<Result> mListResult;
+    private List<Lesson> mLearnedLessonsListResume = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +62,10 @@ public class LearnedLessonActivity extends Activity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         mLearnedLessonsList.clear();
-        mLearnedLessonsList.addAll(mMySqliteHelper.getListLesson());
+        for (Result result: mListResult) {
+            mLearnedLessonsListResume.addAll(mMySqliteHelper.getListLesson(result.getIdLesson()));
+        }
+        mLearnedLessonsList.addAll(mLearnedLessonsListResume);
         if (mLessonLearnedAdapter != null) {
             mLessonLearnedAdapter.notifyDataSetChanged();
         }
@@ -82,11 +89,20 @@ public class LearnedLessonActivity extends Activity implements View.OnClickListe
         mMySqliteHelper = new MySqliteHelper(LearnedLessonActivity.this);
         mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
         int id = mSharedPreferences.getInt(Const.ID, -1);
-        if(id != -1)
+        if (id != -1) {
             mUser = mMySqliteHelper.getUser(id);
-        else finish();
+            mListResult = mMySqliteHelper.getListResultByUser(mUser.getId());
+        } else {
+            finish();
+        }
         mLearnedLessonsList.clear();
-        mLearnedLessonsList = mMySqliteHelper.getListLesson();
+        for (Result result: mListResult) {
+            mLearnedLessonsList.addAll(mMySqliteHelper.getListLesson(result.getIdLesson()));
+        }
+
+//        Log.i("FFFFFFFF","Result  : "+mResult.getId());
+//        Log.i("FFFFFFFF","Id USer : "+mUser.getId());
+//        Log.i("FFFFFFFF","Id Lesson : "+mResult.getIdLesson());
         mLessonLearnedAdapter = new LessonLearnedAdapter(this, mLearnedLessonsList);
         mRecyclerLessonLearned.setAdapter(mLessonLearnedAdapter);
     }
@@ -140,7 +156,8 @@ public class LearnedLessonActivity extends Activity implements View.OnClickListe
                 mAlertDialog.show();
                 break;
             case R.id.button_word_list:
-                //Todo call activity wordlist
+                Intent intentWordList = new Intent(LearnedLessonActivity.this, WordListActivity.class);
+                startActivity(intentWordList);
                 break;
             default:
                 break;
@@ -152,7 +169,7 @@ public class LearnedLessonActivity extends Activity implements View.OnClickListe
         // TODO call lesson or word list
         Intent intent = new Intent(LearnedLessonActivity.this, ResultActivity.class);
         intent.putExtra(Const.LESSON, lesson);
-        intent.putExtra(Const.USER, mUser);
+        //intent.putExtra(Const.USER, mUser);
         startActivity(intent);
     }
 }

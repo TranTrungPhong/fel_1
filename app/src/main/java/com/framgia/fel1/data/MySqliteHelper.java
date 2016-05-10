@@ -510,6 +510,25 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         db.close();
         return lessonsList;
     }
+    public List<Lesson> getListLesson(int id) throws SQLiteException{
+        List<Lesson> lessonsList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor =
+                db.query(TABLE_LESSON,null, COLUMN_ID + " = ?",
+                        new String[]{String.valueOf(id)}, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
+                Lesson lesson = new Lesson();
+                lesson.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+                lesson.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+                lessonsList.add(lesson);
+                cursor.moveToNext();
+            }
+        }
+        cursor.close();
+        db.close();
+        return lessonsList;
+    }
 
     public User getUser() {
         User user = new User();
@@ -547,6 +566,50 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         }
         db.close();
         return activityList;
+    }
+    public List<UserActivity> getListUserActivity(int id) {
+        List<UserActivity> activityList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_USER_ACTIVITY,
+                null,
+                COLUMN_ID + " = ?",
+                new String[]{String.valueOf(id)},
+                null,
+                null,
+                Const.ID+" DESC");
+        if ( cursor != null && cursor.moveToFirst() ) {
+            while (!cursor.isAfterLast()) {
+                UserActivity userActivity = new UserActivity();
+                userActivity.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+                userActivity.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
+                userActivity.setCreated_at(cursor.getString(cursor.getColumnIndex(COLUMN_CREATED_AT)));
+                activityList.add(userActivity);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return activityList;
+    }
+    public List<Result> getListResultByUser(int idUser) {
+
+        List<Result> mListResults = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor =
+                db.query(true,TABLE_RESULT, new String[]{COLUMN_ID_LESSON}, COLUMN_ID_USER + " = ?", new String[]{String.valueOf(idUser)},
+                        null, null, null, null);
+        if ( cursor != null && cursor.moveToFirst() ) {
+            while (!cursor.isAfterLast()){
+                        Result result = new Result();
+//                result.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+//                result.setIdUser(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_USER)));
+                result.setIdLesson(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_LESSON)));
+//                result.setIdAnswer(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_ANSWER)));
+                mListResults.add(result);
+                cursor.moveToNext();
+            }
+        }
+        db.close();
+        return mListResults;
     }
 
 }

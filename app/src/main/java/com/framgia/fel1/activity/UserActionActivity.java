@@ -52,7 +52,7 @@ public class UserActionActivity extends Activity {
 
     private void initData() {
         mListActivities.clear();
-        mListActivities.addAll(mMySqliteHelper.getListUserActivity());// Dung bh quen nua
+        mListActivities.addAll(mMySqliteHelper.getListUserActivity(mUser.getId()));// Dung bh quen nua
         mUserActionAdapter.notifyDataSetChanged();
     }
 

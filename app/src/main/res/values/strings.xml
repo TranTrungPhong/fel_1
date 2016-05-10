@@ -6,7 +6,7 @@
     <string name="text_login">Log In</string>
     <string name="text_SignUp">Sign Up</string>
     <string name="sign_up_title">Sign Up</string>
-    <string name="remember_login">Remenber log in</string>
+    <string name="remember_login">Remember log in</string>
     <string name="error_login">Có lỗi xảy ra</string>
     <string name="login_done">Đăng nhập thành công</string>
     <string name="tk_khongTonTai">Tài khoản không tồn tại.</string>
