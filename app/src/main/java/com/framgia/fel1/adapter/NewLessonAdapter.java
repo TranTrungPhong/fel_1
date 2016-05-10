@@ -92,6 +92,20 @@ public class NewLessonAdapter extends RecyclerView.Adapter<NewLessonAdapter.NewL
                 }
             }
         });
+        int idWord = mWordList.get(position).getId();
+        int idAnwserA = mWordList.get(position).getAnswers().get(Const.POSITION_ANSWER_1).getId();
+        int idAnwserB = mWordList.get(position).getAnswers().get(Const.POSITION_ANSWER_2).getId();
+        int idAnwserC = mWordList.get(position).getAnswers().get(Const.POSITION_ANSWER_3).getId();
+        int idAnwserD = mWordList.get(position).getAnswers().get(Const.POSITION_ANSWER_4).getId();
+        if((idWord != idAnwserA )
+                ||(idWord != idAnwserB )
+                ||(idWord != idAnwserC )
+                ||(idWord != idAnwserD )){
+            holder.mRadioButtonA.setChecked(false);
+            holder.mRadioButtonB.setChecked(false);
+            holder.mRadioButtonC.setChecked(false);
+            holder.mRadioButtonD.setChecked(false);
+        }
     }
 
     @Override
