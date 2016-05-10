@@ -1,6 +1,8 @@
 package com.framgia.fel1.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -39,6 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Button mButtonRegister;
     private LinearLayout mLayoutLoading;
     private LinearLayout mLayoutContent;
+    private SharedPreferences mSharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,6 +155,12 @@ public class RegisterActivity extends AppCompatActivity {
 
                         Toast.makeText(RegisterActivity.this, R.string.register_successfully,
                                        Toast.LENGTH_SHORT).show();
+                        mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE,
+                                Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = mSharedPreferences.edit();
+                        editor.putString(Const.EMAIL, user.getEmail());
+                        editor.putString(Const.PASSWORD, password);
+                        editor.apply();
                         onBackPressed();
                     } else {
                         String message = ReadJson.parseErrorJson(response);

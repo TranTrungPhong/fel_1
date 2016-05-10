@@ -85,6 +85,14 @@ public class LoginActivity extends Activity implements View.OnClickListener {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
+        mEditTextEmail.setText(mSharedPreferences.getString(Const.EMAIL,""));
+        mEditTextPassword.setText(mSharedPreferences.getString(Const.PASSWORD,""));
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_login:

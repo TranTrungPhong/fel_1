@@ -185,7 +185,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,
 
         @Override
         protected void onPostExecute(String response) {
-            Log.d(TAG, response);
+            //Log.d(TAG, response);
             if (response == null) {
                 Toast.makeText(HomeActivity.this, R.string.response_null, Toast.LENGTH_SHORT)
                         .show();
