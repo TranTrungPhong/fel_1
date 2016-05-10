@@ -24,6 +24,7 @@ import com.framgia.fel1.constant.Const;
 import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.User;
 import com.framgia.fel1.model.UserActivity;
+import com.framgia.fel1.util.CheckRequire;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
@@ -89,14 +90,17 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         super.onResume();
         mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
         mEditTextEmail.setText(mSharedPreferences.getString(Const.EMAIL,""));
-        mEditTextPassword.setText(mSharedPreferences.getString(Const.PASSWORD,""));
+//        mEditTextPassword.setText(mSharedPreferences.getString(Const.PASSWORD,""));
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_login:
-                new LoginToServer().execute();
+                if(mEditTextPassword.getText().toString().equals("")){
+                    Toast.makeText(LoginActivity.this, R.string.pass_not_blank, Toast.LENGTH_SHORT).show();
+                } else if( CheckRequire.checkEmail(LoginActivity.this, mEditTextEmail))
+                    new LoginToServer().execute();
                 break;
             case R.id.text_sign_up:
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
@@ -185,7 +189,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                     joActivity.optString(Const.CREATED_AT)
                             );
                             listUserActivity.add(userActivity);
-                            mMySqliteHelper.addUserActivity(userActivity);
+                            mMySqliteHelper
+                                    .addUserActivity(userActivity,
+                                                     Integer.parseInt(response.getString(Const.ID)));
                         }
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         User user = new User(

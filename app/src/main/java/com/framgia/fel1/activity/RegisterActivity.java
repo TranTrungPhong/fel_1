@@ -159,7 +159,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = mSharedPreferences.edit();
                         editor.putString(Const.EMAIL, user.getEmail());
-                        editor.putString(Const.PASSWORD, password);
+//                        editor.putString(Const.PASSWORD, password);
                         editor.apply();
                         onBackPressed();
                     } else {
