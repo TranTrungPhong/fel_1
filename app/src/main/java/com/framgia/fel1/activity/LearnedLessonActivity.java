@@ -64,7 +64,16 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
+        int id = mSharedPreferences.getInt(Const.ID, -1);
+        if (id != -1) {
+            mUser = mMySqliteHelper.getUser(id);
+            mListResult = mMySqliteHelper.getListResultByUser(mUser.getId());
+        } else {
+            finish();
+        }
+        
         mLearnedLessonsList.clear();
+        mLearnedLessonsListResume.clear();
         for (Result result: mListResult) {
             mLearnedLessonsListResume.addAll(mMySqliteHelper.getListLesson(result.getIdLesson()));
         }

@@ -115,19 +115,21 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
 
     private void createLesson(int i) {
         mReadJson = new ReadJson(this);
-        if (mPage * mPerPage > Const.MAX_COUNT_WORDS) {
+        if (mPage * mPerPage >= Const.MAX_COUNT_WORDS) {
             Toast.makeText(NewLessonActivity.this, R.string.thieu_word, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        try {
-            mLesson = mReadJson.createLesson(i, mPage, mPerPage);
-            mTextNameNewLess.setText(mLesson.getName());
-            mListWordNewLesson.addAll(mLesson.getWords());
-            mNewLessonAdapter.notifyDataSetChanged();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
+            finish();
+//            return;
+        }else {
+            try {
+                mLesson = mReadJson.createLesson(i, mPage, mPerPage);
+                mTextNameNewLess.setText(mLesson.getName());
+                mListWordNewLesson.addAll(mLesson.getWords());
+                mNewLessonAdapter.notifyDataSetChanged();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
