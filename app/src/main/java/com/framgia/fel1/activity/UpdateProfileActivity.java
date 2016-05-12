@@ -27,6 +27,7 @@ import com.framgia.fel1.constant.APIService;
 import com.framgia.fel1.constant.Const;
 import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.User;
+import com.framgia.fel1.util.BitmapUtil;
 import com.framgia.fel1.util.CheckRequire;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
@@ -86,7 +87,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                     String picturePath = cursor.getString(columnIndex);
                     cursor.close();
-                    mBitmapAvatar = BitmapFactory.decodeFile(picturePath);
+                    mBitmapAvatar = BitmapUtil.decodeSampledBitmapFromFile(picturePath, 100, 100);
                     mImageAvatar.setImageBitmap(mBitmapAvatar);
                     mUser.setAvatar(picturePath);
                     MySqliteHelper mySqliteHelper = new MySqliteHelper(UpdateProfileActivity.this);
@@ -111,7 +112,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
         mEditPasswordConfirmation = (EditText) findViewById(R.id.edit_password_confirmation);
         mEditName = (EditText) findViewById(R.id.edit_name);
         mImageAvatar = (ImageView) findViewById(R.id.image_avatar);
-        Bitmap bitmap = BitmapFactory.decodeFile(mUser.getAvatar());
+        Bitmap bitmap = BitmapUtil.decodeSampledBitmapFromFile(mUser.getAvatar(), 100, 100);
         if(bitmap != null)
             mImageAvatar.setImageBitmap(bitmap);
         mFab.setImageDrawable(new IconicsDrawable(UpdateProfileActivity.this)
