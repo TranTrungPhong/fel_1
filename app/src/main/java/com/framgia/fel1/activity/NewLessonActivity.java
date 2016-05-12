@@ -115,20 +115,24 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
 
     private void createLesson(int i) {
         mReadJson = new ReadJson(this);
-        if (mPage * mPerPage >= Const.MAX_COUNT_WORDS) {
-            Toast.makeText(NewLessonActivity.this, R.string.thieu_word, Toast.LENGTH_SHORT).show();
-            finish();
+        if (mCountLesson > Const.COUNT_LESSON) {
+            Toast.makeText(NewLessonActivity.this, R.string.hetbai, Toast.LENGTH_SHORT).show();
+        } else {
+            if (mPage * mPerPage >= Const.MAX_COUNT_WORDS) {
+                Toast.makeText(NewLessonActivity.this, R.string.thieu_word, Toast.LENGTH_SHORT).show();
+                finish();
 //            return;
-        }else {
-            try {
-                mLesson = mReadJson.createLesson(i, mPage, mPerPage);
-                mTextNameNewLess.setText(mLesson.getName());
-                mListWordNewLesson.addAll(mLesson.getWords());
-                mNewLessonAdapter.notifyDataSetChanged();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
+            } else {
+                try {
+                    mLesson = mReadJson.createLesson(i, mPage, mPerPage);
+                    mTextNameNewLess.setText(mLesson.getName());
+                    mListWordNewLesson.addAll(mLesson.getWords());
+                    mNewLessonAdapter.notifyDataSetChanged();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -138,24 +142,29 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
         switch (v.getId()) {
             case R.id.button_submit:
                 mCountLesson++;
-                for (Word word : mLesson.getWords()) {
-                    Result mResult = new Result(
-                            mUser.getId(),
-                            word.getLessonId(),
-                            word.getId(),
-                            word.getResultId());
-                    mMySqliteHelper.addResult(mResult);
-                }
-                mMySqliteHelper.addLesson(mLesson);
-                for (Word word : mListWordNewLesson) {
-                    mMySqliteHelper.addWord(word);
-                    for (Answer answer : word.getAnswers()) {
-                        mMySqliteHelper.addAnswer(answer);
+                if(mCountLesson <= Const.COUNT_LESSON){
+                    for (Word word : mLesson.getWords()) {
+                        Result mResult = new Result(
+                                mUser.getId(),
+                                word.getLessonId(),
+                                word.getId(),
+                                word.getResultId());
+                        mMySqliteHelper.addResult(mResult);
                     }
+                    mMySqliteHelper.addLesson(mLesson);
+                    for (Word word : mListWordNewLesson) {
+                        mMySqliteHelper.addWord(word);
+                        for (Answer answer : word.getAnswers()) {
+                            mMySqliteHelper.addAnswer(answer);
+                        }
+                    }
+                    mListWordNewLesson.clear();
+                    mPage++;
+                    createLesson(mCountLesson);
+                }else{
+                    Toast.makeText(NewLessonActivity.this, R.string.hetbai, Toast.LENGTH_SHORT)
+                            .show();
                 }
-                mListWordNewLesson.clear();
-                mPage++;
-                createLesson(mCountLesson);
                 break;
             case R.id.button_cancel:
                 finish();
