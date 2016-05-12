@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -27,17 +29,20 @@ import com.framgia.fel1.constant.APIService;
 import com.framgia.fel1.constant.Const;
 import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.User;
+import com.framgia.fel1.model.UserActivity;
 import com.framgia.fel1.util.BitmapUtil;
 import com.framgia.fel1.util.CheckRequire;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
 import com.framgia.fel1.util.ReadJson;
+import com.framgia.fel1.util.ShowImage;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 public class UpdateProfileActivity extends AppCompatActivity {
     public static final String TAG = "UpdateProfileActivity";
@@ -89,9 +94,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     cursor.close();
                     mBitmapAvatar = BitmapUtil.decodeSampledBitmapFromFile(picturePath, 100, 100);
                     mImageAvatar.setImageBitmap(mBitmapAvatar);
-                    mUser.setAvatar(picturePath);
-                    MySqliteHelper mySqliteHelper = new MySqliteHelper(UpdateProfileActivity.this);
-                    mySqliteHelper.updateUser(mUser);
+//                    mUser.setAvatar(picturePath);
+//                    MySqliteHelper mySqliteHelper = new MySqliteHelper(UpdateProfileActivity.this);
+//                    mySqliteHelper.updateUser(mUser);
                 } else {
                     mBitmapAvatar = null;
                     Toast.makeText(getApplicationContext(), R.string.error_get_image,
@@ -112,9 +117,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
         mEditPasswordConfirmation = (EditText) findViewById(R.id.edit_password_confirmation);
         mEditName = (EditText) findViewById(R.id.edit_name);
         mImageAvatar = (ImageView) findViewById(R.id.image_avatar);
-        Bitmap bitmap = BitmapUtil.decodeSampledBitmapFromFile(mUser.getAvatar(), 100, 100);
-        if(bitmap != null)
-            mImageAvatar.setImageBitmap(bitmap);
+        new ShowImage(mImageAvatar).execute(mUser.getAvatar());
+        mBitmapAvatar = ((BitmapDrawable) mImageAvatar.getDrawable()).getBitmap();
         mFab.setImageDrawable(new IconicsDrawable(UpdateProfileActivity.this)
                                       .icon(FontAwesome.Icon.faw_check)
                                       .color(Color.GREEN));
@@ -193,12 +197,12 @@ public class UpdateProfileActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if (!InternetUtils.isInternetConnected(UpdateProfileActivity.this)) {
-                cancel(true);
-            }
             progressDialog = new ProgressDialog(UpdateProfileActivity.this);
             progressDialog.setMessage(getResources().getString(R.string.loading));
             progressDialog.show();
+            if (!InternetUtils.isInternetConnected(UpdateProfileActivity.this)) {
+                cancel(true);
+            }
         }
 
         @Override
@@ -222,12 +226,13 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 jsonObject.put(Const.EMAIL, email);
                 jsonObject.put(Const.PASSWORD, password);
                 jsonObject.put(Const.PASSWORD_CONFIRMATION, passwordConfirm);
-                jsonObject.put(Const.AUTH_TOKEN, mUser.getAuthToken());
                 JSONObject jsonObjectPost = new JSONObject();
                 jsonObjectPost.put(Const.USER, jsonObject);
                 try {
-                    response = HttpRequest.postJsonRequest(APIService.URL_UPDATE_PROFILE, jsonObjectPost,
-                            APIService.METHOD_POST);
+                    String url = APIService.URL_UPDATE_PROFILE + mUser.getId() + Const.JSON_TYPE
+                            + "?" + Const.AUTH_TOKEN + "=" + mUser.getAuthToken();
+                    response = HttpRequest.postJsonRequest(url, jsonObjectPost,
+                            "PATCH");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -249,11 +254,21 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 try {
                     User user = new User(response);
                     if ( user.getId() != 0 ) {
+                        mMySqliteHelper.updateUser(user);
+                        List<UserActivity> userActivityList = user.getActivities();
+                        for (UserActivity userActivity : userActivityList) {
+                            try {
+                                mMySqliteHelper.addUserActivity(userActivity, user.getId());
+                            } catch (SQLiteConstraintException e){
+                                e.printStackTrace();
+                                mMySqliteHelper.updateUserActivity(userActivity);
+                            }
+                        }
                         Toast.makeText(UpdateProfileActivity.this, R.string.update_successfully,
                                 Toast.LENGTH_SHORT).show();
                         Intent homeItent =
                                 new Intent(UpdateProfileActivity.this, HomeActivity.class);
-                        homeItent.putExtra(Const.USER, mUser);
+                        homeItent.putExtra(Const.USER, user);
                         startActivity(homeItent);
                         finish();
                     } else {

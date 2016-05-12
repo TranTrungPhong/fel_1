@@ -91,4 +91,6 @@
     <string name="answer">Answer</string>
     <string name="question">Question</string>
     <string name="pass_not_blank">Password not blank !</string>
+    <string name="sync_server">Synchronize data from server</string>
+    <string name="error_sign_out">Error signout</string>
 </resources>

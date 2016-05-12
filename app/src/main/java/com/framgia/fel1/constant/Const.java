@@ -48,4 +48,8 @@ public interface Const {
     String LESSON_ID = "lesson_id";
     String MY_PREFERENCE = "preference";
     String REMEMBER = "remember";
+    String JSON_TYPE = ".json";
+    String PER_PAGE = "per_page";
+    int DEFAULT_PERPAGE_WORDLIST = 20;
+    String PAGE = "page";
 }

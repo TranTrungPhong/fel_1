@@ -123,31 +123,33 @@ public class MyItemRecyclerViewAdapter
 
             FilterResults results = new FilterResults();
             final List<ItemList2> list = mValues;
-            final List<ItemList2> result_list = new ArrayList<>(list.size());
+            final List<ItemList2> resultList = new ArrayList<>(list.size());
 
             for (ItemList2 item : list) {
                 Word word = mSqliteHelper.getWord(Integer.parseInt(item.getId()));
                 switch (state.toString()) {
                     case Const.ALL_WORD:
-                        result_list.add(item);
+                        resultList.add(item);
                         break;
                     case Const.LEARNED:
-                        if (word.getId() == Integer.parseInt(item.getId())) {
-                            result_list.add(item);
+                        if (word.getId() == Integer.parseInt(item.getId()) && word.getResultId()
+                        != 0) {
+                            resultList.add(item);
                         }
                         break;
                     case Const.NO_LEARN:
-                        if (word.getId() != Integer.parseInt(item.getId())) {
-                            result_list.add(item);
+                        if (word.getResultId() == 0) {
+                            resultList.add(item);
                         }
                         break;
                     default:
+                        resultList.add(item);
                         break;
                 }
             }
 
-            results.values = result_list;
-            results.count = result_list.size();
+            results.values = resultList;
+            results.count = resultList.size();
 
             return results;
         }
