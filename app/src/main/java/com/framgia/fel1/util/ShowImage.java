@@ -29,7 +29,7 @@ public class ShowImage extends AsyncTask<String, Void, Bitmap> {
             bitmap = BitmapFactory.decodeStream(in);
         } catch (Exception e) {
             hasError = true;
-            bitmap = BitmapFactory.decodeFile(url);
+            bitmap = BitmapUtil.decodeSampledBitmapFromFile(url, 100, 100);
             e.printStackTrace();
         }
         return bitmap;
