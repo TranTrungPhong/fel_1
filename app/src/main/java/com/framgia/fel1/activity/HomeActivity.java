@@ -27,6 +27,7 @@ import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.ArrayCategory;
 import com.framgia.fel1.model.Category;
 import com.framgia.fel1.model.User;
+import com.framgia.fel1.util.BitmapUtil;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.ShowImage;
 
@@ -67,7 +68,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,
 
     @Override
     protected void onResume() {
-        Bitmap bitmap = BitmapFactory.decodeFile(mUser.getAvatar());
+        Bitmap bitmap = BitmapUtil.decodeSampledBitmapFromFile(mUser.getAvatar(), 100, 100);
         if(bitmap != null)
             mImageViewAvatar.setImageBitmap(bitmap);
         super.onResume();
