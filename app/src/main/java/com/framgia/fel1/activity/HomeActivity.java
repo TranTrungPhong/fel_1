@@ -2,6 +2,7 @@ package com.framgia.fel1.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -29,10 +30,13 @@ import com.framgia.fel1.model.Category;
 import com.framgia.fel1.model.User;
 import com.framgia.fel1.util.BitmapUtil;
 import com.framgia.fel1.util.HttpRequest;
+import com.framgia.fel1.util.InternetUtils;
 import com.framgia.fel1.util.ShowImage;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -137,13 +141,8 @@ public class HomeActivity extends Activity implements View.OnClickListener,
                 .setPositiveButton(R.string.thoat, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        SharedPreferences.Editor editor = mSharedPreferences.edit();
-                        editor.putBoolean(Const.REMEMBER, false);
-                        editor.remove(Const.ID);
-                        editor.apply();
-                        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        finish();
+                        onSignOut();
+
                     }
                 })
                 .setNegativeButton(R.string.huy, new DialogInterface.OnClickListener() {
@@ -152,6 +151,20 @@ public class HomeActivity extends Activity implements View.OnClickListener,
                         dialog.dismiss();
                     }
                 }).show();
+    }
+
+    private void onSignOut() {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putBoolean(Const.REMEMBER, false);
+        editor.remove(Const.ID);
+        editor.apply();
+        if( InternetUtils.isInternetConnected(HomeActivity.this))
+            new SignOutRequest().execute();
+        else {
+            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
@@ -210,5 +223,60 @@ public class HomeActivity extends Activity implements View.OnClickListener,
             }
         }
     }
+     private class SignOutRequest extends AsyncTask<String, String, String> {
+         ProgressDialog progressDialog;
+         @Override
+         protected void onPreExecute() {
+             progressDialog = new ProgressDialog(HomeActivity.this);
+             progressDialog.setTitle(getResources().getString(R.string.sign_out));
+             progressDialog.show();
+         }
+
+         @Override
+            protected String doInBackground(String... params) {
+                String url = APIService.URL_API_SIGNOUT + "?" +
+                        Const.AUTH_TOKEN + "=" +
+                        mUser.getAuthToken();
+             String response = null;
+             try {
+                 response = HttpRequest.postJsonRequest(url, null, APIService.METHOD_DELETE);
+             } catch (IOException e) {
+                 e.printStackTrace();
+             }
+             return response;
+            }
+
+            @Override
+            protected void onPostExecute(String response) {
+                if(progressDialog.isShowing())
+                    progressDialog.dismiss();
+                if ( response == null ) {
+                    Toast.makeText(HomeActivity.this, R.string.response_null, Toast.LENGTH_SHORT).show();
+                } else if ( (response.substring(0, response.indexOf(":"))).contains(
+                        String.valueOf(R.string.Exception)) || (response.substring(0, response.indexOf(":"))).contains(
+                        String.valueOf(R.string.StackTrace)) ) {
+                    Toast.makeText(HomeActivity.this, R.string.response_error, Toast.LENGTH_SHORT).show();
+                } else {
+                    String responseInvalid = null;
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        responseInvalid = jsonObject.optString(getString(R.string.message_invalid));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if ( ! responseInvalid.equals("") ) {
+                        Toast.makeText(HomeActivity.this, responseInvalid, Toast.LENGTH_SHORT).show();
+
+                    } else {
+                        Toast.makeText(HomeActivity.this, R.string.error_sign_out, Toast
+                                .LENGTH_SHORT)
+                                .show();
+                    }
+                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+            }
+        }
 
 }

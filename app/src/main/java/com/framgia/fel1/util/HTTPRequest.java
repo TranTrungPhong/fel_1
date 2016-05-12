@@ -71,15 +71,22 @@ public class HttpRequest {
         InputStream inputStream;
         httpUrl = new URL(url);
         connect = (HttpURLConnection) httpUrl.openConnection();
-        connect.setRequestMethod(method);
+        if(!method.equals(APIService.METHOD_PATCH))
+            connect.setRequestMethod(method);
         connect.setDoInput(true);
-        connect.setDoOutput(true);
+        if(jsonObject1 != null)
+            connect.setDoOutput(true);
+        else connect.setDoOutput(false);
+        if(method.equals(APIService.METHOD_PATCH))
+            connect.setRequestProperty("X-HTTP-Method-Override", method);
         connect.setRequestProperty("Content-Type", "application/json");
-        DataOutputStream out = new DataOutputStream(connect.getOutputStream());
-        out.write(jsonObject1.toString().getBytes());
-        Log.d(TAG, jsonObject1.toString());
-        out.flush();
-        out.close();
+        if(jsonObject1 != null) {
+            DataOutputStream out = new DataOutputStream(connect.getOutputStream());
+            out.write(jsonObject1.toString().getBytes());
+            Log.d(TAG, jsonObject1.toString());
+            out.flush();
+            out.close();
+        }
         connect.connect();
         StringBuilder sb = new StringBuilder();
         BufferedReader br;

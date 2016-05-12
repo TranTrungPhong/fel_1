@@ -1,6 +1,8 @@
 package com.framgia.fel1.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,24 +20,28 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import com.framgia.fel1.R;
 import com.framgia.fel1.adapter.MyItemRecyclerViewAdapter;
+import com.framgia.fel1.constant.APIService;
 import com.framgia.fel1.constant.Const;
+import com.framgia.fel1.data.MySqliteHelper;
+import com.framgia.fel1.model.Answer;
 import com.framgia.fel1.model.ItemList2;
+import com.framgia.fel1.model.User;
 import com.framgia.fel1.model.Word;
 import com.framgia.fel1.util.ExportFile;
+import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
-import com.framgia.fel1.util.ReadData;
 import com.itextpdf.text.DocumentException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class WordListActivity extends AppCompatActivity
         implements MyItemRecyclerViewAdapter.OnListFragmentInteractionListener {
     public static final String TAG = "WordListActivity";
+    private static final int THRESHOLD_ITEM_COUNT = 15;
     private RecyclerView mRecyclerView;
     private MyItemRecyclerViewAdapter mMyItemRecyclerViewAdapter;
     private List<ItemList2> mListItem;
@@ -45,6 +51,15 @@ public class WordListActivity extends AppCompatActivity
     private Toolbar mToolbar;
     private Spinner mSpinner;
     private ArrayList<String> mListSpinner;
+    private SharedPreferences mSharedPreferences;
+    private MySqliteHelper mMySqliteHelper;
+    private User mUser;
+    private boolean mIsLoadingMore = true;
+    private boolean mIsLoading = false;
+    private int mPastVisiblesItems;
+    private int mVisibleItemCount;
+    private LinearLayoutManager mLayoutManager;
+    private int mPage = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +73,8 @@ public class WordListActivity extends AppCompatActivity
     private void setView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mLayoutLoad = (LinearLayout) findViewById(R.id.layout_load);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mListItem = new ArrayList<>();
         mMyItemRecyclerViewAdapter =
                 new MyItemRecyclerViewAdapter(WordListActivity.this, mListItem);
@@ -74,10 +90,36 @@ public class WordListActivity extends AppCompatActivity
     private void setData() {
         mData = getIntent();
         mCategoryId = mData.getIntExtra(Const.CATEGORY_ID, 0);
+        mMySqliteHelper = new MySqliteHelper(this);
+        mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
+        int id = mSharedPreferences.getInt(Const.ID, - 1);
+        if ( id != - 1 )
+            mUser = mMySqliteHelper.getUser(id);
+        else
+            finish();
         mLayoutLoad.setVisibility(View.VISIBLE);
-        new WordListRequest().execute(mCategoryId);
+        if ( mMySqliteHelper.countTable(MySqliteHelper.TABLE_WORD) == 0 )
+            new WordListRequest().execute(mCategoryId, mPage);
+        else {
+            mLayoutLoad.setVisibility(View.GONE);
+            mIsLoadingMore = false;
+            getWordListFromDatabase();
+        }
         setListSpinner();
 
+    }
+
+    private void getWordListFromDatabase() {
+        List<Word> wordList = mMySqliteHelper.getListWord();
+        mListItem.clear();
+        for (Word word : wordList) {
+            List<Answer> answerList = mMySqliteHelper.getListAnswerByWord(word.getId());
+            for (Answer answer : answerList) {
+                if ( answer.getCorrect() )
+                    mListItem.add(new ItemList2(String.valueOf(word.getId()), word.getContent(),
+                                                answer.getContent()));
+            }
+        }
     }
 
     private void setListSpinner() {
@@ -87,7 +129,7 @@ public class WordListActivity extends AppCompatActivity
         mListSpinner.add(Const.NO_LEARN);
         ArrayAdapter<String> adapterSpinner =
                 new ArrayAdapter(WordListActivity.this, android.R.layout.simple_list_item_1,
-                        mListSpinner);
+                                 mListSpinner);
         adapterSpinner.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
         mSpinner.setAdapter(adapterSpinner);
     }
@@ -104,7 +146,7 @@ public class WordListActivity extends AppCompatActivity
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String filterString = parent.getItemAtPosition(position).toString();
                 mMyItemRecyclerViewAdapter.getFilter().filter(filterString);
-                if (mMyItemRecyclerViewAdapter.getListFiltered().size() > 0) {
+                if ( mMyItemRecyclerViewAdapter.getListFiltered().size() > 0 ) {
                     mRecyclerView.smoothScrollToPosition(0);
                 }
             }
@@ -112,8 +154,26 @@ public class WordListActivity extends AppCompatActivity
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 mSpinner.setSelection(0);
-                if (mMyItemRecyclerViewAdapter.getListFiltered().size() > 0) {
+                if ( mMyItemRecyclerViewAdapter.getListFiltered().size() > 0 ) {
                     mRecyclerView.smoothScrollToPosition(0);
+                }
+            }
+        });
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if ( dy > 0 ) {
+                    mVisibleItemCount = mLayoutManager.getChildCount();
+                    mPastVisiblesItems = mLayoutManager.findFirstVisibleItemPosition();
+
+                    if ( mIsLoadingMore ) {
+                        if ( (mVisibleItemCount + mPastVisiblesItems + THRESHOLD_ITEM_COUNT) >=
+                                mListItem.size() ) {
+                            if ( ! mIsLoading )
+                                new WordListRequest().execute(mCategoryId, mPage);
+                        }
+                    }
                 }
             }
         });
@@ -134,11 +194,11 @@ public class WordListActivity extends AppCompatActivity
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(WordListActivity.this, R.string.error_export_pdf,
-                            Toast.LENGTH_SHORT).show();
+                                   Toast.LENGTH_SHORT).show();
                 } catch (DocumentException e) {
                     e.printStackTrace();
                     Toast.makeText(WordListActivity.this, R.string.error_export_pdf,
-                            Toast.LENGTH_SHORT).show();
+                                   Toast.LENGTH_SHORT).show();
                 }
                 return true;
             case R.id.action_export_csv:
@@ -147,7 +207,7 @@ public class WordListActivity extends AppCompatActivity
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(WordListActivity.this, R.string.error_export_csv,
-                            Toast.LENGTH_SHORT).show();
+                                   Toast.LENGTH_SHORT).show();
                 }
                 return true;
             case R.id.action_export_tsv:
@@ -156,16 +216,23 @@ public class WordListActivity extends AppCompatActivity
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(WordListActivity.this, R.string.error_export_tsv,
-                            Toast.LENGTH_SHORT).show();
+                                   Toast.LENGTH_SHORT).show();
                 }
                 return true;
+            case R.id.action_sync:
+                mLayoutLoad.setVisibility(View.VISIBLE);
+                mListItem.clear();
+                mIsLoadingMore = true;
+                mPage = 1;
+                new WordListRequest().execute(mCategoryId, mPage);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void exportTsv() throws IOException {
         String fileName;
-        if(mData.getStringExtra(Const.CATEGORY_ID) != null) {
+        if ( mData.getStringExtra(Const.CATEGORY_ID) != null ) {
             fileName = Const.CATEGORY + "_" + mData.getStringExtra(Const.CATEGORY_ID) + "_" +
                     mListSpinner.get(mSpinner.getSelectedItemPosition());
         } else {
@@ -175,21 +242,21 @@ public class WordListActivity extends AppCompatActivity
         String columnStr = "\"" + Const.WORD + "\"\t " + "\"" + Const.ANSWER + "\"";
         builder.append(columnStr);
         for (ItemList2 item : mMyItemRecyclerViewAdapter.getListFiltered()) {
-            builder.append("\n").append("\"").append(item.getContent()).append("\"\t ")
-                    .append("\"").append(item.getDetail()).append("\"");
+            builder.append("\n").append("\"").append(item.getContent()).append("\"\t ").append(
+                    "\"").append(item.getDetail()).append("\"");
         }
-        if (ExportFile.exportTsv(WordListActivity.this, fileName, builder.toString())) {
+        if ( ExportFile.exportTsv(WordListActivity.this, fileName, builder.toString()) ) {
             Toast.makeText(WordListActivity.this, R.string.export_tsv_success,
-                    Toast.LENGTH_SHORT).show();
+                           Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(WordListActivity.this, R.string.error_export_tsv,
-                    Toast.LENGTH_SHORT).show();
+                           Toast.LENGTH_SHORT).show();
         }
     }
 
     private void exportCsv() throws IOException {
         String fileName;
-        if(mData.getStringExtra(Const.CATEGORY_ID) != null) {
+        if ( mData.getStringExtra(Const.CATEGORY_ID) != null ) {
             fileName = Const.CATEGORY + "_" + mData.getStringExtra(Const.CATEGORY_ID) + "_" +
                     mListSpinner.get(mSpinner.getSelectedItemPosition());
         } else {
@@ -199,21 +266,21 @@ public class WordListActivity extends AppCompatActivity
         String columnString = Const.WORD + ", " + Const.ANSWER;
         stringBuilder.append(columnString);
         for (ItemList2 item : mMyItemRecyclerViewAdapter.getListFiltered()) {
-            stringBuilder.append("\n").append(item.getContent()).append(", ")
-                    .append(item.getDetail());
+            stringBuilder.append("\n").append(item.getContent()).append(", ").append(
+                    item.getDetail());
         }
-        if (ExportFile.exportCsv(WordListActivity.this, fileName, stringBuilder.toString())) {
+        if ( ExportFile.exportCsv(WordListActivity.this, fileName, stringBuilder.toString()) ) {
             Toast.makeText(WordListActivity.this, R.string.export_csv_success,
-                    Toast.LENGTH_SHORT).show();
+                           Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(WordListActivity.this, R.string.error_export_csv,
-                    Toast.LENGTH_SHORT).show();
+                           Toast.LENGTH_SHORT).show();
         }
     }
 
     private void exportPdf() throws IOException, DocumentException {
         String fileName;
-        if(mData.getStringExtra(Const.CATEGORY_ID) != null) {
+        if ( mData.getStringExtra(Const.CATEGORY_ID) != null ) {
             fileName = Const.CATEGORY + "_" + mData.getStringExtra(Const.CATEGORY_ID) + "_" +
                     mListSpinner.get(mSpinner.getSelectedItemPosition());
         } else {
@@ -226,13 +293,13 @@ public class WordListActivity extends AppCompatActivity
             arrayList.add(item.getContent());
             arrayList.add(item.getDetail());
         }
-        if (ExportFile.exportPdf(WordListActivity.this, fileName, arrayList,
-                Const.COLUMN_WORD_LIST)) {
+        if ( ExportFile.exportPdf(WordListActivity.this, fileName, arrayList,
+                                  Const.COLUMN_WORD_LIST) ) {
             Toast.makeText(WordListActivity.this, R.string.export_pdf_success,
-                    Toast.LENGTH_SHORT).show();
+                           Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(WordListActivity.this, R.string.error_export_pdf,
-                    Toast.LENGTH_SHORT).show();
+                           Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -245,38 +312,48 @@ public class WordListActivity extends AppCompatActivity
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if (!InternetUtils.isInternetConnected(WordListActivity.this)) {
+            if ( ! InternetUtils.isInternetConnected(WordListActivity.this) ) {
                 cancel(true);
             }
-            mLayoutLoad.setVisibility(View.VISIBLE);
+            mIsLoading = true;
+            if ( mPage == 1 )
+                mLayoutLoad.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected String doInBackground(Integer... params) {
-            if (isCancelled()) {
+            if ( isCancelled() ) {
                 return null;
             }
-            return getWordListByCategory(params[0]);
+            return getWordListByCategory(params[0], params[1]);
         }
 
         @Override
         protected void onPostExecute(String response) {
-            mListItem.clear();
-            if (response == null) {
+            if ( mPage == 1 )
+                mListItem.clear();
+            if ( response == null ) {
                 Toast.makeText(WordListActivity.this, R.string.error_get_word_list,
-                        Toast.LENGTH_SHORT).show();
+                               Toast.LENGTH_SHORT).show();
             } else {
+                mPage++;
                 try {
                     JSONObject wordListObject = new JSONObject(response);
                     JSONArray wordListArray = wordListObject.getJSONArray(Const.WORDS);
+                    if ( wordListArray.length() < Const.DEFAULT_PERPAGE_WORDLIST )
+                        mIsLoadingMore = false;
                     for (int i = 0; i < wordListArray.length(); i++) {
                         Word word = new Word(wordListArray.getJSONObject(i));
-                        if (word != null) {
+                        mMySqliteHelper.addWord(word);
+                        if ( word != null ) {
                             for (int j = 0; j < word.getAnswers().size(); j++) {
-                                if (word.getAnswers().get(j).getCorrect()) {
+                                Answer answer = word.getAnswers().get(j);
+                                answer.setWordId(word.getId());
+                                mMySqliteHelper.addAnswer(answer);
+                                if ( answer.getCorrect() ) {
                                     mListItem.add(new ItemList2(String.valueOf(word.getId()),
-                                            word.getContent(),
-                                            word.getAnswers().get(j).getContent()));
+                                                                word.getContent(),
+                                                                answer.getContent()));
                                 }
                             }
                         }
@@ -284,18 +361,26 @@ public class WordListActivity extends AppCompatActivity
                 } catch (JSONException e) {
                     e.printStackTrace();
                     Toast.makeText(WordListActivity.this, R.string.register_error,
-                            Toast.LENGTH_SHORT).show();
+                                   Toast.LENGTH_SHORT).show();
                     Log.d(TAG, response.toString());
                 }
 
             }
             mMyItemRecyclerViewAdapter.notifyDataSetChanged();
+            mMyItemRecyclerViewAdapter.getFilter().filter(Const.ALL_WORD);
             mLayoutLoad.setVisibility(View.GONE);
+            mIsLoading = false;
         }
     }
 
-    private String getWordListByCategory(Integer param) {
-        InputStream jsonFileInputStream = getResources().openRawResource(R.raw.words);
-        return ReadData.readTextFile(jsonFileInputStream);
+    private String getWordListByCategory(Integer categoryId, Integer page) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(APIService.URL_WORD_LIST).append("?").append(
+                Const.AUTH_TOKEN + "=").append(mUser.getAuthToken()).append("&").append(
+                Const.CATEGORY_ID + "=").append(categoryId).append("&").append(
+                Const.PAGE + "=").append(page).append("&").append(Const.PER_PAGE + "=").append(
+                Const.DEFAULT_PERPAGE_WORDLIST);
+        Log.d(TAG, stringBuilder.toString());
+        return HttpRequest.getJSON(stringBuilder.toString());
     }
 }

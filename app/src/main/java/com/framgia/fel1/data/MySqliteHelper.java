@@ -3,6 +3,8 @@ package com.framgia.fel1.data;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -124,7 +126,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
 
     //region USER
     // Add User
-    public long addUser(User user) {
+    public long addUser(User user) throws SQLiteConstraintException {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         if ( user != null ) {
@@ -138,10 +140,11 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_UPDATED_AT, user.getUpdatedAt());
             cv.put(COLUMN_LEARNED_WORDS, user.getLearnedWords());
         }
-        return db.insert(TABLE_USER, null, cv);
+        return db.insertOrThrow(TABLE_USER, null, cv);
     }
 
     // Read User
+
     public User getUser(int id) {
         User user = new User();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -183,7 +186,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
 
     //region USERACTIVITY
     // Add UserActivity
-    public long addUserActivity(UserActivity userActivity, int idUser) {
+    public long addUserActivity(UserActivity userActivity, int idUser) throws SQLiteConstraintException {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         if ( userActivity != null ) {
@@ -192,7 +195,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_CONTENT, userActivity.getContent());
             cv.put(COLUMN_CREATED_AT, userActivity.getCreated_at());
         }
-        return db.insert(TABLE_USER_ACTIVITY, null, cv);
+        return db.insertOrThrow(TABLE_USER_ACTIVITY, null, cv);
     }
 
     // Read UserActivity
@@ -335,6 +338,26 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             word.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
         }
         return word;
+    }
+
+    public List<Word> getListWord(){
+        List<Word> wordList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.query(TABLE_WORD, null, null, null, null, null, null);
+        if ( cursor.getCount() > 0 && cursor.moveToFirst() ) {
+            do {
+                Word word = new Word();
+                word.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+                word.setLessonId(cursor.getInt(cursor.getColumnIndex(COLUMN_LESSON_ID)));
+                word.setResultId(cursor.getInt(cursor.getColumnIndex(COLUMN_RESULT_ID)));
+                word.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
+                wordList.add(word);
+            }
+            while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return wordList;
     }
 
     public List<Word> getListWordByLesson(int idLesson) {
@@ -492,6 +515,13 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public boolean deleteTable(String tableName) {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.delete(tableName, null,null) != 0;
+    }
+
+    public int countTable(String tableName){
+        SQLiteDatabase db = this.getReadableDatabase();
+        int count = (int) DatabaseUtils.queryNumEntries(db, tableName);
+        db.close();
+        return count;
     }
 
     public List<Lesson> getListLesson() throws SQLiteException{

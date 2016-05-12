@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -189,9 +190,13 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                     joActivity.optString(Const.CREATED_AT)
                             );
                             listUserActivity.add(userActivity);
-                            mMySqliteHelper
-                                    .addUserActivity(userActivity,
-                                                     Integer.parseInt(response.getString(Const.ID)));
+                            try {
+                                mMySqliteHelper.addUserActivity(userActivity,
+                                                                Integer.parseInt(response.getString(Const.ID)));
+                            } catch (SQLiteConstraintException e){
+                                e.printStackTrace();
+                                mMySqliteHelper.updateUserActivity(userActivity);
+                            }
                         }
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                         User user = new User(
@@ -207,7 +212,12 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                                 listUserActivity
                         );
                         //intent.putExtra(Const.USER, user);
-                        mMySqliteHelper.addUser(user);
+                        try{
+                            mMySqliteHelper.addUser(user);
+                        } catch (SQLiteConstraintException e){
+                            e.printStackTrace();
+                            mMySqliteHelper.updateUser(user);
+                        }
                         mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE,
                                                                   Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = mSharedPreferences.edit();

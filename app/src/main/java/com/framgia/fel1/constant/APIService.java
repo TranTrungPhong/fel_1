@@ -12,7 +12,7 @@ public class APIService {
     public static final String URL_UPDATE_LESSION = "https://manh-nt.herokuapp.com/lessons/3.json";
     public static final String URL_WORD_LIST = "https://manh-nt.herokuapp.com/words.json";
     public static final String URL_SHOW_USER = "https://manh-nt.herokuapp.com/users/1.json";
-    public static final String URL_UPDATE_PROFILE = "https://manh-nt.herokuapp.com/users/1.json";
+    public static final String URL_UPDATE_PROFILE = "https://manh-nt.herokuapp.com/users/";
     public static final String URL_MAKE_FOLLOW = "https://manh-nt.herokuapp.com/relationships.json";
     public static final String URL_MAKE_UNFOLLOW = "https://manh-nt.herokuapp.com/relationships/1.json";
 

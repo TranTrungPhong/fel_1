@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_export_pdf"
         android:title="@string/export_pdf"/>
@@ -9,5 +10,10 @@
     <item
         android:id="@+id/action_export_tsv"
         android:title="@string/export_tsv"/>
+    <item
+        android:id="@+id/action_sync"
+        android:icon="@android:drawable/ic_menu_rotate"
+        app:showAsAction="ifRoom"
+        android:title="@string/sync_server"/>
 
 </menu>
