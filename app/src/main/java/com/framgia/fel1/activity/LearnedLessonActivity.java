@@ -177,7 +177,15 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_create_lesson:
-                mAlertDialog.show();
+//                mAlertDialog.show();
+                Intent intent = new Intent(LearnedLessonActivity.this,
+                        NewLessonActivity.class);
+                intent.putExtra(Const.AUTH_TOKEN, mAuthToken);
+                intent.putExtra(Const.NAME, mNameCategory);
+                intent.putExtra(Const.CATEGORY_ID, mCategorId);
+//                intent.putExtra(APIService.PAGE, page);
+//                intent.putExtra(APIService.PER_PAGE, perPage);
+                startActivity(intent);
                 break;
             case R.id.button_word_list:
                 Intent intentWordList = new Intent(LearnedLessonActivity.this, WordListActivity.class);
