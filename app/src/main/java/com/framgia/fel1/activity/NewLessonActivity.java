@@ -258,7 +258,7 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
                             JSONObject jsonWord = jsonArrayWord.optJSONObject(i);
                             int idWord = jsonWord.optInt(Const.ID);
                             int resultIdWord = jsonWord.optInt(Const.RESULT_ID);
-                            Log.i("AAAAAAAAA",resultIdWord+"");
+//                            Log.i("AAAAAAAAA",resultIdWord+"");
                             mListResuiltId.add(String.valueOf(resultIdWord));
                             String contentWord = jsonWord.optString(Const.CONTENT);
                             JSONArray jsonArrayAnswer = jsonWord.optJSONArray(Const.ANSWERS);
@@ -312,9 +312,9 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
                 JSONObject jsonObjectWord = new JSONObject();
                 try {
                     jsonObjectWord.put(Const.ID, String.valueOf(mListResuiltId.get(i)));
-                    Log.i("AAAAAAAAA",mListResuiltId.get(i)+"");
+//                    Log.i("AAAAAAAAA",mListResuiltId.get(i)+"");
                     jsonObjectWord.put(Const.ANSWER_ID, String.valueOf(mListWordAns.get(i).getResultId()));
-                    Log.i("AAAAAAAAA","B : "+mListWordAns.get(i).getResultId()+"");
+//                    Log.i("AAAAAAAAA","B : "+mListWordAns.get(i).getResultId()+"");
                     jsonArray.put(String.valueOf(i), jsonObjectWord);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -332,8 +332,8 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
             String url = Const.URL_UPDATE_LESSON + mLesson.getId() + Const.JSON_TYPE + "?" +
                     Const.AUTH_TOKEN + "=" + mUser.getAuthToken();
             String response = null;
-            Log.i("FFFFFFFFFFF",jsonObjectPost.toString());
-            Log.i("FFFFFFFFFFF","url : "+url);
+//            Log.i("FFFFFFFFFFF",jsonObjectPost.toString());
+//            Log.i("FFFFFFFFFFF","url : "+url);
             try {
                 response = HttpRequest.postJsonRequest(url, jsonObjectPost, APIService.METHOD_PATCH);
             } catch (IOException e) {
@@ -353,7 +353,6 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
                 Toast.makeText(NewLessonActivity.this, R.string.response_error, Toast.LENGTH_SHORT)
                         .show();
             } else {
-//                Toast.makeText(NewLessonActivity.this, s, Toast.LENGTH_LONG).show();
                 Toast.makeText(NewLessonActivity.this, R.string.update_done, Toast.LENGTH_SHORT)
                         .show();
                 }

@@ -39,6 +39,7 @@ public class NewLessonAdapter extends RecyclerView.Adapter<NewLessonAdapter.NewL
         }
     }
 
+
     @Override
     public NewLessonViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater
