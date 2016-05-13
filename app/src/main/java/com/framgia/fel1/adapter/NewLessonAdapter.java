@@ -23,11 +23,13 @@ public class NewLessonAdapter extends RecyclerView.Adapter<NewLessonAdapter.NewL
         implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
     private Context mContext;
     private List<Word> mWordList = new ArrayList<>();
+    private List<Word> mWordListAnswer = new ArrayList<>();
     private OnListWordsClickItem mOnListWordsClickItem;
 
     public NewLessonAdapter(Context context, List<Word> wordList) {
         this.mContext = context;
         this.mWordList = wordList;
+        this.mWordListAnswer = wordList;
         if (context instanceof OnListWordsClickItem) {
             mOnListWordsClickItem = (OnListWordsClickItem) context;
         } else {
@@ -48,31 +50,31 @@ public class NewLessonAdapter extends RecyclerView.Adapter<NewLessonAdapter.NewL
 
     @Override
     public void onBindViewHolder(final NewLessonViewHolder holder, final int position) {
-        holder.mWord = mWordList.get(position);
-        holder.mTextViewNameWord.setText("#" + (mWordList.get(position).getId() + 1));
-        holder.mTextViewContentWord.setText(mWordList.get(position).getContent().toString());
+        holder.mWord = mWordListAnswer.get(position);
+        holder.mTextViewNameWord.setText("#" + (mWordListAnswer.get(position).getId() + 1));
+        holder.mTextViewContentWord.setText(mWordListAnswer.get(position).getContent().toString());
         holder.mTextViewContentWord.setOnClickListener(this);
         holder.mTextViewContentWord.setTag(holder.mWord);
         holder.mRadioButtonA.setText(
-                mWordList.get(position)
+                mWordListAnswer.get(position)
                         .getAnswers()
                         .get(Const.POSITION_ANSWER_1)
                         .getContent()
                         .toString());
         holder.mRadioButtonB.setText(
-                mWordList.get(position)
+                mWordListAnswer.get(position)
                         .getAnswers()
                         .get(Const.POSITION_ANSWER_2)
                         .getContent()
                         .toString());
         holder.mRadioButtonC.setText(
-                mWordList.get(position)
+                mWordListAnswer.get(position)
                         .getAnswers()
                         .get(Const.POSITION_ANSWER_3)
                         .getContent()
                         .toString());
         holder.mRadioButtonD.setText(
-                mWordList.get(position)
+                mWordListAnswer.get(position)
                         .getAnswers()
                         .get(Const.POSITION_ANSWER_4)
                         .getContent()
@@ -144,6 +146,9 @@ public class NewLessonAdapter extends RecyclerView.Adapter<NewLessonAdapter.NewL
         }
     }
 
+    public List<Word> getListWordAnswer (){
+        return mWordListAnswer;
+    }
 
     public class NewLessonViewHolder extends RecyclerView.ViewHolder {
         private TextView mTextViewNameWord;

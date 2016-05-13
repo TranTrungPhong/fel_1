@@ -52,4 +52,7 @@ public interface Const {
     String PER_PAGE = "per_page";
     int DEFAULT_PERPAGE_WORDLIST = 20;
     String PAGE = "page";
+    String ANSWER_ID = "answer_id";
+    String RESULT_ATTRIBUTES = "results_attributes";
+    String URL_UPDATE_LESSON = "https://manh-nt.herokuapp.com/lessons/";
 }
