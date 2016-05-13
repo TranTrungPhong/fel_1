@@ -118,7 +118,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
         mEditName = (EditText) findViewById(R.id.edit_name);
         mImageAvatar = (ImageView) findViewById(R.id.image_avatar);
         new ShowImage(mImageAvatar).execute(mUser.getAvatar());
-        mBitmapAvatar = ((BitmapDrawable) mImageAvatar.getDrawable()).getBitmap();
         mFab.setImageDrawable(new IconicsDrawable(UpdateProfileActivity.this)
                                       .icon(FontAwesome.Icon.faw_check)
                                       .color(Color.GREEN));
@@ -200,6 +199,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
             progressDialog = new ProgressDialog(UpdateProfileActivity.this);
             progressDialog.setMessage(getResources().getString(R.string.loading));
             progressDialog.show();
+            mBitmapAvatar = ((BitmapDrawable) mImageAvatar.getDrawable()).getBitmap();
             if (!InternetUtils.isInternetConnected(UpdateProfileActivity.this)) {
                 cancel(true);
             }

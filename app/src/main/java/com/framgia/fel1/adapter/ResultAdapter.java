@@ -10,8 +10,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import com.framgia.fel1.R;
+import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.Answer;
 import com.framgia.fel1.model.ItemList2;
+import com.framgia.fel1.model.Lesson;
 import com.framgia.fel1.model.Word;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -25,10 +27,14 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
     private Context mContext;
     private List<Word> mValues;
     private OnListFragmentInteractionListener mListener;
+    private Lesson mLesson;
+    private MySqliteHelper mSqliteHelper;
 
-    public ResultAdapter(Context context, List<Word> items) {
+    public ResultAdapter(Context context, Lesson lesson, List<Word> items) {
         mContext = context;
+        mLesson = lesson;
         mValues = items;
+        mSqliteHelper = new MySqliteHelper(context);
         if ( context instanceof OnListFragmentInteractionListener ) {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
@@ -40,7 +46,11 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
     @Override
     public int getItemViewType(int position) {
         for (Answer answer : mValues.get(position).getAnswers()) {
-            if ( answer.getCorrect() && mValues.get(position).getResultId() == answer.getId() )
+
+            if ( answer.getCorrect() && mSqliteHelper.getIdAnswerFromResult(mLesson.getId(),
+                                                                            mValues.get(
+                                                                                    position).getId()) ==
+                    answer.getId() )
                 return 1; // correct answer
         }
         return 0; // incorrect answer
@@ -72,7 +82,10 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
             if ( mValues.get(position).getAnswers().size() > i ) {
                 Answer answer = mValues.get(position).getAnswers().get(i);
                 radioButton.setText(answer.getContent());
-                radioButton.setChecked(mValues.get(position).getResultId() == answer.getId());
+                radioButton.setChecked(mSqliteHelper
+                                               .getIdAnswerFromResult(mLesson.getId(),
+                                                                      mValues.get(position).getId())
+                                               == answer.getId());
             }
             i++;
         }

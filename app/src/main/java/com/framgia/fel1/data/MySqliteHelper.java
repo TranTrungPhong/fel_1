@@ -644,4 +644,21 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         return mListResults;
     }
 
+    public int getIdAnswerFromResult(int idLesson, int idWord) {
+        int idAnswer = -1;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor =
+                db.query(true,TABLE_RESULT, new String[]{COLUMN_ID_ANSWER}, COLUMN_ID_LESSON +
+                        "=? AND " + COLUMN_ID_WORD + "=?",
+                         new String[]{String.valueOf(idLesson), String.valueOf(idWord)},
+                        null, null, null, null);
+        if ( cursor != null && cursor.moveToFirst() ) {
+                idAnswer = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_ANSWER));
+                cursor.moveToNext();
+        }
+        cursor.close();
+        db.close();
+        return idAnswer;
+    }
+
 }

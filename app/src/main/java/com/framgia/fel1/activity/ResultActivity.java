@@ -77,16 +77,16 @@ public class ResultActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mData = getIntent();
+        mLesson = (Lesson) mData.getSerializableExtra(Const.LESSON);
         mWordList = new ArrayList<>();
-        mResultAdapter = new ResultAdapter(ResultActivity.this, mWordList);
+        mResultAdapter = new ResultAdapter(ResultActivity.this, mLesson, mWordList);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(ResultActivity.this));
         mRecyclerView.setAdapter(mResultAdapter);
     }
 
     private void setData() {
-        mData = getIntent();
-        mLesson = (Lesson) mData.getSerializableExtra(Const.LESSON);
         if ( mLesson != null ) {
             mWordList.clear();
             mSqliteHelper = new MySqliteHelper(ResultActivity.this);
