@@ -59,6 +59,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private Bitmap mBitmapAvatar = null;
     private MySqliteHelper mMySqliteHelper;
     private SharedPreferences mSharedPreferences;
+    private boolean isChangedAvatar = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,12 +95,11 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     cursor.close();
                     mBitmapAvatar = BitmapUtil.decodeSampledBitmapFromFile(picturePath, 100, 100);
                     mImageAvatar.setImageBitmap(mBitmapAvatar);
-//                    mUser.setAvatar(picturePath);
-//                    MySqliteHelper mySqliteHelper = new MySqliteHelper(UpdateProfileActivity.this);
-//                    mySqliteHelper.updateUser(mUser);
+                    isChangedAvatar = true;
                 } else {
+                    isChangedAvatar = false;
                     mBitmapAvatar = null;
-                    Toast.makeText(getApplicationContext(), R.string.error_get_image,
+                    Toast.makeText(getApplicationContext(), R.string.not_changed_image,
                             Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -158,7 +158,9 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 if (CheckRequire.checkEmail(getApplicationContext(), mEditEmail) &&
                         CheckRequire.checkPassword(getApplicationContext(), mEditNewPassword,
                                 mEditPasswordConfirmation)) {
-                    new UpdateRequest().execute();
+                    if (InternetUtils.isInternetConnected(UpdateProfileActivity.this)) {
+                        new UpdateRequest().execute();
+                    }
                 }
             }
         });
@@ -200,9 +202,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
             progressDialog.setMessage(getResources().getString(R.string.loading));
             progressDialog.show();
             mBitmapAvatar = ((BitmapDrawable) mImageAvatar.getDrawable()).getBitmap();
-            if (!InternetUtils.isInternetConnected(UpdateProfileActivity.this)) {
-                cancel(true);
-            }
         }
 
         @Override
@@ -214,7 +213,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
             String response = null;
             try {
                 // change bitmap Image to base64 string
-                if(mBitmapAvatar != null) {
+                if(mBitmapAvatar != null && isChangedAvatar) {
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     mBitmapAvatar.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                     byte[] byteArray = byteArrayOutputStream.toByteArray();

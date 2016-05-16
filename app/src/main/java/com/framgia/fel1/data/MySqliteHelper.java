@@ -65,30 +65,37 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         StringBuffer createUserTable =
-                new StringBuffer().append("CREATE TABLE ").append(TABLE_USER + " (").append(
-                        COLUMN_ID + " INTEGER PRIMARY KEY, ").append(COLUMN_NAME).append(
-                        " TEXT, ").append(COLUMN_EMAIL).append(" TEXT, ").append(
-                        COLUMN_AVATAR).append(" TEXT, ").append(COLUMN_ADMIN).append(
-                        " INTEGER, ").append(COLUMN_AUTH_TOKEN).append(" TEXT, ").append(
-                        COLUMN_CREATED_AT).append(" TEXT, ").append(COLUMN_UPDATED_AT).append(
-                        " TEXT, ").append(COLUMN_LEARNED_WORDS).append(" INTEGER)");
+                new StringBuffer().append("CREATE TABLE ").append(TABLE_USER + " (")
+                        .append(COLUMN_ID + " INTEGER PRIMARY KEY, ")
+                        .append(COLUMN_NAME).append(" TEXT, ")
+                        .append(COLUMN_EMAIL).append(" TEXT, ")
+                        .append(COLUMN_AVATAR).append(" TEXT, ")
+                        .append(COLUMN_ADMIN).append(" INTEGER, ")
+                        .append(COLUMN_AUTH_TOKEN).append(" TEXT, ")
+                        .append(COLUMN_CREATED_AT).append(" TEXT, ")
+                        .append(COLUMN_UPDATED_AT).append(" TEXT, ")
+                        .append(COLUMN_LEARNED_WORDS).append(" INTEGER)");
         StringBuffer createUserActivityTable = new StringBuffer().append("CREATE TABLE ")
                 .append(TABLE_USER_ACTIVITY + " (").append(COLUMN_ID + " INTEGER PRIMARY KEY, ")
                 .append(COLUMN_ID_USER + " INTEGER, ")
-                .append(COLUMN_CONTENT).append(" TEXT, ").append(COLUMN_CREATED_AT).append(" TEXT)");
+                .append(COLUMN_CONTENT).append(" TEXT, ")
+                .append(COLUMN_CREATED_AT).append(" TEXT)");
         StringBuffer createCategoryTable =
-                new StringBuffer().append("CREATE TABLE ").append(TABLE_CATEGORY + " (").append(
-                        COLUMN_ID + " INTEGER PRIMARY KEY, ").append(COLUMN_NAME).append(
-                        " TEXT, ").append(COLUMN_PHOTO).append(" TEXT, ").append(
-                        COLUMN_LEARNED_WORDS).append(" INTEGER)");
+                new StringBuffer().append("CREATE TABLE ").append(TABLE_CATEGORY + " (")
+                        .append(COLUMN_ID + " INTEGER PRIMARY KEY, ")
+                        .append(COLUMN_NAME).append(" TEXT, ")
+                        .append(COLUMN_PHOTO).append(" TEXT, ")
+                        .append(COLUMN_LEARNED_WORDS).append(" INTEGER)");
         StringBuffer createLessonTable =
-                new StringBuffer().append("CREATE TABLE ").append(TABLE_LESSON + " (").append(
-                        COLUMN_ID + " INTEGER PRIMARY KEY, ").append(COLUMN_NAME).append(" TEXT)");
+                new StringBuffer().append("CREATE TABLE ").append(TABLE_LESSON + " (")
+                        .append(COLUMN_ID + " INTEGER PRIMARY KEY, ")
+                        .append(COLUMN_NAME).append(" TEXT)");
         StringBuffer createWordTable =
-                new StringBuffer().append("CREATE TABLE ").append(TABLE_WORD + " (").append(
-                        COLUMN_ID + " INTEGER PRIMARY KEY, ").append(COLUMN_LESSON_ID).append(
-                        " INTEGER, ").append(COLUMN_RESULT_ID).append(" INTEGER, ").append(
-                        COLUMN_CONTENT).append(" TEXT)");
+                new StringBuffer().append("CREATE TABLE ").append(TABLE_WORD + " (")
+                        .append(COLUMN_ID + " INTEGER PRIMARY KEY, ")
+                        .append(COLUMN_LESSON_ID).append(" INTEGER, ")
+                        .append(COLUMN_RESULT_ID).append(" INTEGER, ")
+                        .append(COLUMN_CONTENT).append(" TEXT)");
         StringBuffer createAnswerTable =
                 new StringBuffer().append("CREATE TABLE ").append(TABLE_ANSWER + " (")
                         .append(COLUMN_ID + " INTEGER PRIMARY KEY, ")
@@ -140,7 +147,9 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_UPDATED_AT, user.getUpdatedAt());
             cv.put(COLUMN_LEARNED_WORDS, user.getLearnedWords());
         }
-        return db.insertOrThrow(TABLE_USER, null, cv);
+        long id = db.insertOrThrow(TABLE_USER, null, cv);
+        db.close();
+        return id;
     }
 
     // Read User
@@ -162,6 +171,9 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             user.setUpdatedAt(cursor.getString(cursor.getColumnIndex(COLUMN_UPDATED_AT)));
             user.setLearnedWords(cursor.getInt(cursor.getColumnIndex(COLUMN_LEARNED_WORDS)));
         }
+        if ( cursor != null )
+            cursor.close();
+        db.close();
         return user;
     }
 
@@ -179,14 +191,17 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_UPDATED_AT, user.getUpdatedAt());
             cv.put(COLUMN_LEARNED_WORDS, user.getLearnedWords());
         }
-        return db.update(TABLE_USER, cv, COLUMN_ID + " = ?",
-                         new String[]{String.valueOf(user.getId())});
+        long numRow = db.update(TABLE_USER, cv, COLUMN_ID + " = ?",
+                                new String[]{String.valueOf(user.getId())});
+        db.close();
+        return numRow;
     }
     //endregion
 
     //region USERACTIVITY
     // Add UserActivity
-    public long addUserActivity(UserActivity userActivity, int idUser) throws SQLiteConstraintException {
+    public long addUserActivity(UserActivity userActivity, int idUser)
+            throws SQLiteConstraintException {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         if ( userActivity != null ) {
@@ -195,7 +210,9 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_CONTENT, userActivity.getContent());
             cv.put(COLUMN_CREATED_AT, userActivity.getCreated_at());
         }
-        return db.insertOrThrow(TABLE_USER_ACTIVITY, null, cv);
+        long id = db.insertOrThrow(TABLE_USER_ACTIVITY, null, cv);
+        db.close();
+        return id;
     }
 
     // Read UserActivity
@@ -209,6 +226,9 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             userActivity.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
             userActivity.setCreated_at(cursor.getString(cursor.getColumnIndex(COLUMN_CREATED_AT)));
         }
+        if ( cursor != null )
+            cursor.close();
+        db.close();
         return userActivity;
     }
 
@@ -221,8 +241,10 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_CONTENT, userActivity.getContent());
             cv.put(COLUMN_CREATED_AT, userActivity.getCreated_at());
         }
-        return db.update(TABLE_USER_ACTIVITY, cv, COLUMN_ID + " = ?",
-                         new String[]{String.valueOf(userActivity.getId())});
+        long numRow = db.update(TABLE_USER_ACTIVITY, cv, COLUMN_ID + " = ?",
+                                new String[]{String.valueOf(userActivity.getId())});
+        db.close();
+        return numRow;
     }
     //endregion
 
@@ -237,7 +259,9 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_PHOTO, category.getPhoto());
             cv.put(COLUMN_LEARNED_WORDS, category.getLearnWords());
         }
-        return db.insert(TABLE_CATEGORY, null, cv);
+        long id = db.insertOrThrow(TABLE_CATEGORY, null, cv);
+        db.close();
+        return id;
     }
 
     // Read Category
@@ -253,6 +277,9 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             category.setPhoto(cursor.getString(cursor.getColumnIndex(COLUMN_PHOTO)));
             category.setLearnWords(cursor.getString(cursor.getColumnIndex(COLUMN_LEARNED_WORDS)));
         }
+        if ( cursor != null )
+            cursor.close();
+        db.close();
         return category;
     }
 
@@ -266,8 +293,10 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_PHOTO, category.getPhoto());
             cv.put(COLUMN_LEARNED_WORDS, category.getLearnWords());
         }
-        return db.update(TABLE_CATEGORY, cv, COLUMN_ID + " = ?",
-                         new String[]{String.valueOf(category.getId())});
+        long numRow = db.update(TABLE_CATEGORY, cv, COLUMN_ID + " = ?",
+                                new String[]{String.valueOf(category.getId())});
+        db.close();
+        return numRow;
     }
     //endregion
 
@@ -280,7 +309,9 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_ID, lesson.getId());
             cv.put(COLUMN_NAME, lesson.getName());
         }
-        return db.insert(TABLE_LESSON, null, cv);
+        long id = db.insertOrThrow(TABLE_LESSON, null, cv);
+        db.close();
+        return id;
     }
 
     // Read Lesson
@@ -294,6 +325,9 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             lesson.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
             lesson.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
         }
+        if ( cursor != null )
+            cursor.close();
+        db.close();
         return lesson;
     }
 
@@ -305,8 +339,10 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_ID, lesson.getId());
             cv.put(COLUMN_NAME, lesson.getName());
         }
-        return db.update(TABLE_LESSON, cv, COLUMN_ID + " = ?",
-                         new String[]{String.valueOf(lesson.getId())});
+        long numRow = db.update(TABLE_LESSON, cv, COLUMN_ID + " = ?",
+                                new String[]{String.valueOf(lesson.getId())});
+        db.close();
+        return numRow;
     }
     //endregion
 
@@ -321,7 +357,9 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_RESULT_ID, word.getResultId());
             cv.put(COLUMN_CONTENT, word.getContent());
         }
-        return db.insert(TABLE_WORD, null, cv);
+        long id = db.insertOrThrow(TABLE_WORD, null, cv);
+        db.close();
+        return id;
     }
 
     // Read Word
@@ -337,10 +375,13 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             word.setResultId(cursor.getInt(cursor.getColumnIndex(COLUMN_RESULT_ID)));
             word.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
         }
+        if ( cursor != null )
+            cursor.close();
+        db.close();
         return word;
     }
 
-    public List<Word> getListWord(){
+    public List<Word> getListWord() {
         List<Word> wordList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_WORD, null, null, null, null, null, null);
@@ -355,7 +396,8 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             }
             while (cursor.moveToNext());
         }
-        cursor.close();
+        if ( cursor != null )
+            cursor.close();
         db.close();
         return wordList;
     }
@@ -373,7 +415,8 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             }
             while (cursor.moveToNext());
         }
-        cursor.close();
+        if ( cursor != null )
+            cursor.close();
         db.close();
         return wordList;
     }
@@ -388,8 +431,10 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_RESULT_ID, word.getResultId());
             cv.put(COLUMN_CONTENT, word.getContent());
         }
-        return db.update(TABLE_WORD, cv, COLUMN_ID + " = ?",
-                         new String[]{String.valueOf(word.getId())});
+        long numRow = db.update(TABLE_WORD, cv, COLUMN_ID + " = ?",
+                                new String[]{String.valueOf(word.getId())});
+        db.close();
+        return numRow;
     }
     //endregion
 
@@ -404,7 +449,9 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_CONTENT, answer.getContent());
             cv.put(COLUMN_IS_CORRECT, answer.getCorrect());
         }
-        return db.insert(TABLE_ANSWER, null, cv);
+        long id = db.insertOrThrow(TABLE_ANSWER, null, cv);
+        db.close();
+        return id;
     }
 
     // Read Answer
@@ -420,6 +467,9 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             answer.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
             answer.setCorrect(cursor.getInt(cursor.getColumnIndex(COLUMN_IS_CORRECT)) == 1);
         }
+        if ( cursor != null )
+            cursor.close();
+        db.close();
         return answer;
     }
 
@@ -439,7 +489,8 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             }
             while (cursor.moveToNext());
         }
-        cursor.close();
+        if ( cursor != null )
+            cursor.close();
         db.close();
         return answerList;
     }
@@ -454,8 +505,10 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_CONTENT, answer.getContent());
             cv.put(COLUMN_IS_CORRECT, answer.getCorrect());
         }
-        return db.update(TABLE_WORD, cv, COLUMN_ID + " = ?",
-                         new String[]{String.valueOf(answer.getId())});
+        long numRow = db.update(TABLE_ANSWER, cv, COLUMN_ID + " = ?",
+                                new String[]{String.valueOf(answer.getId())});
+        db.close();
+        return numRow;
     }
     //endregion
 
@@ -471,7 +524,9 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_ID_WORD, result.getIdWord());
             cv.put(COLUMN_ID_ANSWER, result.getIdAnswer());
         }
-        return db.insert(TABLE_RESULT, null, cv);
+        long id = db.insertOrThrow(TABLE_RESULT, null, cv);
+        db.close();
+        return id;
     }
 
     // Read Result
@@ -487,6 +542,9 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             result.setIdLesson(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_LESSON)));
             result.setIdAnswer(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_ANSWER)));
         }
+        if ( cursor != null )
+            cursor.close();
+        db.close();
         return result;
     }
 
@@ -501,36 +559,41 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_ID_WORD, result.getIdWord());
             cv.put(COLUMN_ID_ANSWER, result.getIdAnswer());
         }
-        return db.update(TABLE_RESULT, cv, COLUMN_ID + " = ?",
-                         new String[]{String.valueOf(result.getId())});
+        long numRow = db.update(TABLE_RESULT, cv, COLUMN_ID + " = ?",
+                                new String[]{String.valueOf(result.getId())});
+        db.close();
+        return numRow;
     }
     //endregion
 
     // Delete table
     public boolean deleteTable(String tableName, String columnName, String value) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(tableName, columnName + " = ?", new String[]{value}) != 0;
+        long numRow = db.delete(tableName, columnName + " = ?", new String[]{value});
+        db.close();
+        return numRow != 0;
     }
 
     public boolean deleteTable(String tableName) {
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(tableName, null,null) != 0;
+        long numRow = db.delete(tableName, null, null);
+        db.close();
+        return numRow != 0;
     }
 
-    public int countTable(String tableName){
+    public int countTable(String tableName) {
         SQLiteDatabase db = this.getReadableDatabase();
         int count = (int) DatabaseUtils.queryNumEntries(db, tableName);
         db.close();
         return count;
     }
 
-    public List<Lesson> getListLesson() throws SQLiteException{
+    public List<Lesson> getListLesson() throws SQLiteException {
         List<Lesson> lessonsList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor =
-                db.query(TABLE_LESSON,null, null, null, null, null, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()) {
+        Cursor cursor = db.query(TABLE_LESSON, null, null, null, null, null, null);
+        if ( cursor != null && cursor.moveToFirst() ) {
+            while (! cursor.isAfterLast()) {
                 Lesson lesson = new Lesson();
                 lesson.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
                 lesson.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
@@ -538,18 +601,20 @@ public class MySqliteHelper extends SQLiteOpenHelper {
                 cursor.moveToNext();
             }
         }
-        cursor.close();
+        if ( cursor != null )
+            cursor.close();
         db.close();
         return lessonsList;
     }
-    public List<Lesson> getListLesson(int id) throws SQLiteException{
+
+    public List<Lesson> getListLesson(int id) throws SQLiteException {
         List<Lesson> lessonsList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor =
-                db.query(TABLE_LESSON,null, COLUMN_ID + " = ?",
-                        new String[]{String.valueOf(id)}, null, null, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            while (!cursor.isAfterLast()) {
+                db.query(TABLE_LESSON, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)},
+                         null, null, null);
+        if ( cursor != null && cursor.moveToFirst() ) {
+            while (! cursor.isAfterLast()) {
                 Lesson lesson = new Lesson();
                 lesson.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
                 lesson.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
@@ -557,7 +622,8 @@ public class MySqliteHelper extends SQLiteOpenHelper {
                 cursor.moveToNext();
             }
         }
-        cursor.close();
+        if ( cursor != null )
+            cursor.close();
         db.close();
         return lessonsList;
     }
@@ -565,8 +631,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public User getUser() {
         User user = new User();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor =
-                db.query(TABLE_USER, null, null,null, null, null, null);
+        Cursor cursor = db.query(TABLE_USER, null, null, null, null, null, null);
         if ( cursor != null && cursor.moveToFirst() ) {
             user.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
             user.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
@@ -578,6 +643,8 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             user.setUpdatedAt(cursor.getString(cursor.getColumnIndex(COLUMN_UPDATED_AT)));
             user.setLearnedWords(cursor.getInt(cursor.getColumnIndex(COLUMN_LEARNED_WORDS)));
         }
+        if ( cursor != null )
+            cursor.close();
         db.close();
         return user;
     }
@@ -585,77 +652,82 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public List<UserActivity> getListUserActivity() {
         List<UserActivity> activityList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USER_ACTIVITY, null, null, null, null, null, Const.ID+" DESC");
+        Cursor cursor =
+                db.query(TABLE_USER_ACTIVITY, null, null, null, null, null, Const.ID + " DESC");
         if ( cursor != null && cursor.moveToFirst() ) {
-            while (!cursor.isAfterLast()) {
+            while (! cursor.isAfterLast()) {
                 UserActivity userActivity = new UserActivity();
                 userActivity.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
                 userActivity.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
-                userActivity.setCreated_at(cursor.getString(cursor.getColumnIndex(COLUMN_CREATED_AT)));
+                userActivity.setCreated_at(
+                        cursor.getString(cursor.getColumnIndex(COLUMN_CREATED_AT)));
                 activityList.add(userActivity);
                 cursor.moveToNext();
             }
         }
+        if ( cursor != null )
+            cursor.close();
         db.close();
         return activityList;
     }
+
     public List<UserActivity> getListUserActivity(int id) {
         List<UserActivity> activityList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_USER_ACTIVITY,
-                null,
-                COLUMN_ID_USER + " = ?",
-                new String[]{String.valueOf(id)},
-                null,
-                null,
-                Const.ID+" DESC");
+        Cursor cursor = db.query(TABLE_USER_ACTIVITY, null, COLUMN_ID_USER + " = ?",
+                                 new String[]{String.valueOf(id)}, null, null, Const.ID + " DESC");
         if ( cursor != null && cursor.moveToFirst() ) {
-            while (!cursor.isAfterLast()) {
+            while (! cursor.isAfterLast()) {
                 UserActivity userActivity = new UserActivity();
                 userActivity.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
                 userActivity.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
-                userActivity.setCreated_at(cursor.getString(cursor.getColumnIndex(COLUMN_CREATED_AT)));
+                userActivity.setCreated_at(
+                        cursor.getString(cursor.getColumnIndex(COLUMN_CREATED_AT)));
                 activityList.add(userActivity);
                 cursor.moveToNext();
             }
         }
+        if ( cursor != null )
+            cursor.close();
         db.close();
         return activityList;
     }
+
     public List<Result> getListResultByUser(int idUser) {
 
         List<Result> mListResults = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor =
-                db.query(true,TABLE_RESULT, new String[]{COLUMN_ID_LESSON}, COLUMN_ID_USER + " = ?", new String[]{String.valueOf(idUser)},
-                        null, null, null, null);
+        Cursor cursor = db.query(true, TABLE_RESULT, new String[]{COLUMN_ID_LESSON},
+                                 COLUMN_ID_USER + " = ?", new String[]{String.valueOf(idUser)},
+                                 null, null, null, null);
         if ( cursor != null && cursor.moveToFirst() ) {
-            while (!cursor.isAfterLast()){
-                        Result result = new Result();
-//                result.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
-//                result.setIdUser(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_USER)));
+            while (! cursor.isAfterLast()) {
+                Result result = new Result();
                 result.setIdLesson(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_LESSON)));
-//                result.setIdAnswer(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_ANSWER)));
                 mListResults.add(result);
                 cursor.moveToNext();
             }
         }
+        if ( cursor != null )
+            cursor.close();
         db.close();
         return mListResults;
     }
 
     public int getIdAnswerFromResult(int idLesson, int idWord) {
-        int idAnswer = -1;
+        int idAnswer = - 1;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor =
-                db.query(true,TABLE_RESULT, new String[]{COLUMN_ID_ANSWER}, COLUMN_ID_LESSON +
-                        "=? AND " + COLUMN_ID_WORD + "=?",
-                         new String[]{String.valueOf(idLesson), String.valueOf(idWord)},
-                        null, null, null, null);
+                db.query(true, TABLE_RESULT, new String[]{COLUMN_ID_ANSWER}, COLUMN_ID_LESSON +
+                                 "=? AND " + COLUMN_ID_WORD + "=?",
+                         new String[]{String.valueOf(idLesson), String.valueOf(idWord)}, null, null,
+                         null, null);
         if ( cursor != null && cursor.moveToFirst() ) {
-                idAnswer = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_ANSWER));
-                cursor.moveToNext();
+            idAnswer = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_ANSWER));
+            cursor.moveToNext();
         }
+        if ( cursor != null )
+            cursor.close();
         cursor.close();
         db.close();
         return idAnswer;

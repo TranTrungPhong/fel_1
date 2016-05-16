@@ -11,4 +11,7 @@
     <color name="gray">#dfdfdf</color>
     <color name="colorsplash">#757575</color>
     <color name="bgButtonLoginSelected">#a63a00</color>
+    <color name="bg_wrong_answer">#efd7d7</color>
+    <color name="bg_right_answer">#daedd0</color>
+    <color name="divider_category">#cfdacf</color>
 </resources>

@@ -26,6 +26,7 @@ import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.Lesson;
 import com.framgia.fel1.model.Result;
 import com.framgia.fel1.model.User;
+import com.framgia.fel1.util.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,6 +130,9 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
 //        Log.i("FFFFFFFF","Id Lesson : "+mResult.getIdLesson());
         mLessonLearnedAdapter = new LessonLearnedAdapter(this, mLearnedLessonsList);
         mRecyclerLessonLearned.setAdapter(mLessonLearnedAdapter);
+        mRecyclerLessonLearned.addItemDecoration(new DividerItemDecoration(this,
+                                                     DividerItemDecoration.VERTICAL_LIST,
+                                                     R.drawable.divider_category_list));
     }
 
     private void createNewLesson() {

@@ -15,6 +15,7 @@ import com.framgia.fel1.constant.Const;
 import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.Lesson;
 import com.framgia.fel1.model.Word;
+import com.framgia.fel1.util.DividerItemDecoration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -55,7 +56,7 @@ public class ResultActivity extends AppCompatActivity
 
     @Override
     protected void onPause() {
-        if(mTextToSpeech.isSpeaking()) {
+        if(mTextToSpeech != null) {
             mTextToSpeech.stop();
             mTextToSpeech.shutdown();
         }
@@ -64,7 +65,7 @@ public class ResultActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        if(mTextToSpeech.isSpeaking()) {
+        if(mTextToSpeech != null) {
             mTextToSpeech.stop();
             mTextToSpeech.shutdown();
         }
@@ -84,6 +85,9 @@ public class ResultActivity extends AppCompatActivity
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(ResultActivity.this));
         mRecyclerView.setAdapter(mResultAdapter);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
+                                                                  DividerItemDecoration.VERTICAL_LIST,
+                                                                  R.drawable.divider_word_list));
     }
 
     private void setData() {

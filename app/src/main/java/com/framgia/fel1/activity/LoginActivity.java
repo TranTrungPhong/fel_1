@@ -61,46 +61,43 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         mMySqliteHelper = new MySqliteHelper(this);
         mEditTextEmail = (EditText) findViewById(R.id.edit_username_login);
         mEditTextPassword = (EditText) findViewById(R.id.edit_password_login);
-        mEditTextEmail.setCompoundDrawables(new IconicsDrawable(LoginActivity.this)
-                        .icon(FontAwesome.Icon.faw_envelope)
-                        .color(Color.GRAY)
-                        .sizeRes(R.dimen.icon_size),
-                null, null, null);
-        mEditTextPassword.setCompoundDrawables(new IconicsDrawable(LoginActivity.this)
-                        .icon(FontAwesome.Icon.faw_lock)
-                        .color(Color.GRAY)
-                        .sizeRes(R.dimen.icon_size),
-                null, null, null);
+        mEditTextEmail.setCompoundDrawables(
+                new IconicsDrawable(LoginActivity.this).icon(FontAwesome.Icon.faw_envelope)
+                        .color(Color.GRAY).sizeRes(R.dimen.icon_size), null, null, null);
+        mEditTextPassword.setCompoundDrawables(
+                new IconicsDrawable(LoginActivity.this).icon(FontAwesome.Icon.faw_lock)
+                        .color(Color.GRAY).sizeRes(R.dimen.icon_size), null, null, null);
         mCheckBoxRememberMe = (CheckBox) findViewById(R.id.chechbox_remember);
         mTextviewSignup = (TextView) findViewById(R.id.text_sign_up);
         mButtonLogin = (Button) findViewById(R.id.button_login);
         mButtonLogin.setOnClickListener(this);
         mTextviewSignup.setOnClickListener(this);
-        mCheckBoxRememberMe.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    mCheckBoxRememMe = 1;
-                }
-            }
-        });
+        mCheckBoxRememberMe.setOnCheckedChangeListener(
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if ( isChecked ) {
+                            mCheckBoxRememMe = 1;
+                        }
+                    }
+                });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
-        mEditTextEmail.setText(mSharedPreferences.getString(Const.EMAIL,""));
-//        mEditTextPassword.setText(mSharedPreferences.getString(Const.PASSWORD,""));
+        mEditTextEmail.setText(mSharedPreferences.getString(Const.EMAIL, ""));
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_login:
-                if(mEditTextPassword.getText().toString().equals("")){
-                    Toast.makeText(LoginActivity.this, R.string.pass_not_blank, Toast.LENGTH_SHORT).show();
-                } else if( CheckRequire.checkEmail(LoginActivity.this, mEditTextEmail))
+                if ( mEditTextPassword.getText().toString().equals("") ) {
+                    Toast.makeText(LoginActivity.this, R.string.pass_not_blank,
+                                   Toast.LENGTH_SHORT).show();
+                } else if ( CheckRequire.checkEmail(LoginActivity.this, mEditTextEmail) )
                     new LoginToServer().execute();
                 break;
             case R.id.text_sign_up:
@@ -119,7 +116,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if (!InternetUtils.isInternetConnected(LoginActivity.this)) {
+            if ( ! InternetUtils.isInternetConnected(LoginActivity.this) ) {
                 cancel(true);
             }
             progressDialog = new ProgressDialog(LoginActivity.this);
@@ -129,7 +126,7 @@ public class LoginActivity extends Activity implements View.OnClickListener {
 
         @Override
         protected String doInBackground(String... params) {
-            if (isCancelled()) {
+            if ( isCancelled() ) {
                 return null;
             }
             JSONObject jsonObject = new JSONObject();
@@ -141,9 +138,9 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                 JSONObject jsonObjectPost = new JSONObject();
                 jsonObjectPost.put(APIService.SESSION, jsonObject);
                 try {
-                    response = HttpRequest.postJsonRequest(APIService.URL_API_SIGNIN,
-                            jsonObjectPost,
-                            APIService.METHOD_POST);
+                    response =
+                            HttpRequest.postJsonRequest(APIService.URL_API_SIGNIN, jsonObjectPost,
+                                                        APIService.METHOD_POST);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -157,26 +154,25 @@ public class LoginActivity extends Activity implements View.OnClickListener {
         @Override
         protected void onPostExecute(String s) {
             progressDialog.dismiss();
-            if (s == null) {
-                Toast.makeText(LoginActivity.this, R.string.tk_khongTonTai, Toast.LENGTH_SHORT)
-                        .show();
-            } else if ((s.substring(0, s.indexOf(":"))).contains(R.string.Exception + "") ||
-                    (s.substring(0, s.indexOf(":"))).contains(R.string.StackTrace + "")) {
-                Toast.makeText(LoginActivity.this, R.string.error_login, Toast.LENGTH_SHORT)
-                        .show();
+            if ( s == null ) {
+                Toast.makeText(LoginActivity.this, R.string.tk_khongTonTai,
+                               Toast.LENGTH_SHORT).show();
+            } else if ( (s.substring(0, s.indexOf(":"))).contains(R.string.Exception + "") ||
+                    (s.substring(0, s.indexOf(":"))).contains(R.string.StackTrace + "") ) {
+                Toast.makeText(LoginActivity.this, R.string.error_login, Toast.LENGTH_SHORT).show();
             } else {
-                String responseInvalid =null;
+                String responseInvalid = null;
                 try {
                     JSONObject jsonObject = new JSONObject(s);
-                     responseInvalid = jsonObject.optString(getString(R.string.message_invalid));
+                    responseInvalid = jsonObject.optString(getString(R.string.message_invalid));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if(!responseInvalid.equals("")){
-                    Toast.makeText(LoginActivity.this, responseInvalid, Toast.LENGTH_SHORT)
-                            .show();
-                }else {
-                    Toast.makeText(LoginActivity.this, R.string.login_done, Toast.LENGTH_SHORT).show();
+                if ( ! responseInvalid.equals("") ) {
+                    Toast.makeText(LoginActivity.this, responseInvalid, Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(LoginActivity.this, R.string.login_done,
+                                   Toast.LENGTH_SHORT).show();
                     try {
                         JSONObject jsonObjectUser = new JSONObject(s);
                         JSONObject response = jsonObjectUser.optJSONObject(Const.USER);
@@ -187,39 +183,35 @@ public class LoginActivity extends Activity implements View.OnClickListener {
                             UserActivity userActivity = new UserActivity(
                                     Integer.parseInt(joActivity.optString(Const.ID)),
                                     joActivity.optString(Const.CONTENT),
-                                    joActivity.optString(Const.CREATED_AT)
-                            );
+                                    joActivity.optString(Const.CREATED_AT));
                             listUserActivity.add(userActivity);
                             try {
-                                mMySqliteHelper.addUserActivity(userActivity,
-                                                                Integer.parseInt(response.getString(Const.ID)));
-                            } catch (SQLiteConstraintException e){
+                                mMySqliteHelper.addUserActivity(userActivity, Integer.parseInt(
+                                        response.getString(Const.ID)));
+                            } catch (SQLiteConstraintException e) {
                                 e.printStackTrace();
                                 mMySqliteHelper.updateUserActivity(userActivity);
                             }
                         }
                         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                        User user = new User(
-                                Integer.parseInt(response.getString(Const.ID)),
-                                response.optString(Const.NAME),
-                                response.optString(Const.EMAIL),
-                                response.optString(Const.AVATAR),
-                                Boolean.parseBoolean(response.optString(Const.ADMIN)),
-                                response.optString(Const.AUTH_TOKEN),
-                                response.optString(Const.CREATED_AT),
-                                response.optString(Const.UPDATED_AT),
-                                Integer.parseInt(response.optString(Const.LEARNED_WORDS)),
-                                listUserActivity
-                        );
-                        //intent.putExtra(Const.USER, user);
-                        try{
+                        User user = new User(Integer.parseInt(response.getString(Const.ID)),
+                                             response.optString(Const.NAME),
+                                             response.optString(Const.EMAIL),
+                                             response.optString(Const.AVATAR),
+                                             Boolean.parseBoolean(response.optString(Const.ADMIN)),
+                                             response.optString(Const.AUTH_TOKEN),
+                                             response.optString(Const.CREATED_AT),
+                                             response.optString(Const.UPDATED_AT),
+                                             Integer.parseInt(response.optString(Const.LEARNED_WORDS)),
+                                             listUserActivity);
+                        try {
                             mMySqliteHelper.addUser(user);
-                        } catch (SQLiteConstraintException e){
+                        } catch (SQLiteConstraintException e) {
                             e.printStackTrace();
                             mMySqliteHelper.updateUser(user);
                         }
-                        mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE,
-                                                                  Context.MODE_PRIVATE);
+                        mSharedPreferences =
+                                getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = mSharedPreferences.edit();
                         editor.putBoolean(Const.REMEMBER, mCheckBoxRememberMe.isChecked());
                         editor.putInt(Const.ID, user.getId());
