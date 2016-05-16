@@ -80,6 +80,8 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
     }
 
     private void initView() {
+        progressDialog = new ProgressDialog(NewLessonActivity.this);
+        progressDialog.setMessage(getResources().getString(R.string.loading));
         mMySqliteHelper = new MySqliteHelper(this);
         mButtonSubmit = (Button) findViewById(R.id.button_submit);
         mButtonCancel = (Button) findViewById(R.id.button_cancel);
@@ -211,9 +213,11 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
             if (!InternetUtils.isInternetConnected(NewLessonActivity.this)) {
                 cancel(true);
             }
-            progressDialog = new ProgressDialog(NewLessonActivity.this);
-            progressDialog.setMessage(getResources().getString(R.string.loading));
-            progressDialog.show();
+//            progressDialog = new ProgressDialog(NewLessonActivity.this);
+//            progressDialog.setMessage(getResources().getString(R.string.loading));
+            if(!progressDialog.isShowing()){
+                progressDialog.show();
+            }
         }
 
         @Override
@@ -237,7 +241,9 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
 
         @Override
         protected void onPostExecute(String s) {
-            progressDialog.dismiss();
+            if(progressDialog.isShowing()){
+                progressDialog.dismiss();
+            }
             if (s == null) {
                 Toast.makeText(NewLessonActivity.this, R.string.response_null, Toast.LENGTH_SHORT)
                         .show();
@@ -296,8 +302,8 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
             if (!InternetUtils.isInternetConnected(NewLessonActivity.this)) {
                 cancel(true);
             }
-            progressDialog = new ProgressDialog(NewLessonActivity.this);
-            progressDialog.setMessage(getResources().getString(R.string.loading));
+//            progressDialog = new ProgressDialog(NewLessonActivity.this);
+//            progressDialog.setMessage(getResources().getString(R.string.loading));
             progressDialog.show();
         }
 
@@ -344,7 +350,7 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
 
         @Override
         protected void onPostExecute(String s) {
-            progressDialog.dismiss();
+//            progressDialog.dismiss();
             if (s == null) {
                 Toast.makeText(NewLessonActivity.this, R.string.response_null, Toast.LENGTH_SHORT)
                         .show();

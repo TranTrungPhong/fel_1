@@ -48,6 +48,7 @@ public class UserActionActivity extends Activity {
         setContentView(R.layout.user_activities_layout);
         initView();
         initData();
+        new LoadActionUser().execute();
     }
 
     private void initData() {
@@ -78,6 +79,44 @@ public class UserActionActivity extends Activity {
                 finish();
             }
         });
+    }
+
+    public class LoadActionUser extends AsyncTask<String,String,String>{
+
+        @Override
+        protected String doInBackground(String... params) {
+            String url = APIService.URL_SHOW_USER+mUser.getId()+Const.JSON_TYPE + "?" + Const.AUTH_TOKEN + "=" + mUser.getAuthToken();
+            String response = HttpRequest.getJSON(url);
+            return response;
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            if (response == null) {
+                Toast.makeText(UserActionActivity.this, R.string.response_null, Toast.LENGTH_SHORT)
+                        .show();
+            } else if ((response.substring(0, response.indexOf(":")))
+                    .contains(String.valueOf(R.string.Exception))
+                    || (response.substring(0, response.indexOf(":")))
+                    .contains(String.valueOf(R.string.StackTrace))) {
+                Toast.makeText(UserActionActivity.this, R.string.response_error, Toast.LENGTH_SHORT)
+                        .show();
+            } else {
+                Toast.makeText(UserActionActivity.this, R.string.response_done, Toast.LENGTH_SHORT).show();
+                try {
+//                    ArrayCategory arrayCategory = new ArrayCategory(response);
+//                    mListCategory.clear();
+//                    mListCategory.addAll(arrayCategory.getCategoryList());
+//                    mHomeAdapter.notifyDataSetChanged();
+                    User user = new User(response);
+                    mListActivities.clear();
+                    mListActivities.addAll(user.getActivities());
+                    mUserActionAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 }
