@@ -62,9 +62,10 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
                                                                      false);
         switch (viewType) {
             case 0: // incorrect
-                view.setBackgroundResource(R.color.gray);
+                view.setBackgroundResource(R.color.bg_wrong_answer);
                 break;
             case 1: // correct
+                view.setBackgroundResource(R.color.bg_right_answer);
                 break;
         }
         return new ViewHolder(view);

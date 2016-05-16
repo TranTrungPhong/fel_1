@@ -29,6 +29,7 @@ import com.framgia.fel1.model.ArrayCategory;
 import com.framgia.fel1.model.Category;
 import com.framgia.fel1.model.User;
 import com.framgia.fel1.util.BitmapUtil;
+import com.framgia.fel1.util.DividerItemDecoration;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
 import com.framgia.fel1.util.ShowImage;
@@ -91,6 +92,9 @@ public class HomeActivity extends Activity implements View.OnClickListener,
         mRecyclerViewCategory.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mHomeAdapter = new HomeAdapter(this, mListCategory);
         mRecyclerViewCategory.setAdapter(mHomeAdapter);
+        mRecyclerViewCategory.addItemDecoration(new DividerItemDecoration(this,
+                                                        DividerItemDecoration.VERTICAL_LIST,
+                                                        R.drawable.divider_category_list));
         mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
         int id = mSharedPreferences.getInt(Const.ID, -1);
         if(id != -1)
@@ -108,6 +112,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,
         mButtonSignUp.setOnClickListener(this);
         mButtonShowWordList.setOnClickListener(this);
         mButtonShowActivity.setOnClickListener(this);
+        mImageViewAvatar.setOnClickListener(this);
     }
 
     @Override
@@ -128,6 +133,9 @@ public class HomeActivity extends Activity implements View.OnClickListener,
                 Intent intentActivities = new Intent(HomeActivity.this, UserActionActivity.class);
                 startActivity(intentActivities);
                 break;
+            case R.id.image_show_user_avatar:
+                Intent intent = new Intent(HomeActivity.this, UpdateProfileActivity.class);
+                startActivity(intent);
             default:
                 break;
         }

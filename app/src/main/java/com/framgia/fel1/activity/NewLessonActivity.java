@@ -79,6 +79,37 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
         initData();
     }
 
+    @Override
+    protected void onResume() {
+        mTextToSpeech = new TextToSpeech(NewLessonActivity.this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status != TextToSpeech.ERROR) {
+                    mTextToSpeech.setLanguage(Locale.US);
+                }
+            }
+        });
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        if(mTextToSpeech != null) {
+            mTextToSpeech.stop();
+            mTextToSpeech.shutdown();
+        }
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(mTextToSpeech != null) {
+            mTextToSpeech.stop();
+            mTextToSpeech.shutdown();
+        }
+        super.onDestroy();
+    }
+
     private void initView() {
         progressDialog = new ProgressDialog(NewLessonActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.loading));
@@ -92,14 +123,6 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
         mListViewWordNewLesson.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mButtonSubmit.setOnClickListener(this);
         mButtonCancel.setOnClickListener(this);
-        mTextToSpeech = new TextToSpeech(NewLessonActivity.this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status != TextToSpeech.ERROR) {
-                    mTextToSpeech.setLanguage(Locale.US);
-                }
-            }
-        });
     }
 
     private void initData() {
@@ -165,13 +188,33 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
                                 word.getLessonId(),
                                 word.getId(),
                                 word.getResultId());
-                        mMySqliteHelper.addResult(mResult);
+                        try {
+                            mMySqliteHelper.addResult(mResult);
+                        } catch (SQLiteConstraintException e){
+                            e.printStackTrace();
+                            mMySqliteHelper.updateResult(mResult);
+                        }
                     }
-                    mMySqliteHelper.addLesson(mLesson);
+                    try {
+                        mMySqliteHelper.addLesson(mLesson);
+                    } catch (SQLiteConstraintException e){
+                        e.printStackTrace();
+                        mMySqliteHelper.updateLesson(mLesson);
+                    }
                     for (Word word : mListWordNewLesson) {
-                        mMySqliteHelper.addWord(word);
+                        try {
+                            mMySqliteHelper.addWord(word);
+                        } catch (SQLiteConstraintException e){
+                            e.printStackTrace();
+                            mMySqliteHelper.updateWord(word);
+                        }
                         for (Answer answer : word.getAnswers()) {
-                            mMySqliteHelper.addAnswer(answer);
+                            try {
+                                mMySqliteHelper.addAnswer(answer);
+                            } catch (SQLiteConstraintException e){
+                                e.printStackTrace();
+                                mMySqliteHelper.updateAnswer(answer);
+                            }
                         }
                     }
                 new UpdateNewLesson().execute();

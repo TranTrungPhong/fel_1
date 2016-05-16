@@ -3,6 +3,7 @@ package com.framgia.fel1.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import com.framgia.fel1.model.Answer;
 import com.framgia.fel1.model.ItemList2;
 import com.framgia.fel1.model.User;
 import com.framgia.fel1.model.Word;
+import com.framgia.fel1.util.DividerItemDecoration;
 import com.framgia.fel1.util.ExportFile;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
@@ -79,6 +81,9 @@ public class WordListActivity extends AppCompatActivity
         mMyItemRecyclerViewAdapter =
                 new MyItemRecyclerViewAdapter(WordListActivity.this, mListItem);
         mRecyclerView.setAdapter(mMyItemRecyclerViewAdapter);
+        mRecyclerView.addItemDecoration(new DividerItemDecoration(WordListActivity.this,
+                                                                  DividerItemDecoration.VERTICAL_LIST,
+                                                                  R.drawable.divider_word_list));
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle(null);
@@ -344,12 +349,22 @@ public class WordListActivity extends AppCompatActivity
                         mIsLoadingMore = false;
                     for (int i = 0; i < wordListArray.length(); i++) {
                         Word word = new Word(wordListArray.getJSONObject(i));
-                        mMySqliteHelper.addWord(word);
+                        try {
+                            mMySqliteHelper.addWord(word);
+                        } catch (SQLiteConstraintException e){
+                            e.printStackTrace();
+                            mMySqliteHelper.updateWord(word);
+                        }
                         if ( word != null ) {
                             for (int j = 0; j < word.getAnswers().size(); j++) {
                                 Answer answer = word.getAnswers().get(j);
                                 answer.setWordId(word.getId());
-                                mMySqliteHelper.addAnswer(answer);
+                                try {
+                                    mMySqliteHelper.addAnswer(answer);
+                                } catch (SQLiteConstraintException e){
+                                    e.printStackTrace();
+                                    mMySqliteHelper.updateAnswer(answer);
+                                }
                                 if ( answer.getCorrect() ) {
                                     mListItem.add(new ItemList2(String.valueOf(word.getId()),
                                                                 word.getContent(),

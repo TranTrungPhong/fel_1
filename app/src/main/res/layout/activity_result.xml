@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.framgia.fel1.activity.ResultActivity">
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -28,7 +27,6 @@
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="@dimen/abc_dialog_list_padding_vertical_material"/>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>
