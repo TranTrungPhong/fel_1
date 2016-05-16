@@ -76,7 +76,7 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
         mLearnedLessonsList.clear();
         mLearnedLessonsListResume.clear();
         for (Result result: mListResult) {
-            mLearnedLessonsListResume.addAll(mMySqliteHelper.getListLesson(result.getIdLesson()));
+            mLearnedLessonsListResume.addAll(mMySqliteHelper.getListLesson(result.getIdLesson(),mCategorId));
         }
         mLearnedLessonsList.addAll(mLearnedLessonsListResume);
         if (mLessonLearnedAdapter != null) {
@@ -122,7 +122,7 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
         }
         mLearnedLessonsList.clear();
         for (Result result: mListResult) {
-            mLearnedLessonsList.addAll(mMySqliteHelper.getListLesson(result.getIdLesson()));
+            mLearnedLessonsList.addAll(mMySqliteHelper.getListLesson(result.getIdLesson(), mCategorId));
         }
 
 //        Log.i("FFFFFFFF","Result  : "+mResult.getId());
@@ -130,6 +130,7 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
 //        Log.i("FFFFFFFF","Id Lesson : "+mResult.getIdLesson());
         mLessonLearnedAdapter = new LessonLearnedAdapter(this, mLearnedLessonsList);
         mRecyclerLessonLearned.setAdapter(mLessonLearnedAdapter);
+        mLessonLearnedAdapter.notifyDataSetChanged();
         mRecyclerLessonLearned.addItemDecoration(new DividerItemDecoration(this,
                                                      DividerItemDecoration.VERTICAL_LIST,
                                                      R.drawable.divider_category_list));

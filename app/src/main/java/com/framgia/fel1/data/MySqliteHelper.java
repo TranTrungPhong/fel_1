@@ -57,6 +57,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ID_LESSON = "id_lesson";
     public static final String COLUMN_ID_WORD = "id_word";
     public static final String COLUMN_ID_ANSWER = "id_answer";
+    public static final String COLUMN_ID_CATEGORY = "id_category";
 
     public MySqliteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -89,6 +90,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         StringBuffer createLessonTable =
                 new StringBuffer().append("CREATE TABLE ").append(TABLE_LESSON + " (")
                         .append(COLUMN_ID + " INTEGER PRIMARY KEY, ")
+                        .append(COLUMN_ID_CATEGORY + " INTEGER, ")
                         .append(COLUMN_NAME).append(" TEXT)");
         StringBuffer createWordTable =
                 new StringBuffer().append("CREATE TABLE ").append(TABLE_WORD + " (")
@@ -307,6 +309,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         ContentValues cv = new ContentValues();
         if ( lesson != null ) {
             cv.put(COLUMN_ID, lesson.getId());
+            cv.put(COLUMN_ID_CATEGORY,lesson.getmIdCategory());
             cv.put(COLUMN_NAME, lesson.getName());
         }
         long id = db.insertOrThrow(TABLE_LESSON, null, cv);
@@ -613,6 +616,27 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         Cursor cursor =
                 db.query(TABLE_LESSON, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)},
                          null, null, null);
+        if ( cursor != null && cursor.moveToFirst() ) {
+            while (! cursor.isAfterLast()) {
+                Lesson lesson = new Lesson();
+                lesson.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
+                lesson.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
+                lessonsList.add(lesson);
+                cursor.moveToNext();
+            }
+        }
+        if ( cursor != null )
+            cursor.close();
+        db.close();
+        return lessonsList;
+    }
+    public List<Lesson> getListLesson(int idLesson, int idCategory) throws SQLiteException {
+        List<Lesson> lessonsList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor =
+                db.query(TABLE_LESSON, null, COLUMN_ID + " = ? AND " + COLUMN_ID_CATEGORY + " = ?"
+                        , new String[]{String.valueOf(idLesson),String.valueOf(idCategory)},
+                        null, null, null);
         if ( cursor != null && cursor.moveToFirst() ) {
             while (! cursor.isAfterLast()) {
                 Lesson lesson = new Lesson();

@@ -183,6 +183,11 @@ public class HomeActivity extends Activity implements View.OnClickListener,
         intentLessonLearned.putExtra(Const.NAME, mListCategory.get(position).getName());
         intentLessonLearned.putExtra(Const.USER, mUser);
         startActivity(intentLessonLearned);
+        mSharedPreferences =
+                getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putInt(Const.CATEGORY_ID, mListCategory.get(position).getId());
+        editor.apply();
     }
 
     @Override

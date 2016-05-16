@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class Lesson implements Serializable{
     private int mId;
+    private int mIdCategory;
     private String mName;
     private List<Word> mWords;
 
@@ -20,6 +21,12 @@ public class Lesson implements Serializable{
 
     public Lesson(int id, String name, List<Word> words) {
         mId = id;
+        mName = name;
+        mWords = words;
+    }
+    public Lesson(int id, int idCategory, String name, List<Word> words) {
+        mId = id;
+        mIdCategory = idCategory;
         mName = name;
         mWords = words;
     }
@@ -66,5 +73,13 @@ public class Lesson implements Serializable{
 
     public void setWords(List<Word> words) {
         mWords = words;
+    }
+
+    public int getmIdCategory() {
+        return mIdCategory;
+    }
+
+    public void setmIdCategory(int mIdCategory) {
+        this.mIdCategory = mIdCategory;
     }
 }

@@ -182,6 +182,7 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
             case R.id.button_submit:
 //                mCountLesson++;
 //                if(mCountLesson <= Const.COUNT_LESSON){
+                Log.i("FFFFFFFFFFFFFFF","Category ID : "+mLesson.getmIdCategory());
                     for (Word word : mLesson.getWords()) {
                         Result mResult = new Result(
                                 mUser.getId(),
@@ -323,7 +324,9 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
                             Word word = new Word(idWord,idLesson,resultIdWord,contentWord,answerList);
                             wordList.add(word);
                         }
-                        mLesson = new Lesson(idLesson,nameLesson,wordList);
+                        mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
+                        mCategoryId = mSharedPreferences.getInt(Const.CATEGORY_ID, -1);
+                        mLesson = new Lesson(idLesson,mCategoryId,nameLesson,wordList);
                         mTextNameNewLess.setText(mLesson.getName());
                         mListWordNewLesson.clear();
                         mListWordNewLesson.addAll(mLesson.getWords());
