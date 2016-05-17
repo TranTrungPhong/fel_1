@@ -128,7 +128,8 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
         mEditPasswordConfirmation = (EditText) findViewById(R.id.edit_password_confirmation);
         mEditName = (EditText) findViewById(R.id.edit_name);
         mImageAvatar = (ImageView) findViewById(R.id.image_avatar);
-        new ShowImage(mImageAvatar).execute(mUser.getAvatar());
+        if(InternetUtils.isInternetConnected(UpdateProfileActivity.this, false))
+            new ShowImage(mImageAvatar).execute(mUser.getAvatar());
         mFab.setImageDrawable(new IconicsDrawable(UpdateProfileActivity.this)
                                       .icon(FontAwesome.Icon.faw_check)
                                       .color(Color.GREEN));

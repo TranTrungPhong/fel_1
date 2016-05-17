@@ -29,6 +29,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
     private OnListFragmentInteractionListener mListener;
     private Lesson mLesson;
     private MySqliteHelper mSqliteHelper;
+    private int mCountCorrectAnswer = 0;
 
     public ResultAdapter(Context context, Lesson lesson, List<Word> items) {
         mContext = context;
@@ -106,6 +107,19 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
     @Override
     public int getItemCount() {
         if ( mValues != null ) { return mValues.size(); } else { return 0; }
+    }
+
+    public String getCountCorrect() {
+        for(int i = 0; i < getItemCount(); i++) {
+            for (Answer answer : mValues.get(i).getAnswers()) {
+
+                if ( answer.getCorrect() &&
+                        mSqliteHelper.getIdAnswerFromResult(mLesson.getId(),
+                                                            mValues.get(i).getId()) == answer.getId() )
+                    mCountCorrectAnswer++;
+            }
+        }
+        return " " + mCountCorrectAnswer + "/" + getItemCount() + " ";
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

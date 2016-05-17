@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,6 +33,7 @@ import com.framgia.fel1.util.DividerItemDecoration;
 import com.framgia.fel1.util.ExportFile;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
+import com.framgia.fel1.util.TaskFragment;
 import com.itextpdf.text.DocumentException;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,8 +43,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WordListActivity extends AppCompatActivity
-        implements MyItemRecyclerViewAdapter.OnListFragmentInteractionListener {
+        implements MyItemRecyclerViewAdapter.OnListFragmentInteractionListener,
+        TaskFragment.TaskCallbacks {
     public static final String TAG = "WordListActivity";
+    private static final String TAG_TASK_FRAGMENT = "task_fragment";
+    private TaskFragment mTaskFragment;
     private static final int THRESHOLD_ITEM_COUNT = 15;
     private RecyclerView mRecyclerView;
     private MyItemRecyclerViewAdapter mMyItemRecyclerViewAdapter;
@@ -67,6 +72,12 @@ public class WordListActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_word_list);
+        FragmentManager fm = getSupportFragmentManager();
+        mTaskFragment = (TaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
+        if ( mTaskFragment == null ) {
+            mTaskFragment = new TaskFragment();
+            fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
+        }
         setView();
         setData();
         setEvent();
@@ -103,8 +114,11 @@ public class WordListActivity extends AppCompatActivity
         else
             finish();
         mLayoutLoad.setVisibility(View.VISIBLE);
-        if ( mMySqliteHelper.countTable(MySqliteHelper.TABLE_WORD) == 0 )
-            new WordListRequest().execute(mCategoryId, mPage);
+        if ( mMySqliteHelper.countTable(MySqliteHelper.TABLE_WORD) == 0 && InternetUtils
+                .isInternetConnected(WordListActivity.this))
+            mTaskFragment.startInBackground(new String[]{String.valueOf(mCategoryId),
+                    String.valueOf(mPage)});
+//            new WordListRequest().execute(mCategoryId, mPage);
         else {
             mLayoutLoad.setVisibility(View.GONE);
             mIsLoadingMore = false;
@@ -175,8 +189,11 @@ public class WordListActivity extends AppCompatActivity
                     if ( mIsLoadingMore ) {
                         if ( (mVisibleItemCount + mPastVisiblesItems + THRESHOLD_ITEM_COUNT) >=
                                 mListItem.size() ) {
-                            if ( ! mIsLoading )
-                                new WordListRequest().execute(mCategoryId, mPage);
+                            if ( ! mIsLoading && InternetUtils.isInternetConnected
+                                    (WordListActivity.this))
+                                mTaskFragment.startInBackground(new String[]{String.valueOf(mCategoryId),
+                                        String.valueOf(mPage)});
+//                                new WordListRequest().execute(mCategoryId, mPage);
                         }
                     }
                 }
@@ -225,11 +242,15 @@ public class WordListActivity extends AppCompatActivity
                 }
                 return true;
             case R.id.action_sync:
-                mLayoutLoad.setVisibility(View.VISIBLE);
-                mListItem.clear();
-                mIsLoadingMore = true;
-                mPage = 1;
-                new WordListRequest().execute(mCategoryId, mPage);
+                if(InternetUtils.isInternetConnected(WordListActivity.this)) {
+                    mLayoutLoad.setVisibility(View.VISIBLE);
+                    mListItem.clear();
+                    mIsLoadingMore = true;
+                    mPage = 1;
+                    mTaskFragment.startInBackground(
+                            new String[]{String.valueOf(mCategoryId), String.valueOf(mPage)});
+                }
+//                new WordListRequest().execute(mCategoryId, mPage);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -311,6 +332,82 @@ public class WordListActivity extends AppCompatActivity
     @Override
     public void onListFragmentInteraction(int position, ItemList2 item) {
         Log.d(TAG, String.valueOf(position));
+    }
+
+    @Override
+    public void onPreExecute() {
+        mIsLoading = true;
+        if ( mPage == 1 )
+            mLayoutLoad.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public String onBackGround(String[] param) {
+        return getWordListByCategory(Integer.parseInt(param[0]), Integer.parseInt(param[1]));
+    }
+
+    @Override
+    public void onProgressUpdate(String response) {
+
+    }
+
+    @Override
+    public void onCancelled() {
+
+    }
+
+    @Override
+    public void onPostExecute(String response) {
+        if ( mPage == 1 )
+            mListItem.clear();
+        if ( response == null ) {
+            Toast.makeText(WordListActivity.this, R.string.error_get_word_list,
+                           Toast.LENGTH_SHORT).show();
+        } else {
+            mPage++;
+            try {
+                JSONObject wordListObject = new JSONObject(response);
+                JSONArray wordListArray = wordListObject.getJSONArray(Const.WORDS);
+                if ( wordListArray.length() < Const.DEFAULT_PERPAGE_WORDLIST )
+                    mIsLoadingMore = false;
+                for (int i = 0; i < wordListArray.length(); i++) {
+                    Word word = new Word(wordListArray.getJSONObject(i));
+                    try {
+                        mMySqliteHelper.addWord(word);
+                    } catch (SQLiteConstraintException e){
+                        e.printStackTrace();
+                        mMySqliteHelper.updateWord(word);
+                    }
+                    if ( word != null ) {
+                        for (int j = 0; j < word.getAnswers().size(); j++) {
+                            Answer answer = word.getAnswers().get(j);
+                            answer.setWordId(word.getId());
+                            try {
+                                mMySqliteHelper.addAnswer(answer);
+                            } catch (SQLiteConstraintException e){
+                                e.printStackTrace();
+                                mMySqliteHelper.updateAnswer(answer);
+                            }
+                            if ( answer.getCorrect() ) {
+                                mListItem.add(new ItemList2(String.valueOf(word.getId()),
+                                                            word.getContent(),
+                                                            answer.getContent()));
+                            }
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(WordListActivity.this, R.string.register_error,
+                               Toast.LENGTH_SHORT).show();
+                Log.d(TAG, response.toString());
+            }
+
+        }
+        mMyItemRecyclerViewAdapter.notifyDataSetChanged();
+        mMyItemRecyclerViewAdapter.getFilter().filter(Const.ALL_WORD);
+        mLayoutLoad.setVisibility(View.GONE);
+        mIsLoading = false;
     }
 
     private class WordListRequest extends AsyncTask<Integer, String, String> {

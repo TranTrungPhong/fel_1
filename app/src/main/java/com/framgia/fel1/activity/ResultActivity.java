@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.TextView;
 import com.framgia.fel1.R;
 import com.framgia.fel1.adapter.ResultAdapter;
 import com.framgia.fel1.constant.Const;
@@ -23,6 +24,7 @@ import java.util.Locale;
 public class ResultActivity extends AppCompatActivity
         implements ResultAdapter.OnListFragmentInteractionListener {
     public static final String TAG = "ResultActivity";
+    private TextView mTextResult;
     private RecyclerView mRecyclerView;
     private ResultAdapter mResultAdapter;
     private List<Word> mWordList;
@@ -73,6 +75,7 @@ public class ResultActivity extends AppCompatActivity
     }
 
     private void setView() {
+        mTextResult = (TextView) findViewById(R.id.text_result);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -96,6 +99,11 @@ public class ResultActivity extends AppCompatActivity
             mSqliteHelper = new MySqliteHelper(ResultActivity.this);
             mWordList.addAll(mSqliteHelper.getListWordByLesson(mLesson.getId()));
             mResultAdapter.notifyDataSetChanged();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(getResources().getString(R.string.corrected))
+                    .append(mResultAdapter.getCountCorrect())
+                    .append(getResources().getString(R.string.words));
+            mTextResult.setText(stringBuilder.toString());
         }
 
     }

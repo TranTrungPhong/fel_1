@@ -95,4 +95,6 @@
     <string name="error_sign_out">Error signout</string>
     <string name="update_done">Update done !</string>
     <string name="not_changed_image">Not changed image</string>
+    <string name="corrected">Corrected :</string>
+    <string name="words">Words</string>
 </resources>
