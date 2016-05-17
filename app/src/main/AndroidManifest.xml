@@ -19,7 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LoginActivity" />
+        <activity android:name=".activity.LoginActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".activity.RegisterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -28,18 +29,22 @@
             android:label="@string/title_activity_update_profile"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".activity.HomeActivity" />
+        <activity android:name=".activity.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.LearnedLessonActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.NewLessonActivity" />
+        <activity android:name=".activity.NewLessonActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.WordListActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.ResultActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.UserActionActivity" />
+        <activity android:name=".activity.UserActionActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

@@ -14,4 +14,5 @@
     <color name="bg_wrong_answer">#efd7d7</color>
     <color name="bg_right_answer">#daedd0</color>
     <color name="divider_category">#cfdacf</color>
+    <color name="item_recycle_color">#ffa8a8</color>
 </resources>

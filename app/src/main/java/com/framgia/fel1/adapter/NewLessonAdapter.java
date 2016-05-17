@@ -23,10 +23,10 @@ public class NewLessonAdapter extends RecyclerView.Adapter<NewLessonAdapter.NewL
         implements CompoundButton.OnCheckedChangeListener, View.OnClickListener {
     private Context mContext;
     private List<Word> mWordList = new ArrayList<>();
-    private List<Word> mWordListAnswer = new ArrayList<>();
+    private ArrayList<Word> mWordListAnswer = new ArrayList<>();
     private OnListWordsClickItem mOnListWordsClickItem;
 
-    public NewLessonAdapter(Context context, List<Word> wordList) {
+    public NewLessonAdapter(Context context, ArrayList<Word> wordList) {
         this.mContext = context;
         this.mWordList = wordList;
         this.mWordListAnswer = wordList;
@@ -146,7 +146,7 @@ public class NewLessonAdapter extends RecyclerView.Adapter<NewLessonAdapter.NewL
         }
     }
 
-    public List<Word> getListWordAnswer (){
+    public ArrayList<Word> getListWordAnswer (){
         return mWordListAnswer;
     }
 

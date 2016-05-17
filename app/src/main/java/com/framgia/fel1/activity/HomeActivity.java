@@ -11,6 +11,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -33,11 +35,13 @@ import com.framgia.fel1.util.DividerItemDecoration;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
 import com.framgia.fel1.util.ShowImage;
+import com.framgia.fel1.util.TaskFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,9 +49,16 @@ import java.util.List;
 /**
  * Created by PhongTran on 04/15/2016.
  */
-public class HomeActivity extends Activity implements View.OnClickListener,
-        HomeAdapter.OnListCategoryClickItem {
+public class HomeActivity extends AppCompatActivity implements View.OnClickListener,
+        HomeAdapter.OnListCategoryClickItem, TaskFragment.TaskCallbacks {
     private static final String TAG = "HomeActivity";
+    private static final String TAG_TASK_FRAGMENT = "task_fragment";
+    private static final String LOADCATEGORY_TAG = "load_category_tag";
+    private static final String SIGOUT_TAG = "sig_out_tag";
+    private static final String SHOWIMAGE_TAG = "show_image_tag";
+    private static final String ISCATEGORY = "ISCATEGORY";
+    private static String GET_TAG = LOADCATEGORY_TAG;
+    private TaskFragment mTaskFragment;
     private Button mButtonUpdate;
     private Button mButtonSignUp;
     private Button mButtonShowWordList;
@@ -57,17 +68,30 @@ public class HomeActivity extends Activity implements View.OnClickListener,
     private TextView mTextViewEmail;
     private RecyclerView mRecyclerViewCategory;
     private HomeAdapter mHomeAdapter;
-    private List<Category> mListCategory = new ArrayList<>();
+    private ArrayList<Category> mListCategory = new ArrayList<>();
     private String mAuthToken;
     private User mUser;
     private MySqliteHelper mMySqliteHelper;
     private Toast mToast;
     private SharedPreferences mSharedPreferences;
+    private ProgressDialog mProgressDialog;
+    private ProgressDialog progressDialog;
+    private static boolean isCategoryLoad = false;
+    private static boolean isAvatar = false;
+    private Bundle mBundle = new Bundle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(savedInstanceState != null)
+            mBundle = savedInstanceState;
         setContentView(R.layout.home_screen_layout);
+        FragmentManager fm = getSupportFragmentManager();
+        mTaskFragment = (TaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
+        if ( mTaskFragment == null ) {
+            mTaskFragment = new TaskFragment();
+            fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
+        }
         initView();
     }
 
@@ -81,6 +105,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,
 
     private void initView() {
         mMySqliteHelper = new MySqliteHelper(this);
+        mProgressDialog = new ProgressDialog(HomeActivity.this);
         mButtonSignUp = (Button) findViewById(R.id.button_sign_out_show_user);
         mButtonUpdate = (Button) findViewById(R.id.button_update_show_user);
         mButtonShowWordList = (Button) findViewById(R.id.button_wordlist_show_user);
@@ -103,11 +128,38 @@ public class HomeActivity extends Activity implements View.OnClickListener,
             finish();
         //Intent intent = getIntent();
         //mUser = (User) intent.getSerializableExtra(Const.USER);
-        new ShowImage(mImageViewAvatar).execute(mUser.getAvatar());
+        if(mUser.getAvatar() != null || !mUser.getAvatar().equals("")) {
+//            if(!isAvatar){
+                new ShowImage(mImageViewAvatar).execute(mUser.getAvatar());
+//                isAvatar = true;
+//            }
+        }
         mTextViewName.setText(mUser.getName());
         mTextViewEmail.setText(mUser.getEmail());
         mAuthToken = mUser.getAuthToken();
-        new LoadCategory().execute();
+//        new LoadCategory().execute();
+        GET_TAG = LOADCATEGORY_TAG;
+        if(!isCategoryLoad){
+            progressDialog = new ProgressDialog(HomeActivity.this);
+            progressDialog.setTitle(getResources().getString(R.string.loading));
+            progressDialog.show();
+            new Thread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    progressDialog.dismiss();
+                }
+            }).start();
+            mTaskFragment.startInBackground(null);
+        }
+        if(!mBundle.getBoolean(ISCATEGORY, false)){
+        }
         mButtonUpdate.setOnClickListener(this);
         mButtonSignUp.setOnClickListener(this);
         mButtonShowWordList.setOnClickListener(this);
@@ -166,8 +218,11 @@ public class HomeActivity extends Activity implements View.OnClickListener,
         editor.putBoolean(Const.REMEMBER, false);
         editor.remove(Const.ID);
         editor.apply();
-        if( InternetUtils.isInternetConnected(HomeActivity.this))
-            new SignOutRequest().execute();
+        if( InternetUtils.isInternetConnected(HomeActivity.this)) {
+//            new SignOutRequest().execute();
+            GET_TAG = SIGOUT_TAG;
+            mTaskFragment.startInBackground(null);
+        }
         else {
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
             startActivity(intent);
@@ -202,6 +257,132 @@ public class HomeActivity extends Activity implements View.OnClickListener,
         }
     }
 
+    @Override
+    public void onPreExecute() {
+        if(GET_TAG == SIGOUT_TAG ){
+            mProgressDialog.setTitle(getResources().getString(R.string.sign_out));
+            mProgressDialog.show();
+        }
+
+    }
+
+    @Override
+    public String onBackGround(String[] param) {
+            String response = null;
+        if(GET_TAG == LOADCATEGORY_TAG){
+            String url = APIService.URL_GET_CATEGORY + "?" + Const.AUTH_TOKEN + "=" + mAuthToken;
+            response = HttpRequest.getJSON(url);
+            return response;
+        }else if(GET_TAG == SIGOUT_TAG ){
+            String url = APIService.URL_API_SIGNOUT + "?" +
+                    Const.AUTH_TOKEN + "=" +
+                    mUser.getAuthToken();
+            try {
+                response = HttpRequest.postJsonRequest(url, null, APIService.METHOD_DELETE);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return response;
+        }
+        return response;
+    }
+
+    @Override
+    public void onProgressUpdate(String response) {
+
+    }
+
+    @Override
+    public void onCancelled() {
+
+    }
+
+    @Override
+    public void onPostExecute(String response) {
+        if(GET_TAG == LOADCATEGORY_TAG){
+            if (response == null) {
+                Toast.makeText(HomeActivity.this, R.string.response_null, Toast.LENGTH_SHORT)
+                        .show();
+            } else if ((response.substring(0, response.indexOf(":")))
+                    .contains(String.valueOf(R.string.Exception))
+                    || (response.substring(0, response.indexOf(":")))
+                    .contains(String.valueOf(R.string.StackTrace))) {
+                Toast.makeText(HomeActivity.this, R.string.response_error, Toast.LENGTH_SHORT)
+                        .show();
+            } else {
+                isCategoryLoad = true;
+                Toast.makeText(HomeActivity.this, R.string.response_done, Toast.LENGTH_SHORT).show();
+                try {
+                    ArrayCategory arrayCategory = new ArrayCategory(response);
+                    mListCategory.clear();
+                    mListCategory.addAll(arrayCategory.getCategoryList());
+                    mHomeAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }else if(GET_TAG == SIGOUT_TAG ){
+            if(mProgressDialog.isShowing())
+                mProgressDialog.dismiss();
+            if ( response == null ) {
+                Toast.makeText(HomeActivity.this, R.string.response_null, Toast.LENGTH_SHORT).show();
+            } else if ( (response.substring(0, response.indexOf(":"))).contains(
+                    String.valueOf(R.string.Exception)) || (response.substring(0, response.indexOf(":"))).contains(
+                    String.valueOf(R.string.StackTrace)) ) {
+                Toast.makeText(HomeActivity.this, R.string.response_error, Toast.LENGTH_SHORT).show();
+            } else {
+                String responseInvalid = null;
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    responseInvalid = jsonObject.optString(getString(R.string.message_invalid));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if ( ! responseInvalid.equals("") ) {
+                    Toast.makeText(HomeActivity.this, responseInvalid, Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(HomeActivity.this, R.string.error_sign_out, Toast
+                            .LENGTH_SHORT)
+                            .show();
+                }
+                Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(Const.CONTENT_LOADING, mProgressDialog.isShowing());
+        outState.putBoolean(ISCATEGORY,isCategoryLoad);
+        outState.putSerializable("list",mListCategory);
+//        outState.putString("image",mUser.getAvatar());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState.getBoolean(Const.CONTENT_LOADING)) {
+            mProgressDialog.setMessage(getResources().getString(R.string.loading));
+            mProgressDialog.show();
+        }
+        mListCategory.clear();
+        mListCategory.addAll((ArrayList<Category>)savedInstanceState.getSerializable("list"));
+//        InputStream in = null;
+//        try {
+//            in = new java.net.URL(savedInstanceState.getString("image")).openStream();
+//            Bitmap bitmap = BitmapFactory.decodeStream(in);
+//            mImageViewAvatar.setImageBitmap(bitmap);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            mImageViewAvatar.setImageBitmap(BitmapUtil.decodeSampledBitmapFromFile(savedInstanceState.getString("image"), 100, 100));
+//        }
+//        isAvatar = true;
+//        if(savedInstanceState)
+    }
     private class LoadCategory extends AsyncTask<String, String, String> {
 
         @Override
@@ -224,7 +405,7 @@ public class HomeActivity extends Activity implements View.OnClickListener,
                 Toast.makeText(HomeActivity.this, R.string.response_error, Toast.LENGTH_SHORT)
                         .show();
             } else {
-                Toast.makeText(HomeActivity.this, R.string.response_done, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(HomeActivity.this, R.string.response_done, Toast.LENGTH_SHORT).show();
                 try {
                     ArrayCategory arrayCategory = new ArrayCategory(response);
                     mListCategory.clear();

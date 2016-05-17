@@ -3,6 +3,7 @@ package com.framgia.fel1.util;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.InputStream;
@@ -11,6 +12,7 @@ import java.io.InputStream;
  * Created by PhongTran on 04/25/2016.
  */
 public class ShowImage extends AsyncTask<String, Void, Bitmap> {
+    private static final String TAG = "ShowImage";
     ImageView mImageView;
     boolean hasError = false;
 
@@ -25,8 +27,14 @@ public class ShowImage extends AsyncTask<String, Void, Bitmap> {
             return bitmap;
         }
         try {
-            InputStream in = new java.net.URL(url).openStream();
-            bitmap = BitmapFactory.decodeStream(in);
+
+            Log.d(TAG, "doInBackground: " + url);
+            if(url.equals("")){
+                return null;
+            }else {
+                InputStream in = new java.net.URL(url).openStream();
+                bitmap = BitmapFactory.decodeStream(in);
+            }
         } catch (Exception e) {
             hasError = true;
             bitmap = BitmapUtil.decodeSampledBitmapFromFile(url, 100, 100);
