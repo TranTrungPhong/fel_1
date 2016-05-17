@@ -1,5 +1,6 @@
 package com.framgia.fel1.activity;
 
+import android.support.v4.app.FragmentManager;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import com.framgia.fel1.util.CheckRequire;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
 import com.framgia.fel1.util.ReadJson;
+import com.framgia.fel1.util.TaskFragment;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 import org.json.JSONArray;
@@ -31,8 +33,10 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Iterator;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends AppCompatActivity implements TaskFragment.TaskCallbacks {
     private static final String TAG = "RegisterActivity";
+    private static final String TAG_TASK_FRAGMENT = "task_fragment";
+    private TaskFragment mTaskFragment;
     private Toolbar mToolbar;
     private EditText mEditName;
     private EditText mEditEmail;
@@ -47,6 +51,12 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        FragmentManager fm = getSupportFragmentManager();
+        mTaskFragment = (TaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
+        if ( mTaskFragment == null ) {
+            mTaskFragment = new TaskFragment();
+            fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
+        }
         initView();
         setEvent();
     }
@@ -67,22 +77,18 @@ public class RegisterActivity extends AppCompatActivity {
         mLayoutContent = (LinearLayout) findViewById(R.id.layout_content);
         mLayoutContent.setVisibility(View.VISIBLE);
         mLayoutLoading.setVisibility(View.GONE);
-        mEditName.setCompoundDrawables(new IconicsDrawable(RegisterActivity.this)
-                                                .icon(FontAwesome.Icon.faw_user)
-                                                .color(Color.GRAY)
-                                                .sizeRes(R.dimen.icon_size), null, null, null);
-        mEditEmail.setCompoundDrawables(new IconicsDrawable(RegisterActivity.this)
-                                                .icon(FontAwesome.Icon.faw_envelope)
-                                                .color(Color.GRAY)
-                                                .sizeRes(R.dimen.icon_size), null, null, null);
-        mEditPassword.setCompoundDrawables(new IconicsDrawable(RegisterActivity.this)
-                                                .icon(FontAwesome.Icon.faw_lock)
-                                                .color(Color.GRAY)
-                                                .sizeRes(R.dimen.icon_size), null, null, null);
-        mEditPasswordConfirmation.setCompoundDrawables(new IconicsDrawable(RegisterActivity.this)
-                                                .icon(FontAwesome.Icon.faw_lock)
-                                                .color(Color.GRAY)
-                                                .sizeRes(R.dimen.icon_size), null, null, null);
+        mEditName.setCompoundDrawables(
+                new IconicsDrawable(RegisterActivity.this).icon(FontAwesome.Icon.faw_user).color(
+                        Color.GRAY).sizeRes(R.dimen.icon_size), null, null, null);
+        mEditEmail.setCompoundDrawables(new IconicsDrawable(RegisterActivity.this).icon(
+                FontAwesome.Icon.faw_envelope).color(Color.GRAY).sizeRes(R.dimen.icon_size), null,
+                                        null, null);
+        mEditPassword.setCompoundDrawables(
+                new IconicsDrawable(RegisterActivity.this).icon(FontAwesome.Icon.faw_lock).color(
+                        Color.GRAY).sizeRes(R.dimen.icon_size), null, null, null);
+        mEditPasswordConfirmation.setCompoundDrawables(
+                new IconicsDrawable(RegisterActivity.this).icon(FontAwesome.Icon.faw_lock).color(
+                        Color.GRAY).sizeRes(R.dimen.icon_size), null, null, null);
     }
 
     private void setEvent() {
@@ -91,11 +97,16 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if ( CheckRequire.checkEmail(getApplicationContext(), mEditEmail) &&
                         CheckRequire.checkPassword(getApplicationContext(), mEditPassword,
-                                mEditPasswordConfirmation)) {
+                                                   mEditPasswordConfirmation) ) {
                     mEditEmail.setError(null);
                     mEditPassword.setError(null);
                     mEditPasswordConfirmation.setError(null);
-                    new RegisterRequest().execute();
+                    if ( InternetUtils.isInternetConnected(RegisterActivity.this) ) {
+                        String[] param = new String[]{mEditName.getText().toString(),
+                                mEditEmail.getText().toString(), mEditPassword.getText().toString(),
+                                mEditPasswordConfirmation.getText().toString()};
+                        mTaskFragment.startInBackground(param);
+                    }
                 }
             }
         });
@@ -107,72 +118,88 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    private class RegisterRequest extends AsyncTask<String, String, String> {
-        String name = mEditName.getText().toString();
-        String email = mEditEmail.getText().toString();
-        String password = mEditPassword.getText().toString();
-        String passwordConfirmation = mEditPasswordConfirmation.getText().toString();
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(Const.CONTENT_LOADING, mLayoutLoading.getVisibility());
+    }
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState.getInt(Const.CONTENT_LOADING, View.INVISIBLE) == View.VISIBLE) {
             mLayoutLoading.setVisibility(View.VISIBLE);
             mLayoutContent.setVisibility(View.GONE);
         }
+    }
 
-        @Override
-        protected String doInBackground(String... params) {
-                JSONObject jsonObject = new JSONObject();
-                JSONObject object = new JSONObject();
-                try {
-                    jsonObject.put(Const.NAME, name);
-                    jsonObject.put(Const.EMAIL, email);
-                    jsonObject.put(Const.PASSWORD, password);
-                    jsonObject.put(Const.PASSWORD_CONFIRMATION, passwordConfirmation);
-                    object.put(Const.USER, jsonObject);
-                    String response = null;
-                    try {
-                        response = HttpRequest.postJsonRequest(APIService.URL_API_SIGNUP, object,
-                                                               APIService.METHOD_POST);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return response;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            return null;
+    @Override
+    public void onPreExecute() {
+        mLayoutLoading.setVisibility(View.VISIBLE);
+        mLayoutContent.setVisibility(View.GONE);
+    }
+
+    @Override
+    public String onBackGround(String[] param) {
+        JSONObject jsonObject = new JSONObject();
+        JSONObject object = new JSONObject();
+        try {
+            jsonObject.put(Const.NAME, param[0]);
+            jsonObject.put(Const.EMAIL, param[1]);
+            jsonObject.put(Const.PASSWORD, param[2]);
+            jsonObject.put(Const.PASSWORD_CONFIRMATION, param[3]);
+            object.put(Const.USER, jsonObject);
+            String response = null;
+            try {
+                response = HttpRequest.postJsonRequest(APIService.URL_API_SIGNUP, object,
+                                                       APIService.METHOD_POST);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return response;
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+        return null;
+    }
 
-        @Override
-        protected void onPostExecute(String response) {
-            mLayoutLoading.setVisibility(View.GONE);
-            mLayoutContent.setVisibility(View.VISIBLE);
-            if ( response != null ) {
-                try {
-                    User user = new User(response);
-                    if ( user.getId() != 0 ) {
+    @Override
+    public void onProgressUpdate(String response) {
 
-                        Toast.makeText(RegisterActivity.this, R.string.register_successfully,
-                                       Toast.LENGTH_SHORT).show();
-                        mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE,
-                                Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = mSharedPreferences.edit();
-                        editor.putString(Const.EMAIL, user.getEmail());
-//                        editor.putString(Const.PASSWORD, password);
-                        editor.apply();
-                        onBackPressed();
-                    } else {
-                        String message = ReadJson.parseErrorJson(response);
-                        Toast.makeText(RegisterActivity.this, message,
-                                       Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Toast.makeText(RegisterActivity.this, R.string.register_error,
+    }
+
+    @Override
+    public void onCancelled() {
+
+    }
+
+    @Override
+    public void onPostExecute(String response) {
+        mLayoutLoading.setVisibility(View.GONE);
+        mLayoutContent.setVisibility(View.VISIBLE);
+        if ( response != null ) {
+            try {
+                User user = new User(response);
+                if ( user.getId() != 0 ) {
+
+                    Toast.makeText(RegisterActivity.this, R.string.register_successfully,
                                    Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, response.toString());
+                    mSharedPreferences =
+                            getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = mSharedPreferences.edit();
+                    editor.putString(Const.EMAIL, user.getEmail());
+                    //                        editor.putString(Const.PASSWORD, password);
+                    editor.apply();
+                    onBackPressed();
+                } else {
+                    String message = ReadJson.parseErrorJson(response);
+                    Toast.makeText(RegisterActivity.this, message, Toast.LENGTH_SHORT).show();
                 }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(RegisterActivity.this, R.string.register_error,
+                               Toast.LENGTH_SHORT).show();
+                Log.d(TAG, response.toString());
             }
         }
     }

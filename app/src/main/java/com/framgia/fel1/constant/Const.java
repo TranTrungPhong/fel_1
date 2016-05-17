@@ -55,4 +55,5 @@ public interface Const {
     String ANSWER_ID = "answer_id";
     String RESULT_ATTRIBUTES = "results_attributes";
     String URL_UPDATE_LESSON = "https://manh-nt.herokuapp.com/lessons/";
+    String CONTENT_LOADING = "content_loading";
 }
