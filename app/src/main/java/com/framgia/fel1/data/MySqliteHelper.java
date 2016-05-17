@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class MySqliteHelper extends SQLiteOpenHelper {
     //Database Config
-    public static final int DATABASE_VERSION = 3;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "EnglishLearning.db";
     //Table name
     public static final String TABLE_USER = "user";

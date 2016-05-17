@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.Bitmap;
@@ -15,6 +16,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Base64;
@@ -36,6 +38,7 @@ import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
 import com.framgia.fel1.util.ReadJson;
 import com.framgia.fel1.util.ShowImage;
+import com.framgia.fel1.util.TaskFragment;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 import org.json.JSONException;
@@ -44,9 +47,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
 
-public class UpdateProfileActivity extends AppCompatActivity {
+public class UpdateProfileActivity extends AppCompatActivity implements TaskFragment.TaskCallbacks {
     public static final String TAG = "UpdateProfileActivity";
-
+    private static final String TAG_TASK_FRAGMENT = "task_fragment";
+    private TaskFragment mTaskFragment;
     private Toolbar mToolbar;
     private FloatingActionButton mFab;
     private EditText mEditEmail;
@@ -60,21 +64,28 @@ public class UpdateProfileActivity extends AppCompatActivity {
     private MySqliteHelper mMySqliteHelper;
     private SharedPreferences mSharedPreferences;
     private boolean isChangedAvatar = false;
+    private ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_profile);
         mData = getIntent();
-        //mUser = (User) mData.getSerializableExtra(Const.USER);
         mMySqliteHelper = new MySqliteHelper(this);
         mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
         int id = mSharedPreferences.getInt(Const.ID, -1);
         if(id != -1)
             mUser = mMySqliteHelper.getUser(id);
         else finish();
+        FragmentManager fm = getSupportFragmentManager();
+        mTaskFragment = (TaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
+        if ( mTaskFragment == null ) {
+            mTaskFragment = new TaskFragment();
+            fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
+        }
         setView();
         setEvent();
+
     }
 
     @Override
@@ -149,6 +160,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT).show();
             onBackPressed();
         }
+        mProgressDialog = new ProgressDialog(UpdateProfileActivity.this);
     }
 
     private void setEvent() {
@@ -159,7 +171,11 @@ public class UpdateProfileActivity extends AppCompatActivity {
                         CheckRequire.checkPassword(getApplicationContext(), mEditNewPassword,
                                 mEditPasswordConfirmation)) {
                     if (InternetUtils.isInternetConnected(UpdateProfileActivity.this)) {
-                        new UpdateRequest().execute();
+//                        new UpdateRequest().execute();
+                        mTaskFragment.startInBackground(new String[]{mEditName.getText().toString(),
+                                                    mEditEmail.getText().toString(),
+                                                    mEditNewPassword.getText().toString(),
+                                                    mEditPasswordConfirmation.getText().toString()});
                     }
                 }
             }
@@ -186,6 +202,115 @@ public class UpdateProfileActivity extends AppCompatActivity {
         Intent chooserIntent =
                 Intent.createChooser(pickIntent, getResources().getString(R.string.select_image));
         startActivityForResult(chooserIntent, Const.ACTION_PICK_IMAGE);
+    }
+
+    @Override
+    public void onPreExecute() {
+        mProgressDialog.setMessage(getResources().getString(R.string.loading));
+        mProgressDialog.show();
+        mBitmapAvatar = ((BitmapDrawable) mImageAvatar.getDrawable()).getBitmap();
+    }
+
+    @Override
+    public String onBackGround(String[] param) {
+        JSONObject jsonObject = new JSONObject();
+        String response = null;
+        try {
+            // change bitmap Image to base64 string
+            if(mBitmapAvatar != null && isChangedAvatar) {
+                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                mBitmapAvatar.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                byte[] byteArray = byteArrayOutputStream.toByteArray();
+                String bitmapEncoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                jsonObject.put(Const.AVATAR, bitmapEncoded);
+            }
+            //make JsonObject
+            jsonObject.put(Const.NAME, param[0]);
+            jsonObject.put(Const.EMAIL, param[1]);
+            jsonObject.put(Const.PASSWORD, param[2]);
+            jsonObject.put(Const.PASSWORD_CONFIRMATION, param[3]);
+            JSONObject jsonObjectPost = new JSONObject();
+            jsonObjectPost.put(Const.USER, jsonObject);
+            try {
+                String url = APIService.URL_UPDATE_PROFILE + mUser.getId() + Const.JSON_TYPE
+                        + "?" + Const.AUTH_TOKEN + "=" + mUser.getAuthToken();
+                response = HttpRequest.postJsonRequest(url, jsonObjectPost,
+                                                       "PATCH");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return response;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public void onProgressUpdate(String response) {
+
+    }
+
+    @Override
+    public void onCancelled() {
+
+    }
+
+    @Override
+    public void onPostExecute(String response) {
+        if(mProgressDialog.isShowing())
+            mProgressDialog.dismiss();
+        if (response == null) {
+            Toast.makeText(UpdateProfileActivity.this, R.string.error_update_profile,
+                           Toast.LENGTH_SHORT).show();
+        } else {
+            try {
+                User user = new User(response);
+                if ( user.getId() != 0 ) {
+                    mMySqliteHelper.updateUser(user);
+                    List<UserActivity> userActivityList = user.getActivities();
+                    for (UserActivity userActivity : userActivityList) {
+                        try {
+                            mMySqliteHelper.addUserActivity(userActivity, user.getId());
+                        } catch (SQLiteConstraintException e){
+                            e.printStackTrace();
+                            mMySqliteHelper.updateUserActivity(userActivity);
+                        }
+                    }
+                    Toast.makeText(UpdateProfileActivity.this, R.string.update_successfully,
+                                   Toast.LENGTH_SHORT).show();
+                    Intent homeItent =
+                            new Intent(UpdateProfileActivity.this, HomeActivity.class);
+                    homeItent.putExtra(Const.USER, user);
+                    startActivity(homeItent);
+                    finish();
+                } else {
+                    String message = ReadJson.parseErrorJson(response);
+                    Toast.makeText(UpdateProfileActivity.this, message,
+                                   Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Toast.makeText(UpdateProfileActivity.this, R.string.error_update_profile,
+                               Toast.LENGTH_SHORT).show();
+                Log.d(TAG, response.toString());
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(Const.CONTENT_LOADING, mProgressDialog.isShowing());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState.getBoolean(Const.CONTENT_LOADING)) {
+            mProgressDialog.setMessage(getResources().getString(R.string.loading));
+            mProgressDialog.show();
+        }
     }
 
     private class UpdateRequest extends AsyncTask<String, String, String> {
