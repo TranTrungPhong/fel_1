@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
@@ -40,6 +41,7 @@ import com.framgia.fel1.util.TaskFragment;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -57,6 +59,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private static final String SIGOUT_TAG = "sig_out_tag";
     private static final String SHOWIMAGE_TAG = "show_image_tag";
     private static final String ISCATEGORY = "ISCATEGORY";
+    private static final String CONTENT_BITMAP = "bitmap";
     private static String GET_TAG = LOADCATEGORY_TAG;
     private TaskFragment mTaskFragment;
     private Button mButtonUpdate;
@@ -79,6 +82,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private static boolean isCategoryLoad = false;
     private static boolean isAvatar = false;
     private Bundle mBundle = new Bundle();
+    private boolean isLoadImage = false;
+    private Bitmap mBitmapAvatar = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +96,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if ( mTaskFragment == null ) {
             mTaskFragment = new TaskFragment();
             fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
+            mTaskFragment.onAttach((Context) this);
         }
         initView();
     }
@@ -128,11 +134,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             finish();
         //Intent intent = getIntent();
         //mUser = (User) intent.getSerializableExtra(Const.USER);
-        if(mUser.getAvatar() != null || !mUser.getAvatar().equals("")) {
-//            if(!isAvatar){
-                new ShowImage(mImageViewAvatar).execute(mUser.getAvatar());
-//                isAvatar = true;
-//            }
+        if( !isLoadImage )
+            if(InternetUtils.isInternetConnected(HomeActivity.this, false)) {
+                isLoadImage = !isLoadImage;
+            if(mUser.getAvatar() != null || !mUser.getAvatar().equals("")) {
+                    new ShowImage(mImageViewAvatar).execute(mUser.getAvatar());
+                }
         }
         mTextViewName.setText(mUser.getName());
         mTextViewEmail.setText(mUser.getEmail());
@@ -156,7 +163,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     progressDialog.dismiss();
                 }
             }).start();
-            mTaskFragment.startInBackground(null);
+            mTaskFragment.startInBackground(new String[]{TAG_TASK_FRAGMENT});
         }
         if(!mBundle.getBoolean(ISCATEGORY, false)){
         }
@@ -173,6 +180,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button_update_show_user:
                 Intent intentUpdate = new Intent(HomeActivity.this, UpdateProfileActivity.class);
                 startActivity(intentUpdate);
+                isCategoryLoad = false;
                 break;
             case R.id.button_sign_out_show_user:
                 showSignOutDialog();
@@ -180,14 +188,17 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button_wordlist_show_user:
                 Intent intentWordList = new Intent(HomeActivity.this, WordListActivity.class);
                 startActivity(intentWordList);
+                isCategoryLoad = false;
                 break;
             case R.id.button_show_activities:
                 Intent intentActivities = new Intent(HomeActivity.this, UserActionActivity.class);
                 startActivity(intentActivities);
+                isCategoryLoad = false;
                 break;
             case R.id.image_show_user_avatar:
                 Intent intent = new Intent(HomeActivity.this, UpdateProfileActivity.class);
                 startActivity(intent);
+                isCategoryLoad = false;
             default:
                 break;
         }
@@ -221,10 +232,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         if( InternetUtils.isInternetConnected(HomeActivity.this)) {
 //            new SignOutRequest().execute();
             GET_TAG = SIGOUT_TAG;
-            mTaskFragment.startInBackground(null);
+            mTaskFragment.startInBackground(new String[]{TAG_TASK_FRAGMENT});
         }
         else {
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+            isCategoryLoad = false;
             startActivity(intent);
             finish();
         }
@@ -252,6 +264,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.LENGTH_SHORT);
         if (mToast.getView().isShown()) {
             super.onBackPressed();
+            isCategoryLoad = false;
         } else {
             mToast.show();
         }
@@ -261,6 +274,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     public void onPreExecute() {
         if(GET_TAG == SIGOUT_TAG ){
             mProgressDialog.setTitle(getResources().getString(R.string.sign_out));
+            mProgressDialog.setCancelable(false);
             mProgressDialog.show();
         }
 
@@ -359,6 +373,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         outState.putBoolean(Const.CONTENT_LOADING, mProgressDialog.isShowing());
         outState.putBoolean(ISCATEGORY,isCategoryLoad);
         outState.putSerializable("list",mListCategory);
+        if(isLoadImage)
+            mBitmapAvatar = ((BitmapDrawable) mImageViewAvatar.getDrawable()).getBitmap();
+        if(mBitmapAvatar != null) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            mBitmapAvatar.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            outState.putByteArray(CONTENT_BITMAP, byteArray);
+        }
 //        outState.putString("image",mUser.getAvatar());
     }
 
@@ -371,6 +393,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
         mListCategory.clear();
         mListCategory.addAll((ArrayList<Category>)savedInstanceState.getSerializable("list"));
+        byte[] byteArray = savedInstanceState.getByteArray(CONTENT_BITMAP);
+        if(byteArray != null)
+            mBitmapAvatar = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        if(mBitmapAvatar != null)
+            mImageViewAvatar.setImageBitmap(mBitmapAvatar);
 //        InputStream in = null;
 //        try {
 //            in = new java.net.URL(savedInstanceState.getString("image")).openStream();
