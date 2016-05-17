@@ -29,4 +29,6 @@
     <dimen name="activity_marginTop_40">40dp</dimen>
     <dimen name="icon_size">20dp</dimen>
     <dimen name="dropdown_offset">40dp</dimen>
+    <dimen name="width_100">100dp</dimen>
+    <dimen name="margin_10">10dp</dimen>
 </resources>

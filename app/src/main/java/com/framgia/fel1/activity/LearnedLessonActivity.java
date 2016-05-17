@@ -2,6 +2,7 @@ package com.framgia.fel1.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -52,6 +53,7 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
     private List<Result> mListResult;
     private List<Lesson> mLearnedLessonsListResume = new ArrayList<>();
     private Toolbar mToolbar;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +67,7 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onResume() {
         super.onResume();
+        progressDialog.dismiss();
         int id = mSharedPreferences.getInt(Const.ID, -1);
         if (id != -1) {
             mUser = mMySqliteHelper.getUser(id);
@@ -85,6 +88,8 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
     }
 
     private void initView() {
+        progressDialog = new ProgressDialog(LearnedLessonActivity.this);
+        progressDialog.setMessage(getResources().getString(R.string.info_lesson));
         mToolbar = (Toolbar) findViewById(R.id.toolbar_lesson);
         setSupportActionBar(mToolbar);
         mToolbar.setTitle(null);
@@ -183,14 +188,30 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
         switch (v.getId()) {
             case R.id.button_create_lesson:
 //                mAlertDialog.show();
-                Intent intent = new Intent(LearnedLessonActivity.this,
+                NewLessonActivity.isLessonLoad = false;
+                final Intent intent = new Intent(LearnedLessonActivity.this,
                         NewLessonActivity.class);
                 intent.putExtra(Const.AUTH_TOKEN, mAuthToken);
                 intent.putExtra(Const.NAME, mNameCategory);
                 intent.putExtra(Const.CATEGORY_ID, mCategorId);
 //                intent.putExtra(APIService.PAGE, page);
 //                intent.putExtra(APIService.PER_PAGE, perPage);
-                startActivity(intent);
+                progressDialog.setMessage(getResources().getString(R.string.loading));
+                progressDialog.show();
+                new Thread(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        try {
+                            Thread.sleep(3000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        progressDialog.dismiss();
+                        startActivity(intent);
+                    }
+                }).start();
                 break;
             case R.id.button_word_list:
                 Intent intentWordList = new Intent(LearnedLessonActivity.this, WordListActivity.class);
@@ -207,6 +228,21 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
         Intent intent = new Intent(LearnedLessonActivity.this, ResultActivity.class);
         intent.putExtra(Const.LESSON, lesson);
         //intent.putExtra(Const.USER, mUser);
+        progressDialog.setMessage(getResources().getString(R.string.loading));
+        progressDialog.show();
+        new Thread(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                progressDialog.dismiss();
+            }
+        }).start();
         startActivity(intent);
     }
 }

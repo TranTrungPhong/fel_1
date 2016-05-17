@@ -106,6 +106,5 @@
         android:id="@+id/listview_lesson_learned"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_recycle"
-        android:padding="@dimen/padding_20" />
+        android:background="@drawable/bg_recycle"/>
 </LinearLayout>

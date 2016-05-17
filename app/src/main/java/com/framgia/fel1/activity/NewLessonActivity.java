@@ -10,11 +10,14 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.framgia.fel1.R;
@@ -23,6 +26,7 @@ import com.framgia.fel1.constant.APIService;
 import com.framgia.fel1.constant.Const;
 import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.Answer;
+import com.framgia.fel1.model.Category;
 import com.framgia.fel1.model.Lesson;
 import com.framgia.fel1.model.Result;
 import com.framgia.fel1.model.User;
@@ -31,6 +35,7 @@ import com.framgia.fel1.model.Word;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
 import com.framgia.fel1.util.ReadJson;
+import com.framgia.fel1.util.TaskFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,11 +49,16 @@ import java.util.Locale;
 /**
  * Created by PhongTran on 05/02/2016.
  */
-public class NewLessonActivity extends Activity implements View.OnClickListener,
-        NewLessonAdapter.OnListWordsClickItem {
+public class NewLessonActivity extends AppCompatActivity implements View.OnClickListener,
+        NewLessonAdapter.OnListWordsClickItem, TaskFragment.TaskCallbacks {
     public static String mReadWord;
-    private List<Word> mListWordNewLesson = new ArrayList<>();
-    private List<Word> mListWordAns = new ArrayList<>();
+    private static final String TAG_TASK_FRAGMENT = "task_fragment";
+    private static final String CREATE_LESSON_TAG = "create_tag";
+    private static final String UPDATE_LESSON_TAG = "update_tag";
+    private static String GET_TAG = CREATE_LESSON_TAG;
+    private TaskFragment mTaskFragment;
+    private ArrayList<Word> mListWordNewLesson = new ArrayList<>();
+    private ArrayList<Word> mListWordAns = new ArrayList<>();
     private NewLessonAdapter mNewLessonAdapter;
     private RecyclerView mListViewWordNewLesson;
     private MySqliteHelper mMySqliteHelper;
@@ -69,12 +79,20 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
     private SharedPreferences mSharedPreferences;
     private ProgressDialog progressDialog;
     private List<String> mListResuiltId = new ArrayList<>();
+    private static final String ISLESSON = "ISLESSON";
+    public static boolean isLessonLoad = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mReadWord = this.getString(R.string.no_data_to_speech);
         setContentView(R.layout.new_lesson_layout);
+        FragmentManager fm = getSupportFragmentManager();
+        mTaskFragment = (TaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
+            if ( mTaskFragment == null ) {
+                mTaskFragment = new TaskFragment();
+                fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
+            }
         initView();
         initData();
     }
@@ -110,6 +128,12 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
         super.onDestroy();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        isLessonLoad = false;
+    }
+
     private void initView() {
         progressDialog = new ProgressDialog(NewLessonActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.loading));
@@ -137,44 +161,50 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
         mNameCategory = intent.getStringExtra(Const.NAME);
 //        mPage = Integer.parseInt(intent.getStringExtra(APIService.PAGE));
 //        mPerPage = Integer.parseInt(intent.getStringExtra(APIService.PER_PAGE));
-        List<Lesson> lessonsList = new ArrayList<>();
-        try {
-            lessonsList = mMySqliteHelper.getListLesson();
-        } catch (SQLiteException e) {
-            Toast.makeText(this, R.string.err_cannot_read_list_lesson, Toast.LENGTH_SHORT).show();
-        }
-        mCountLesson = lessonsList.size();
-        if (mCountLesson > Const.COUNT_LESSON) {
-            Toast.makeText(NewLessonActivity.this, R.string.hetbai, Toast.LENGTH_SHORT).show();
-        } else {
-            //createLesson(mCountLesson);
-        }
-        new CreateNewLesson().execute();
-    }
-
-    private void createLesson(int i) {
-        mReadJson = new ReadJson(this);
-        if (mCountLesson > Const.COUNT_LESSON) {
-            Toast.makeText(NewLessonActivity.this, R.string.hetbai, Toast.LENGTH_SHORT).show();
-        } else {
-            if (mPage * mPerPage >= Const.MAX_COUNT_WORDS) {
-                Toast.makeText(NewLessonActivity.this, R.string.thieu_word, Toast.LENGTH_SHORT).show();
-                finish();
-//            return;
-            } else {
-                try {
-                    mLesson = mReadJson.createLesson(i, mPage, mPerPage);
-                    mTextNameNewLess.setText(mLesson.getName());
-                    mListWordNewLesson.addAll(mLesson.getWords());
-                    mNewLessonAdapter.notifyDataSetChanged();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+//        List<Lesson> lessonsList = new ArrayList<>();
+//        try {
+//            lessonsList = mMySqliteHelper.getListLesson();
+//        } catch (SQLiteException e) {
+//            Toast.makeText(this, R.string.err_cannot_read_list_lesson, Toast.LENGTH_SHORT).show();
+//        }
+//        mCountLesson = lessonsList.size();
+//        if (mCountLesson > Const.COUNT_LESSON) {
+//            Toast.makeText(NewLessonActivity.this, R.string.hetbai, Toast.LENGTH_SHORT).show();
+//        } else {
+//            //createLesson(mCountLesson);
+//        }
+//        new CreateNewLesson().execute();
+        if(!isLessonLoad){
+            GET_TAG = CREATE_LESSON_TAG;
+            if (InternetUtils.isInternetConnected(NewLessonActivity.this)) {
+                mTaskFragment.startInBackground(null);
             }
         }
     }
+
+//    private void createLesson(int i) {
+//        mReadJson = new ReadJson(this);
+//        if (mCountLesson > Const.COUNT_LESSON) {
+//            Toast.makeText(NewLessonActivity.this, R.string.hetbai, Toast.LENGTH_SHORT).show();
+//        } else {
+//            if (mPage * mPerPage >= Const.MAX_COUNT_WORDS) {
+//                Toast.makeText(NewLessonActivity.this, R.string.thieu_word, Toast.LENGTH_SHORT).show();
+//                finish();
+////            return;
+//            } else {
+//                try {
+//                    mLesson = mReadJson.createLesson(i, mPage, mPerPage);
+//                    mTextNameNewLess.setText(mLesson.getName());
+//                    mListWordNewLesson.addAll(mLesson.getWords());
+//                    mNewLessonAdapter.notifyDataSetChanged();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
 
     @Override
     public void onClick(View v) {
@@ -218,16 +248,15 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
                             }
                         }
                     }
-                new UpdateNewLesson().execute();
-//                    mPage++;
-//                    createLesson(mCountLesson);
-//                }else{
-//                    Toast.makeText(NewLessonActivity.this, R.string.hetbai, Toast.LENGTH_SHORT)
-//                            .show();
-//                }
+                GET_TAG = UPDATE_LESSON_TAG;
+                if (InternetUtils.isInternetConnected(NewLessonActivity.this)) {
+                    mTaskFragment.startInBackground(null);
+                }
                 break;
             case R.id.button_cancel:
+                isLessonLoad = false;
                 finish();
+                onCancelled();
                 break;
             case R.id.text_content_word_new:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -247,55 +276,106 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
         //TODO call activity
     }
 
-    private class CreateNewLesson extends AsyncTask<String, String, String> {
-//        String email = mEditTextEmail.getText().toString();
-//        String password = mEditTextPassword.getText().toString();
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            if (!InternetUtils.isInternetConnected(NewLessonActivity.this)) {
-                cancel(true);
-            }
-//            progressDialog = new ProgressDialog(NewLessonActivity.this);
-//            progressDialog.setMessage(getResources().getString(R.string.loading));
-            if(!progressDialog.isShowing()){
+    @Override
+    public void onPreExecute() {
+        switch (GET_TAG){
+            case CREATE_LESSON_TAG:
+                if(!progressDialog.isShowing()){
+                    progressDialog.show();
+                }
+                break;
+            case UPDATE_LESSON_TAG:
                 progressDialog.show();
-            }
+                break;
+            default:
+                break;
         }
+    }
 
-        @Override
-        protected String doInBackground(String... params) {
-            if (isCancelled()) {
-                return null;
-            }
-            String url = "https://manh-nt.herokuapp.com/categories/" +mCategoryId+"/lessons.json"+ "?" +
-                    Const.AUTH_TOKEN + "=" +
-                    mUser.getAuthToken();
-            String response = null;
-            try {
-                response = HttpRequest.postJsonRequest(url, null, APIService.METHOD_POST);
-                Log.i("Response create : " , response);
-                Log.i("Response create url: " , url);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return response;
+    @Override
+    public String onBackGround(String[] param) {
+        String response = null;
+        switch (GET_TAG){
+            case CREATE_LESSON_TAG:
+                String url = "https://manh-nt.herokuapp.com/categories/" +mCategoryId+"/lessons.json"+ "?" +
+                        Const.AUTH_TOKEN + "=" +
+                        mUser.getAuthToken();
+                try {
+                    response = HttpRequest.postJsonRequest(url, null, APIService.METHOD_POST);
+                    Log.i("Response create : " , response);
+                    Log.i("Response create url: " , url);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return response;
+            case UPDATE_LESSON_TAG:
+                mListWordAns = mNewLessonAdapter.getListWordAnswer();
+                JSONObject jsonArray = new JSONObject();
+                for (int i = 0; i < mListWordNewLesson.size(); i++) {
+                    JSONObject jsonObjectWord = new JSONObject();
+                    try {
+                        jsonObjectWord.put(Const.ID, String.valueOf(mListResuiltId.get(i)));
+                        Log.i("AAAAAAAAA",mListResuiltId.get(i)+"");
+                        jsonObjectWord.put(Const.ANSWER_ID, String.valueOf(mListWordAns.get(i).getResultId()));
+                        Log.i("AAAAAAAAA","B : "+mListWordAns.get(i).getResultId()+"");
+                        jsonArray.put(String.valueOf(i), jsonObjectWord);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+                JSONObject jsonObjectMid = new JSONObject();
+                JSONObject jsonObjectPost = new JSONObject();
+                try {
+                    jsonObjectMid.put(Const.RESULT_ATTRIBUTES, jsonArray);
+                    jsonObjectMid.put(Const.LEARNED, String.valueOf(true));
+                    jsonObjectPost.put(Const.LESSON, jsonObjectMid);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                String urlPost = Const.URL_UPDATE_LESSON + mLesson.getId() + Const.JSON_TYPE + "?" +
+                        Const.AUTH_TOKEN + "=" + mUser.getAuthToken();
+//                String response = null;
+                Log.i("FFFFFFFFFFF",jsonObjectPost.toString());
+                Log.i("FFFFFFFFFFF","url : "+urlPost);
+                try {
+                    response = HttpRequest.postJsonRequest(urlPost, jsonObjectPost, APIService.METHOD_PATCH);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                return response;
+//                break;
+            default:
+                break;
         }
+        return response;
+    }
 
-        @Override
-        protected void onPostExecute(String s) {
-            if(progressDialog.isShowing()){
-                progressDialog.dismiss();
-            }
-            if (s == null) {
-                Toast.makeText(NewLessonActivity.this, R.string.response_null, Toast.LENGTH_SHORT)
-                        .show();
-            } else if ((s.substring(0, s.indexOf(":"))).contains(R.string.Exception + "") ||
-                    (s.substring(0, s.indexOf(":"))).contains(R.string.StackTrace + "")) {
-                Toast.makeText(NewLessonActivity.this, R.string.response_error, Toast.LENGTH_SHORT)
-                        .show();
-            } else {
+    @Override
+    public void onProgressUpdate(String response) {
+
+    }
+
+    @Override
+    public void onCancelled() {
+        return ;
+    }
+
+    @Override
+    public void onPostExecute(String s) {
+        switch (GET_TAG){
+            case CREATE_LESSON_TAG:
+                isLessonLoad = true;
+                if(progressDialog.isShowing()){
+                    progressDialog.dismiss();
+                }
+                if (s == null) {
+                    Toast.makeText(NewLessonActivity.this, R.string.response_null, Toast.LENGTH_SHORT)
+                            .show();
+                } else if ((s.substring(0, s.indexOf(":"))).contains(R.string.Exception + "") ||
+                        (s.substring(0, s.indexOf(":"))).contains(R.string.StackTrace + "")) {
+                    Toast.makeText(NewLessonActivity.this, R.string.response_error, Toast.LENGTH_SHORT)
+                            .show();
+                } else {
                     Toast.makeText(NewLessonActivity.this, R.string.response_done, Toast.LENGTH_SHORT).show();
                     try {
                         JSONObject jsonObjectUser = new JSONObject(s);
@@ -335,83 +415,222 @@ public class NewLessonActivity extends Activity implements View.OnClickListener,
                         e.printStackTrace();
                     }
 //                }
-            }
-        }
-    }
-    private class UpdateNewLesson extends AsyncTask<String, String, String> {
-//        String email = mEditTextEmail.getText().toString();
-//        String password = mEditTextPassword.getText().toString();
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            if (!InternetUtils.isInternetConnected(NewLessonActivity.this)) {
-                cancel(true);
-            }
-//            progressDialog = new ProgressDialog(NewLessonActivity.this);
-//            progressDialog.setMessage(getResources().getString(R.string.loading));
-            progressDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-            if (isCancelled()) {
-                return null;
-            }
-            mListWordAns = mNewLessonAdapter.getListWordAnswer();
-            JSONObject jsonArray = new JSONObject();
-            for (int i = 0; i < mListWordNewLesson.size(); i++) {
-                JSONObject jsonObjectWord = new JSONObject();
-                try {
-                    jsonObjectWord.put(Const.ID, String.valueOf(mListResuiltId.get(i)));
-                    Log.i("AAAAAAAAA",mListResuiltId.get(i)+"");
-                    jsonObjectWord.put(Const.ANSWER_ID, String.valueOf(mListWordAns.get(i).getResultId()));
-                    Log.i("AAAAAAAAA","B : "+mListWordAns.get(i).getResultId()+"");
-                    jsonArray.put(String.valueOf(i), jsonObjectWord);
-                } catch (JSONException e) {
-                    e.printStackTrace();
                 }
-            }
-            JSONObject jsonObjectMid = new JSONObject();
-            JSONObject jsonObjectPost = new JSONObject();
-            try {
-                jsonObjectMid.put(Const.RESULT_ATTRIBUTES, jsonArray);
-                jsonObjectMid.put(Const.LEARNED, String.valueOf(true));
-                jsonObjectPost.put(Const.LESSON, jsonObjectMid);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            String url = Const.URL_UPDATE_LESSON + mLesson.getId() + Const.JSON_TYPE + "?" +
-                    Const.AUTH_TOKEN + "=" + mUser.getAuthToken();
-            String response = null;
-            Log.i("FFFFFFFFFFF",jsonObjectPost.toString());
-            Log.i("FFFFFFFFFFF","url : "+url);
-            try {
-                response = HttpRequest.postJsonRequest(url, jsonObjectPost, APIService.METHOD_PATCH);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return response;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-//            progressDialog.dismiss();
-            if (s == null) {
-                Toast.makeText(NewLessonActivity.this, R.string.response_null, Toast.LENGTH_SHORT)
-                        .show();
-            } else if ((s.substring(0, s.indexOf(":"))).contains(R.string.Exception + "") ||
-                    (s.substring(0, s.indexOf(":"))).contains(R.string.StackTrace + "")) {
-                Toast.makeText(NewLessonActivity.this, R.string.response_error, Toast.LENGTH_SHORT)
-                        .show();
-            } else {
+                break;
+            case UPDATE_LESSON_TAG:
+                if (s == null) {
+                    Toast.makeText(NewLessonActivity.this, R.string.response_null, Toast.LENGTH_SHORT)
+                            .show();
+                } else if ((s.substring(0, s.indexOf(":"))).contains(R.string.Exception + "") ||
+                        (s.substring(0, s.indexOf(":"))).contains(R.string.StackTrace + "")) {
+                    Toast.makeText(NewLessonActivity.this, R.string.response_error, Toast.LENGTH_SHORT)
+                            .show();
+                } else {
 //                Toast.makeText(NewLessonActivity.this, s, Toast.LENGTH_LONG).show();
-                Toast.makeText(NewLessonActivity.this, R.string.update_done, Toast.LENGTH_SHORT)
-                        .show();
+                    Toast.makeText(NewLessonActivity.this, R.string.update_done, Toast.LENGTH_SHORT)
+                            .show();
                 }
                 mListWordNewLesson.clear();
-                new CreateNewLesson().execute();
-            }
+                GET_TAG = CREATE_LESSON_TAG;
+                if (InternetUtils.isInternetConnected(NewLessonActivity.this)) {
+                    mTaskFragment.startInBackground(null);
+                }
+                break;
+            default:
+                break;
         }
+    }
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(Const.CONTENT_LOADING, progressDialog.isShowing());
+        outState.putBoolean(ISLESSON,isLessonLoad);
+        outState.putSerializable("list",mListWordNewLesson);
+        outState.putSerializable("lesson",mLesson);
+        outState.putSerializable("lesson_ans",mListWordAns);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(savedInstanceState.getBoolean(Const.CONTENT_LOADING)) {
+            progressDialog.setMessage(getResources().getString(R.string.loading));
+            progressDialog.show();
+        }
+        mLesson = (Lesson)savedInstanceState.getSerializable("lesson");
+        mTextNameNewLess.setText(mLesson.getName());
+        mListWordNewLesson.clear();
+        mListWordNewLesson.addAll((ArrayList<Word>)savedInstanceState.getSerializable("list"));
+        mListWordAns.clear();
+        mListWordAns.addAll((ArrayList<Word>)savedInstanceState.get("lesson_ans"));
+
+    }
+
+//    private class CreateNewLesson extends AsyncTask<String, String, String> {
+////        String email = mEditTextEmail.getText().toString();
+////        String password = mEditTextPassword.getText().toString();
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            if (!InternetUtils.isInternetConnected(NewLessonActivity.this)) {
+//                cancel(true);
+//            }
+////            progressDialog = new ProgressDialog(NewLessonActivity.this);
+////            progressDialog.setMessage(getResources().getString(R.string.loading));
+//            if(!progressDialog.isShowing()){
+//                progressDialog.show();
+//            }
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            if (isCancelled()) {
+//                return null;
+//            }
+//            String url = "https://manh-nt.herokuapp.com/categories/" +mCategoryId+"/lessons.json"+ "?" +
+//                    Const.AUTH_TOKEN + "=" +
+//                    mUser.getAuthToken();
+//            String response = null;
+//            try {
+//                response = HttpRequest.postJsonRequest(url, null, APIService.METHOD_POST);
+//                Log.i("Response create : " , response);
+//                Log.i("Response create url: " , url);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            return response;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            if(progressDialog.isShowing()){
+//                progressDialog.dismiss();
+//            }
+//            if (s == null) {
+//                Toast.makeText(NewLessonActivity.this, R.string.response_null, Toast.LENGTH_SHORT)
+//                        .show();
+//            } else if ((s.substring(0, s.indexOf(":"))).contains(R.string.Exception + "") ||
+//                    (s.substring(0, s.indexOf(":"))).contains(R.string.StackTrace + "")) {
+//                Toast.makeText(NewLessonActivity.this, R.string.response_error, Toast.LENGTH_SHORT)
+//                        .show();
+//            } else {
+//                    Toast.makeText(NewLessonActivity.this, R.string.response_done, Toast.LENGTH_SHORT).show();
+//                    try {
+//                        JSONObject jsonObjectUser = new JSONObject(s);
+//                        JSONObject response = jsonObjectUser.optJSONObject(Const.LESSON);
+//                        int idLesson = response.optInt(Const.ID);
+//                        String nameLesson = response.optString(Const.NAME);
+//                        JSONArray jsonArrayWord = response.optJSONArray(Const.WORDS);
+//                        List<Word> wordList = new ArrayList<>();
+//                        for (int i = 0; i < jsonArrayWord.length(); i++) {
+//                            JSONObject jsonWord = jsonArrayWord.optJSONObject(i);
+//                            int idWord = jsonWord.optInt(Const.ID);
+//                            int resultIdWord = jsonWord.optInt(Const.RESULT_ID);
+//                            Log.i("AAAAAAAAA",resultIdWord+"");
+//                            mListResuiltId.add(String.valueOf(resultIdWord));
+//                            String contentWord = jsonWord.optString(Const.CONTENT);
+//                            JSONArray jsonArrayAnswer = jsonWord.optJSONArray(Const.ANSWERS);
+//                            List<Answer> answerList = new ArrayList<>();
+//                            for (int j = 0; j < jsonArrayAnswer.length(); j++) {
+//                                JSONObject jsonAnswer = jsonArrayAnswer.optJSONObject(j);
+//                                int idAnswer = jsonAnswer.optInt(Const.ID);
+//                                String contentAnswer = jsonAnswer.optString(Const.CONTENT);
+//                                boolean isCorrect = jsonAnswer.optBoolean(Const.IS_CORRECT);
+//                                Answer answer = new Answer(idAnswer,idWord,contentAnswer,isCorrect);
+//                                answerList.add(answer);
+//                            }
+//                            Word word = new Word(idWord,idLesson,resultIdWord,contentWord,answerList);
+//                            wordList.add(word);
+//                        }
+//                        mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
+//                        mCategoryId = mSharedPreferences.getInt(Const.CATEGORY_ID, -1);
+//                        mLesson = new Lesson(idLesson,mCategoryId,nameLesson,wordList);
+//                        mTextNameNewLess.setText(mLesson.getName());
+//                        mListWordNewLesson.clear();
+//                        mListWordNewLesson.addAll(mLesson.getWords());
+//                        mNewLessonAdapter.notifyDataSetChanged();
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+////                }
+//            }
+//        }
+//    }
+//    private class UpdateNewLesson extends AsyncTask<String, String, String> {
+////        String email = mEditTextEmail.getText().toString();
+////        String password = mEditTextPassword.getText().toString();
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            if (!InternetUtils.isInternetConnected(NewLessonActivity.this)) {
+//                cancel(true);
+//            }
+////            progressDialog = new ProgressDialog(NewLessonActivity.this);
+////            progressDialog.setMessage(getResources().getString(R.string.loading));
+//            progressDialog.show();
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... params) {
+//            if (isCancelled()) {
+//                return null;
+//            }
+//            mListWordAns = mNewLessonAdapter.getListWordAnswer();
+//            JSONObject jsonArray = new JSONObject();
+//            for (int i = 0; i < mListWordNewLesson.size(); i++) {
+//                JSONObject jsonObjectWord = new JSONObject();
+//                try {
+//                    jsonObjectWord.put(Const.ID, String.valueOf(mListResuiltId.get(i)));
+//                    Log.i("AAAAAAAAA",mListResuiltId.get(i)+"");
+//                    jsonObjectWord.put(Const.ANSWER_ID, String.valueOf(mListWordAns.get(i).getResultId()));
+//                    Log.i("AAAAAAAAA","B : "+mListWordAns.get(i).getResultId()+"");
+//                    jsonArray.put(String.valueOf(i), jsonObjectWord);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            JSONObject jsonObjectMid = new JSONObject();
+//            JSONObject jsonObjectPost = new JSONObject();
+//            try {
+//                jsonObjectMid.put(Const.RESULT_ATTRIBUTES, jsonArray);
+//                jsonObjectMid.put(Const.LEARNED, String.valueOf(true));
+//                jsonObjectPost.put(Const.LESSON, jsonObjectMid);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            String url = Const.URL_UPDATE_LESSON + mLesson.getId() + Const.JSON_TYPE + "?" +
+//                    Const.AUTH_TOKEN + "=" + mUser.getAuthToken();
+//            String response = null;
+//            Log.i("FFFFFFFFFFF",jsonObjectPost.toString());
+//            Log.i("FFFFFFFFFFF","url : "+url);
+//            try {
+//                response = HttpRequest.postJsonRequest(url, jsonObjectPost, APIService.METHOD_PATCH);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            return response;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+////            progressDialog.dismiss();
+//            if (s == null) {
+//                Toast.makeText(NewLessonActivity.this, R.string.response_null, Toast.LENGTH_SHORT)
+//                        .show();
+//            } else if ((s.substring(0, s.indexOf(":"))).contains(R.string.Exception + "") ||
+//                    (s.substring(0, s.indexOf(":"))).contains(R.string.StackTrace + "")) {
+//                Toast.makeText(NewLessonActivity.this, R.string.response_error, Toast.LENGTH_SHORT)
+//                        .show();
+//            } else {
+////                Toast.makeText(NewLessonActivity.this, s, Toast.LENGTH_LONG).show();
+//                Toast.makeText(NewLessonActivity.this, R.string.update_done, Toast.LENGTH_SHORT)
+//                        .show();
+//                }
+//                mListWordNewLesson.clear();
+//                new CreateNewLesson().execute();
+//            }
+//        }
     }
 
