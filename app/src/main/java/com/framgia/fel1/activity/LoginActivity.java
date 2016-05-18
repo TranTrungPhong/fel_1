@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if ( mTaskFragment == null ) {
             mTaskFragment = new TaskFragment();
             fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
+            mTaskFragment.onAttach((Context) this);
         }
         initView();
     }
@@ -132,6 +133,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onPreExecute() {
         progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.loading));
+        progressDialog.setCancelable(false);
         progressDialog.show();
     }
 

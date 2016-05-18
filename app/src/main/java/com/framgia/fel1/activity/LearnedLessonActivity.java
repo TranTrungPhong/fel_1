@@ -196,22 +196,7 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
                 intent.putExtra(Const.CATEGORY_ID, mCategorId);
 //                intent.putExtra(APIService.PAGE, page);
 //                intent.putExtra(APIService.PER_PAGE, perPage);
-                progressDialog.setMessage(getResources().getString(R.string.loading));
-                progressDialog.show();
-                new Thread(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        try {
-                            Thread.sleep(3000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        progressDialog.dismiss();
-                        startActivity(intent);
-                    }
-                }).start();
+                startActivity(intent);
                 break;
             case R.id.button_word_list:
                 Intent intentWordList = new Intent(LearnedLessonActivity.this, WordListActivity.class);

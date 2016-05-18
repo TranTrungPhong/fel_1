@@ -92,6 +92,7 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
             if ( mTaskFragment == null ) {
                 mTaskFragment = new TaskFragment();
                 fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
+                mTaskFragment.onAttach((Context) this);
             }
         initView();
         initData();
@@ -177,7 +178,7 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
         if(!isLessonLoad){
             GET_TAG = CREATE_LESSON_TAG;
             if (InternetUtils.isInternetConnected(NewLessonActivity.this)) {
-                mTaskFragment.startInBackground(null);
+                mTaskFragment.startInBackground(new String[]{TAG_TASK_FRAGMENT});
             }
         }
     }
@@ -250,7 +251,7 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
                     }
                 GET_TAG = UPDATE_LESSON_TAG;
                 if (InternetUtils.isInternetConnected(NewLessonActivity.this)) {
-                    mTaskFragment.startInBackground(null);
+                    mTaskFragment.startInBackground(new String[]{TAG_TASK_FRAGMENT});
                 }
                 break;
             case R.id.button_cancel:
@@ -281,10 +282,12 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
         switch (GET_TAG){
             case CREATE_LESSON_TAG:
                 if(!progressDialog.isShowing()){
+                    progressDialog.setCancelable(false);
                     progressDialog.show();
                 }
                 break;
             case UPDATE_LESSON_TAG:
+                progressDialog.setCancelable(false);
                 progressDialog.show();
                 break;
             default:
@@ -365,9 +368,6 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
         switch (GET_TAG){
             case CREATE_LESSON_TAG:
                 isLessonLoad = true;
-                if(progressDialog.isShowing()){
-                    progressDialog.dismiss();
-                }
                 if (s == null) {
                     Toast.makeText(NewLessonActivity.this, R.string.response_null, Toast.LENGTH_SHORT)
                             .show();
@@ -433,11 +433,14 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
                 mListWordNewLesson.clear();
                 GET_TAG = CREATE_LESSON_TAG;
                 if (InternetUtils.isInternetConnected(NewLessonActivity.this)) {
-                    mTaskFragment.startInBackground(null);
+                    mTaskFragment.startInBackground(new String[]{TAG_TASK_FRAGMENT});
                 }
                 break;
             default:
                 break;
+        }
+        if(progressDialog.isShowing()){
+            progressDialog.dismiss();
         }
     }
     @Override

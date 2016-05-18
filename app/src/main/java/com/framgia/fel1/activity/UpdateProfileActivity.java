@@ -50,6 +50,7 @@ import java.util.List;
 public class UpdateProfileActivity extends AppCompatActivity implements TaskFragment.TaskCallbacks {
     public static final String TAG = "UpdateProfileActivity";
     private static final String TAG_TASK_FRAGMENT = "task_fragment";
+    private static final String CONTENT_BITMAP = "bitmap";
     private TaskFragment mTaskFragment;
     private Toolbar mToolbar;
     private FloatingActionButton mFab;
@@ -64,6 +65,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
     private MySqliteHelper mMySqliteHelper;
     private SharedPreferences mSharedPreferences;
     private boolean isChangedAvatar = false;
+    private boolean isLoadImage = false;
     private ProgressDialog mProgressDialog;
 
     @Override
@@ -82,6 +84,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
         if ( mTaskFragment == null ) {
             mTaskFragment = new TaskFragment();
             fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
+            mTaskFragment.onAttach((Context) this);
         }
         setView();
         setEvent();
@@ -128,8 +131,11 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
         mEditPasswordConfirmation = (EditText) findViewById(R.id.edit_password_confirmation);
         mEditName = (EditText) findViewById(R.id.edit_name);
         mImageAvatar = (ImageView) findViewById(R.id.image_avatar);
-        if(InternetUtils.isInternetConnected(UpdateProfileActivity.this, false))
-            new ShowImage(mImageAvatar).execute(mUser.getAvatar());
+        if( !isLoadImage )
+            if(InternetUtils.isInternetConnected(UpdateProfileActivity.this, false)) {
+                new ShowImage(mImageAvatar).execute(mUser.getAvatar());
+                isLoadImage = !isLoadImage;
+            }
         mFab.setImageDrawable(new IconicsDrawable(UpdateProfileActivity.this)
                                       .icon(FontAwesome.Icon.faw_check)
                                       .color(Color.GREEN));
@@ -208,6 +214,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
     @Override
     public void onPreExecute() {
         mProgressDialog.setMessage(getResources().getString(R.string.loading));
+        mProgressDialog.setCancelable(false);
         mProgressDialog.show();
         mBitmapAvatar = ((BitmapDrawable) mImageAvatar.getDrawable()).getBitmap();
     }
@@ -259,8 +266,6 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
 
     @Override
     public void onPostExecute(String response) {
-        if(mProgressDialog.isShowing())
-            mProgressDialog.dismiss();
         if (response == null) {
             Toast.makeText(UpdateProfileActivity.this, R.string.error_update_profile,
                            Toast.LENGTH_SHORT).show();
@@ -297,12 +302,22 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
                 Log.d(TAG, response.toString());
             }
         }
+        if(mProgressDialog.isShowing())
+            mProgressDialog.dismiss();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(Const.CONTENT_LOADING, mProgressDialog.isShowing());
+        if(isLoadImage)
+            mBitmapAvatar = ((BitmapDrawable) mImageAvatar.getDrawable()).getBitmap();
+        if(mBitmapAvatar != null) {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            mBitmapAvatar.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            outState.putByteArray(CONTENT_BITMAP, byteArray);
+        }
     }
 
     @Override
@@ -312,6 +327,11 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
             mProgressDialog.setMessage(getResources().getString(R.string.loading));
             mProgressDialog.show();
         }
+        byte[] byteArray = savedInstanceState.getByteArray(CONTENT_BITMAP);
+        if(byteArray != null)
+            mBitmapAvatar = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        if(mBitmapAvatar != null)
+            mImageAvatar.setImageBitmap(mBitmapAvatar);
     }
 
     private class UpdateRequest extends AsyncTask<String, String, String> {

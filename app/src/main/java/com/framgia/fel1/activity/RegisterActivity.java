@@ -56,6 +56,7 @@ public class RegisterActivity extends AppCompatActivity implements TaskFragment.
         if ( mTaskFragment == null ) {
             mTaskFragment = new TaskFragment();
             fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
+            mTaskFragment.onAttach((Context) this);
         }
         initView();
         setEvent();
