@@ -9,10 +9,12 @@ import android.widget.CompoundButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
 import com.framgia.fel1.R;
 import com.framgia.fel1.activity.NewLessonActivity;
 import com.framgia.fel1.constant.Const;
 import com.framgia.fel1.model.Word;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -146,7 +148,7 @@ public class NewLessonAdapter extends RecyclerView.Adapter<NewLessonAdapter.NewL
         }
     }
 
-    public ArrayList<Word> getListWordAnswer (){
+    public ArrayList<Word> getListWordAnswer() {
         return mWordListAnswer;
     }
 

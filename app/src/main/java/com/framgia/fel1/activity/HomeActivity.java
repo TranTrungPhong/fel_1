@@ -88,12 +88,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState != null)
+        if (savedInstanceState != null)
             mBundle = savedInstanceState;
         setContentView(R.layout.home_screen_layout);
         FragmentManager fm = getSupportFragmentManager();
         mTaskFragment = (TaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
-        if ( mTaskFragment == null ) {
+        if (mTaskFragment == null) {
             mTaskFragment = new TaskFragment();
             fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
             mTaskFragment.onAttach((Context) this);
@@ -104,7 +104,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         Bitmap bitmap = BitmapUtil.decodeSampledBitmapFromFile(mUser.getAvatar(), 100, 100);
-        if(bitmap != null)
+        if (bitmap != null)
             mImageViewAvatar.setImageBitmap(bitmap);
         super.onResume();
     }
@@ -124,37 +124,32 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         mHomeAdapter = new HomeAdapter(this, mListCategory);
         mRecyclerViewCategory.setAdapter(mHomeAdapter);
         mRecyclerViewCategory.addItemDecoration(new DividerItemDecoration(this,
-                                                        DividerItemDecoration.VERTICAL_LIST,
-                                                        R.drawable.divider_category_list));
+                DividerItemDecoration.VERTICAL_LIST,
+                R.drawable.divider_category_list));
         mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
         int id = mSharedPreferences.getInt(Const.ID, -1);
-        if(id != -1)
+        if (id != -1)
             mUser = mMySqliteHelper.getUser(id);
         else
             finish();
-        //Intent intent = getIntent();
-        //mUser = (User) intent.getSerializableExtra(Const.USER);
-        if( !isLoadImage )
-            if(InternetUtils.isInternetConnected(HomeActivity.this, false)) {
+        if (!isLoadImage)
+            if (InternetUtils.isInternetConnected(HomeActivity.this, false)) {
                 isLoadImage = !isLoadImage;
-            if(mUser.getAvatar() != null || !mUser.getAvatar().equals("")) {
+                if (mUser.getAvatar() != null || !mUser.getAvatar().equals("")) {
                     new ShowImage(mImageViewAvatar).execute(mUser.getAvatar());
                 }
-        }
+            }
         mTextViewName.setText(mUser.getName());
         mTextViewEmail.setText(mUser.getEmail());
         mAuthToken = mUser.getAuthToken();
-//        new LoadCategory().execute();
         GET_TAG = LOADCATEGORY_TAG;
-        if(!isCategoryLoad){
+        if (!isCategoryLoad) {
             progressDialog = new ProgressDialog(HomeActivity.this);
             progressDialog.setTitle(getResources().getString(R.string.loading));
             progressDialog.show();
-            new Thread(new Runnable()
-            {
+            new Thread(new Runnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     try {
                         Thread.sleep(3000);
                     } catch (InterruptedException e) {
@@ -165,7 +160,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             }).start();
             mTaskFragment.startInBackground(new String[]{TAG_TASK_FRAGMENT});
         }
-        if(!mBundle.getBoolean(ISCATEGORY, false)){
+        if (!mBundle.getBoolean(ISCATEGORY, false)) {
         }
         mButtonUpdate.setOnClickListener(this);
         mButtonSignUp.setOnClickListener(this);
@@ -179,6 +174,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.button_update_show_user:
                 Intent intentUpdate = new Intent(HomeActivity.this, UpdateProfileActivity.class);
+                isCategoryLoad = false;
                 startActivity(intentUpdate);
                 isCategoryLoad = false;
                 break;
@@ -187,16 +183,19 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.button_wordlist_show_user:
                 Intent intentWordList = new Intent(HomeActivity.this, WordListActivity.class);
+                isCategoryLoad = false;
                 startActivity(intentWordList);
                 isCategoryLoad = false;
                 break;
             case R.id.button_show_activities:
                 Intent intentActivities = new Intent(HomeActivity.this, UserActionActivity.class);
+                isCategoryLoad = false;
                 startActivity(intentActivities);
                 isCategoryLoad = false;
                 break;
             case R.id.image_show_user_avatar:
                 Intent intent = new Intent(HomeActivity.this, UpdateProfileActivity.class);
+                isCategoryLoad = false;
                 startActivity(intent);
                 isCategoryLoad = false;
             default:
@@ -229,12 +228,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         editor.putBoolean(Const.REMEMBER, false);
         editor.remove(Const.ID);
         editor.apply();
-        if( InternetUtils.isInternetConnected(HomeActivity.this)) {
-//            new SignOutRequest().execute();
+        if (InternetUtils.isInternetConnected(HomeActivity.this)) {
             GET_TAG = SIGOUT_TAG;
             mTaskFragment.startInBackground(new String[]{TAG_TASK_FRAGMENT});
-        }
-        else {
+        } else {
             Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
             isCategoryLoad = false;
             startActivity(intent);
@@ -272,7 +269,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onPreExecute() {
-        if(GET_TAG == SIGOUT_TAG ){
+        if (GET_TAG == SIGOUT_TAG) {
             mProgressDialog.setTitle(getResources().getString(R.string.sign_out));
             mProgressDialog.setCancelable(false);
             mProgressDialog.show();
@@ -282,12 +279,12 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public String onBackGround(String[] param) {
-            String response = null;
-        if(GET_TAG == LOADCATEGORY_TAG){
+        String response = null;
+        if (GET_TAG == LOADCATEGORY_TAG) {
             String url = APIService.URL_GET_CATEGORY + "?" + Const.AUTH_TOKEN + "=" + mAuthToken;
             response = HttpRequest.getJSON(url);
             return response;
-        }else if(GET_TAG == SIGOUT_TAG ){
+        } else if (GET_TAG == SIGOUT_TAG) {
             String url = APIService.URL_API_SIGNOUT + "?" +
                     Const.AUTH_TOKEN + "=" +
                     mUser.getAuthToken();
@@ -313,7 +310,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onPostExecute(String response) {
-        if(GET_TAG == LOADCATEGORY_TAG){
+        if (GET_TAG == LOADCATEGORY_TAG) {
             if (response == null) {
                 Toast.makeText(HomeActivity.this, R.string.response_null, Toast.LENGTH_SHORT)
                         .show();
@@ -335,14 +332,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     e.printStackTrace();
                 }
             }
-        }else if(GET_TAG == SIGOUT_TAG ){
-            if(mProgressDialog.isShowing())
+        } else if (GET_TAG == SIGOUT_TAG) {
+            if (mProgressDialog.isShowing())
                 mProgressDialog.dismiss();
-            if ( response == null ) {
+            if (response == null) {
                 Toast.makeText(HomeActivity.this, R.string.response_null, Toast.LENGTH_SHORT).show();
-            } else if ( (response.substring(0, response.indexOf(":"))).contains(
+            } else if ((response.substring(0, response.indexOf(":"))).contains(
                     String.valueOf(R.string.Exception)) || (response.substring(0, response.indexOf(":"))).contains(
-                    String.valueOf(R.string.StackTrace)) ) {
+                    String.valueOf(R.string.StackTrace))) {
                 Toast.makeText(HomeActivity.this, R.string.response_error, Toast.LENGTH_SHORT).show();
             } else {
                 String responseInvalid = null;
@@ -352,7 +349,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if ( ! responseInvalid.equals("") ) {
+                if (!responseInvalid.equals("")) {
                     Toast.makeText(HomeActivity.this, responseInvalid, Toast.LENGTH_SHORT).show();
 
                 } else {
@@ -367,137 +364,37 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(Const.CONTENT_LOADING, mProgressDialog.isShowing());
-        outState.putBoolean(ISCATEGORY,isCategoryLoad);
-        outState.putSerializable("list",mListCategory);
-        if(isLoadImage)
+        outState.putBoolean(ISCATEGORY, isCategoryLoad);
+        outState.putSerializable(Const.LIST, mListCategory);
+        if (isLoadImage)
             mBitmapAvatar = ((BitmapDrawable) mImageViewAvatar.getDrawable()).getBitmap();
-        if(mBitmapAvatar != null) {
+        if (mBitmapAvatar != null) {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             mBitmapAvatar.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
             outState.putByteArray(CONTENT_BITMAP, byteArray);
         }
-//        outState.putString("image",mUser.getAvatar());
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if(savedInstanceState.getBoolean(Const.CONTENT_LOADING)) {
+        if (savedInstanceState.getBoolean(Const.CONTENT_LOADING)) {
             mProgressDialog.setMessage(getResources().getString(R.string.loading));
             mProgressDialog.show();
         }
         mListCategory.clear();
-        mListCategory.addAll((ArrayList<Category>)savedInstanceState.getSerializable("list"));
+        mListCategory.addAll((ArrayList<Category>) savedInstanceState.getSerializable(Const.LIST));
         byte[] byteArray = savedInstanceState.getByteArray(CONTENT_BITMAP);
-        if(byteArray != null)
+        if (byteArray != null)
             mBitmapAvatar = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        if(mBitmapAvatar != null)
+        if (mBitmapAvatar != null)
             mImageViewAvatar.setImageBitmap(mBitmapAvatar);
-//        InputStream in = null;
-//        try {
-//            in = new java.net.URL(savedInstanceState.getString("image")).openStream();
-//            Bitmap bitmap = BitmapFactory.decodeStream(in);
-//            mImageViewAvatar.setImageBitmap(bitmap);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            mImageViewAvatar.setImageBitmap(BitmapUtil.decodeSampledBitmapFromFile(savedInstanceState.getString("image"), 100, 100));
-//        }
-//        isAvatar = true;
-//        if(savedInstanceState)
     }
-    private class LoadCategory extends AsyncTask<String, String, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            String url = APIService.URL_GET_CATEGORY + "?" + Const.AUTH_TOKEN + "=" + mAuthToken;
-            String response = HttpRequest.getJSON(url);
-            return response;
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            //Log.d(TAG, response);
-            if (response == null) {
-                Toast.makeText(HomeActivity.this, R.string.response_null, Toast.LENGTH_SHORT)
-                        .show();
-            } else if ((response.substring(0, response.indexOf(":")))
-                    .contains(String.valueOf(R.string.Exception))
-                    || (response.substring(0, response.indexOf(":")))
-                    .contains(String.valueOf(R.string.StackTrace))) {
-                Toast.makeText(HomeActivity.this, R.string.response_error, Toast.LENGTH_SHORT)
-                        .show();
-            } else {
-//                Toast.makeText(HomeActivity.this, R.string.response_done, Toast.LENGTH_SHORT).show();
-                try {
-                    ArrayCategory arrayCategory = new ArrayCategory(response);
-                    mListCategory.clear();
-                    mListCategory.addAll(arrayCategory.getCategoryList());
-                    mHomeAdapter.notifyDataSetChanged();
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-     private class SignOutRequest extends AsyncTask<String, String, String> {
-         ProgressDialog progressDialog;
-         @Override
-         protected void onPreExecute() {
-             progressDialog = new ProgressDialog(HomeActivity.this);
-             progressDialog.setTitle(getResources().getString(R.string.sign_out));
-             progressDialog.show();
-         }
-
-         @Override
-            protected String doInBackground(String... params) {
-                String url = APIService.URL_API_SIGNOUT + "?" +
-                        Const.AUTH_TOKEN + "=" +
-                        mUser.getAuthToken();
-             String response = null;
-             try {
-                 response = HttpRequest.postJsonRequest(url, null, APIService.METHOD_DELETE);
-             } catch (IOException e) {
-                 e.printStackTrace();
-             }
-             return response;
-            }
-
-            @Override
-            protected void onPostExecute(String response) {
-                if(progressDialog.isShowing())
-                    progressDialog.dismiss();
-                if ( response == null ) {
-                    Toast.makeText(HomeActivity.this, R.string.response_null, Toast.LENGTH_SHORT).show();
-                } else if ( (response.substring(0, response.indexOf(":"))).contains(
-                        String.valueOf(R.string.Exception)) || (response.substring(0, response.indexOf(":"))).contains(
-                        String.valueOf(R.string.StackTrace)) ) {
-                    Toast.makeText(HomeActivity.this, R.string.response_error, Toast.LENGTH_SHORT).show();
-                } else {
-                    String responseInvalid = null;
-                    try {
-                        JSONObject jsonObject = new JSONObject(response);
-                        responseInvalid = jsonObject.optString(getString(R.string.message_invalid));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    if ( ! responseInvalid.equals("") ) {
-                        Toast.makeText(HomeActivity.this, responseInvalid, Toast.LENGTH_SHORT).show();
-
-                    } else {
-                        Toast.makeText(HomeActivity.this, R.string.error_sign_out, Toast
-                                .LENGTH_SHORT)
-                                .show();
-                    }
-                    Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }
-        }
 
 }

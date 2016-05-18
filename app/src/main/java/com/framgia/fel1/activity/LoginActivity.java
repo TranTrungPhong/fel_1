@@ -42,7 +42,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener,TaskFragment.TaskCallbacks {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener, TaskFragment.TaskCallbacks {
     private static final String TAG_TASK_FRAGMENT = "task_fragment";
     private TaskFragment mTaskFragment;
     private EditText mEditTextEmail;
@@ -58,12 +58,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setSupportActionBar(null);
         setContentView(R.layout.login_layout);
         progressDialog = new ProgressDialog(LoginActivity.this);
         FragmentManager fm = getSupportFragmentManager();
         mTaskFragment = (TaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
-        if ( mTaskFragment == null ) {
+        if (mTaskFragment == null) {
             mTaskFragment = new TaskFragment();
             fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
             mTaskFragment.onAttach((Context) this);
@@ -90,7 +89,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if ( isChecked ) {
+                        if (isChecked) {
                             mCheckBoxRememMe = 1;
                         }
                     }
@@ -108,13 +107,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_login:
-                if ( mEditTextPassword.getText().toString().equals("") ) {
+                if (mEditTextPassword.getText().toString().equals("")) {
                     Toast.makeText(LoginActivity.this, R.string.pass_not_blank,
-                                   Toast.LENGTH_SHORT).show();
-                } else if ( CheckRequire.checkEmail(LoginActivity.this, mEditTextEmail) )
-                    if ( InternetUtils.isInternetConnected(LoginActivity.this) ) {
-//                        cancel(true);
-//                    new LoginToServer().execute();
+                            Toast.LENGTH_SHORT).show();
+                } else if (CheckRequire.checkEmail(LoginActivity.this, mEditTextEmail))
+                    if (InternetUtils.isInternetConnected(LoginActivity.this)) {
                         String[] param = new String[]{mEditTextEmail.getText().toString(),
                                 mEditTextPassword.getText().toString()};
                         mTaskFragment.startInBackground(param);
@@ -174,11 +171,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onPostExecute(String s) {
         progressDialog.dismiss();
-        if ( s == null ) {
+        if (s == null) {
             Toast.makeText(LoginActivity.this, R.string.tk_khongTonTai,
                     Toast.LENGTH_SHORT).show();
-        } else if ( (s.substring(0, s.indexOf(":"))).contains(R.string.Exception + "") ||
-                (s.substring(0, s.indexOf(":"))).contains(R.string.StackTrace + "") ) {
+        } else if ((s.substring(0, s.indexOf(":"))).contains(R.string.Exception + "") ||
+                (s.substring(0, s.indexOf(":"))).contains(R.string.StackTrace + "")) {
             Toast.makeText(LoginActivity.this, R.string.error_login, Toast.LENGTH_SHORT).show();
         } else {
             String responseInvalid = null;
@@ -188,7 +185,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if ( ! responseInvalid.equals("") ) {
+            if (!responseInvalid.equals("")) {
                 Toast.makeText(LoginActivity.this, responseInvalid, Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(LoginActivity.this, R.string.login_done,
@@ -254,124 +251,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if(savedInstanceState.getBoolean(Const.CONTENT_LOADING)) {
+        if (savedInstanceState.getBoolean(Const.CONTENT_LOADING)) {
             progressDialog.setMessage(getResources().getString(R.string.loading));
             progressDialog.show();
         }
     }
-
-    private class LoginToServer extends AsyncTask<String, String, String> {
-        String email = mEditTextEmail.getText().toString();
-        String password = mEditTextPassword.getText().toString();
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = new ProgressDialog(LoginActivity.this);
-            progressDialog.setMessage(getResources().getString(R.string.loading));
-            progressDialog.show();
-        }
-
-        @Override
-        protected String doInBackground(String... params) {
-//            if ( isCancelled() ) {
-//                return null;
-//            }
-            JSONObject jsonObject = new JSONObject();
-            String response = null;
-            try {
-                jsonObject.put(APIService.SESSION_EMAIL, email);
-                jsonObject.put(APIService.SESSION_PASWORD, password);
-                jsonObject.put(APIService.SESSION_REMEMBER_ME, mCheckBoxRememMe);
-                JSONObject jsonObjectPost = new JSONObject();
-                jsonObjectPost.put(APIService.SESSION, jsonObject);
-                try {
-                    response =
-                            HttpRequest.postJsonRequest(APIService.URL_API_SIGNIN, jsonObjectPost,
-                                                        APIService.METHOD_POST);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                return response;
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return response;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            progressDialog.dismiss();
-            if ( s == null ) {
-                Toast.makeText(LoginActivity.this, R.string.tk_khongTonTai,
-                               Toast.LENGTH_SHORT).show();
-            } else if ( (s.substring(0, s.indexOf(":"))).contains(R.string.Exception + "") ||
-                    (s.substring(0, s.indexOf(":"))).contains(R.string.StackTrace + "") ) {
-                Toast.makeText(LoginActivity.this, R.string.error_login, Toast.LENGTH_SHORT).show();
-            } else {
-                String responseInvalid = null;
-                try {
-                    JSONObject jsonObject = new JSONObject(s);
-                    responseInvalid = jsonObject.optString(getString(R.string.message_invalid));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if ( ! responseInvalid.equals("") ) {
-                    Toast.makeText(LoginActivity.this, responseInvalid, Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(LoginActivity.this, R.string.login_done,
-                                   Toast.LENGTH_SHORT).show();
-                    try {
-                        JSONObject jsonObjectUser = new JSONObject(s);
-                        JSONObject response = jsonObjectUser.optJSONObject(Const.USER);
-                        JSONArray jsonArrayAct = response.optJSONArray(Const.ACTIVITIES);
-                        List<UserActivity> listUserActivity = new ArrayList<>();
-                        for (int i = 0; i < jsonArrayAct.length(); i++) {
-                            JSONObject joActivity = jsonArrayAct.optJSONObject(i);
-                            UserActivity userActivity = new UserActivity(
-                                    Integer.parseInt(joActivity.optString(Const.ID)),
-                                    joActivity.optString(Const.CONTENT),
-                                    joActivity.optString(Const.CREATED_AT));
-                            listUserActivity.add(userActivity);
-                            try {
-                                mMySqliteHelper.addUserActivity(userActivity, Integer.parseInt(
-                                        response.getString(Const.ID)));
-                            } catch (SQLiteConstraintException e) {
-                                e.printStackTrace();
-                                mMySqliteHelper.updateUserActivity(userActivity);
-                            }
-                        }
-                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                        User user = new User(Integer.parseInt(response.getString(Const.ID)),
-                                             response.optString(Const.NAME),
-                                             response.optString(Const.EMAIL),
-                                             response.optString(Const.AVATAR),
-                                             Boolean.parseBoolean(response.optString(Const.ADMIN)),
-                                             response.optString(Const.AUTH_TOKEN),
-                                             response.optString(Const.CREATED_AT),
-                                             response.optString(Const.UPDATED_AT),
-                                             Integer.parseInt(response.optString(Const.LEARNED_WORDS)),
-                                             listUserActivity);
-                        try {
-                            mMySqliteHelper.addUser(user);
-                        } catch (SQLiteConstraintException e) {
-                            e.printStackTrace();
-                            mMySqliteHelper.updateUser(user);
-                        }
-                        mSharedPreferences =
-                                getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
-                        SharedPreferences.Editor editor = mSharedPreferences.edit();
-                        editor.putBoolean(Const.REMEMBER, mCheckBoxRememberMe.isChecked());
-                        editor.putInt(Const.ID, user.getId());
-                        editor.apply();
-                        startActivity(intent);
-                        finish();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
-
 }

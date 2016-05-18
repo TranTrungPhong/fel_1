@@ -41,8 +41,10 @@ import com.framgia.fel1.util.ShowImage;
 import com.framgia.fel1.util.TaskFragment;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -76,12 +78,12 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
         mMySqliteHelper = new MySqliteHelper(this);
         mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
         int id = mSharedPreferences.getInt(Const.ID, -1);
-        if(id != -1)
+        if (id != -1)
             mUser = mMySqliteHelper.getUser(id);
         else finish();
         FragmentManager fm = getSupportFragmentManager();
         mTaskFragment = (TaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
-        if ( mTaskFragment == null ) {
+        if (mTaskFragment == null) {
             mTaskFragment = new TaskFragment();
             fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
             mTaskFragment.onAttach((Context) this);
@@ -131,32 +133,32 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
         mEditPasswordConfirmation = (EditText) findViewById(R.id.edit_password_confirmation);
         mEditName = (EditText) findViewById(R.id.edit_name);
         mImageAvatar = (ImageView) findViewById(R.id.image_avatar);
-        if( !isLoadImage )
-            if(InternetUtils.isInternetConnected(UpdateProfileActivity.this, false)) {
+        if (!isLoadImage)
+            if (InternetUtils.isInternetConnected(UpdateProfileActivity.this, false)) {
                 new ShowImage(mImageAvatar).execute(mUser.getAvatar());
                 isLoadImage = !isLoadImage;
             }
         mFab.setImageDrawable(new IconicsDrawable(UpdateProfileActivity.this)
-                                      .icon(FontAwesome.Icon.faw_check)
-                                      .color(Color.GREEN));
+                .icon(FontAwesome.Icon.faw_check)
+                .color(Color.GREEN));
         mEditName.setCompoundDrawables(new IconicsDrawable(UpdateProfileActivity.this)
-                                               .icon(FontAwesome.Icon.faw_user)
-                                               .color(Color.GRAY)
-                                               .sizeRes(R.dimen.icon_size), null, null, null);
+                .icon(FontAwesome.Icon.faw_user)
+                .color(Color.GRAY)
+                .sizeRes(R.dimen.icon_size), null, null, null);
         mEditEmail.setCompoundDrawables(new IconicsDrawable(UpdateProfileActivity.this)
-                                                .icon(FontAwesome.Icon.faw_envelope)
-                                                .color(Color.GRAY)
-                                                .sizeRes(R.dimen.icon_size), null, null, null);
+                .icon(FontAwesome.Icon.faw_envelope)
+                .color(Color.GRAY)
+                .sizeRes(R.dimen.icon_size), null, null, null);
         mEditNewPassword.setCompoundDrawables(new IconicsDrawable(UpdateProfileActivity.this)
-                                                   .icon(FontAwesome.Icon.faw_lock)
-                                                   .color(Color.GRAY)
-                                                   .sizeRes(R.dimen.icon_size), null, null, null);
+                .icon(FontAwesome.Icon.faw_lock)
+                .color(Color.GRAY)
+                .sizeRes(R.dimen.icon_size), null, null, null);
         mEditPasswordConfirmation
                 .setCompoundDrawables(new IconicsDrawable(UpdateProfileActivity.this)
-                                                               .icon(FontAwesome.Icon.faw_lock)
-                                                               .color(Color.GRAY)
-                                                               .sizeRes(R.dimen.icon_size),
-                                                               null, null, null);
+                                .icon(FontAwesome.Icon.faw_lock)
+                                .color(Color.GRAY)
+                                .sizeRes(R.dimen.icon_size),
+                        null, null, null);
 
 
         if (mUser != null) {
@@ -180,9 +182,9 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
                     if (InternetUtils.isInternetConnected(UpdateProfileActivity.this)) {
 //                        new UpdateRequest().execute();
                         mTaskFragment.startInBackground(new String[]{mEditName.getText().toString(),
-                                                    mEditEmail.getText().toString(),
-                                                    mEditNewPassword.getText().toString(),
-                                                    mEditPasswordConfirmation.getText().toString()});
+                                mEditEmail.getText().toString(),
+                                mEditNewPassword.getText().toString(),
+                                mEditPasswordConfirmation.getText().toString()});
                     }
                 }
             }
@@ -225,7 +227,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
         String response = null;
         try {
             // change bitmap Image to base64 string
-            if(mBitmapAvatar != null && isChangedAvatar) {
+            if (mBitmapAvatar != null && isChangedAvatar) {
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 mBitmapAvatar.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                 byte[] byteArray = byteArrayOutputStream.toByteArray();
@@ -243,7 +245,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
                 String url = APIService.URL_UPDATE_PROFILE + mUser.getId() + Const.JSON_TYPE
                         + "?" + Const.AUTH_TOKEN + "=" + mUser.getAuthToken();
                 response = HttpRequest.postJsonRequest(url, jsonObjectPost,
-                                                       "PATCH");
+                        "PATCH");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -268,23 +270,23 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
     public void onPostExecute(String response) {
         if (response == null) {
             Toast.makeText(UpdateProfileActivity.this, R.string.error_update_profile,
-                           Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_SHORT).show();
         } else {
             try {
                 User user = new User(response);
-                if ( user.getId() != 0 ) {
+                if (user.getId() != 0) {
                     mMySqliteHelper.updateUser(user);
                     List<UserActivity> userActivityList = user.getActivities();
                     for (UserActivity userActivity : userActivityList) {
                         try {
                             mMySqliteHelper.addUserActivity(userActivity, user.getId());
-                        } catch (SQLiteConstraintException e){
+                        } catch (SQLiteConstraintException e) {
                             e.printStackTrace();
                             mMySqliteHelper.updateUserActivity(userActivity);
                         }
                     }
                     Toast.makeText(UpdateProfileActivity.this, R.string.update_successfully,
-                                   Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_SHORT).show();
                     Intent homeItent =
                             new Intent(UpdateProfileActivity.this, HomeActivity.class);
                     homeItent.putExtra(Const.USER, user);
@@ -293,16 +295,16 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
                 } else {
                     String message = ReadJson.parseErrorJson(response);
                     Toast.makeText(UpdateProfileActivity.this, message,
-                                   Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_SHORT).show();
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(UpdateProfileActivity.this, R.string.error_update_profile,
-                               Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
                 Log.d(TAG, response.toString());
             }
         }
-        if(mProgressDialog.isShowing())
+        if (mProgressDialog.isShowing())
             mProgressDialog.dismiss();
     }
 
@@ -310,9 +312,9 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(Const.CONTENT_LOADING, mProgressDialog.isShowing());
-        if(isLoadImage)
+        if (isLoadImage)
             mBitmapAvatar = ((BitmapDrawable) mImageAvatar.getDrawable()).getBitmap();
-        if(mBitmapAvatar != null) {
+        if (mBitmapAvatar != null) {
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             mBitmapAvatar.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
@@ -323,14 +325,14 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if(savedInstanceState.getBoolean(Const.CONTENT_LOADING)) {
+        if (savedInstanceState.getBoolean(Const.CONTENT_LOADING)) {
             mProgressDialog.setMessage(getResources().getString(R.string.loading));
             mProgressDialog.show();
         }
         byte[] byteArray = savedInstanceState.getByteArray(CONTENT_BITMAP);
-        if(byteArray != null)
+        if (byteArray != null)
             mBitmapAvatar = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        if(mBitmapAvatar != null)
+        if (mBitmapAvatar != null)
             mImageAvatar.setImageBitmap(mBitmapAvatar);
     }
 
@@ -359,7 +361,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
             String response = null;
             try {
                 // change bitmap Image to base64 string
-                if(mBitmapAvatar != null && isChangedAvatar) {
+                if (mBitmapAvatar != null && isChangedAvatar) {
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                     mBitmapAvatar.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
                     byte[] byteArray = byteArrayOutputStream.toByteArray();
@@ -390,7 +392,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
 
         @Override
         protected void onPostExecute(String response) {
-            if(progressDialog.isShowing())
+            if (progressDialog.isShowing())
                 progressDialog.dismiss();
             if (response == null) {
                 Toast.makeText(UpdateProfileActivity.this, R.string.error_update_profile,
@@ -398,13 +400,13 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
             } else {
                 try {
                     User user = new User(response);
-                    if ( user.getId() != 0 ) {
+                    if (user.getId() != 0) {
                         mMySqliteHelper.updateUser(user);
                         List<UserActivity> userActivityList = user.getActivities();
                         for (UserActivity userActivity : userActivityList) {
                             try {
                                 mMySqliteHelper.addUserActivity(userActivity, user.getId());
-                            } catch (SQLiteConstraintException e){
+                            } catch (SQLiteConstraintException e) {
                                 e.printStackTrace();
                                 mMySqliteHelper.updateUserActivity(userActivity);
                             }
@@ -419,7 +421,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
                     } else {
                         String message = ReadJson.parseErrorJson(response);
                         Toast.makeText(UpdateProfileActivity.this, message,
-                                       Toast.LENGTH_SHORT).show();
+                                Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

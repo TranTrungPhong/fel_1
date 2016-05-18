@@ -26,7 +26,7 @@ public class UserActionAdapter extends RecyclerView.Adapter<UserActionAdapter.Us
 
     @Override
     public UserActionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_user_activities, parent,false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_user_activities, parent, false);
         UserActionHolder actionHolder = new UserActionHolder(view);
         return actionHolder;
     }
@@ -43,7 +43,7 @@ public class UserActionAdapter extends RecyclerView.Adapter<UserActionAdapter.Us
         return mListActivities == null ? 0 : mListActivities.size();
     }
 
-    public class UserActionHolder extends RecyclerView.ViewHolder{
+    public class UserActionHolder extends RecyclerView.ViewHolder {
         private TextView mTextViewIdUserAction;
         private TextView mTextViewAction;
 //        private final View mView;
@@ -52,11 +52,12 @@ public class UserActionAdapter extends RecyclerView.Adapter<UserActionAdapter.Us
         public UserActionHolder(View itemView) {
             super(itemView);
 //            this.mView = itemView;
-            this.mTextViewIdUserAction = (TextView)itemView
+            this.mTextViewIdUserAction = (TextView) itemView
                     .findViewById(R.id.text_item_user_activities_id);
-            this.mTextViewAction = (TextView)itemView
+            this.mTextViewAction = (TextView) itemView
                     .findViewById(R.id.text_item_user_activities_name);
         }
+
         @Override
         public String toString() {
             return super.toString();

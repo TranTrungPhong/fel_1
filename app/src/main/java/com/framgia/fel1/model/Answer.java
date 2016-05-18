@@ -1,14 +1,16 @@
 package com.framgia.fel1.model;
 
 import com.framgia.fel1.constant.Const;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.Serializable;
 
 /**
  * Created by vuduychuong1994 on 4/14/16.
  */
-public class Answer implements Serializable{
+public class Answer implements Serializable {
     private int mId;
     private int mWordId;
     private String mContent;

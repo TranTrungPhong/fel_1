@@ -25,7 +25,7 @@ public class InternetUtils {
                 result = true;
             }
         }
-        if(!result)
+        if (!result)
             new AlertDialog.Builder(context)
                     .setTitle(R.string.infor)
                     .setMessage(context.getResources().getString(R.string.not_internet))
@@ -37,6 +37,7 @@ public class InternetUtils {
                     }).show();
         return result;
     }
+
     public static boolean isInternetConnected(Context context, boolean haveDialog) {
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -50,7 +51,7 @@ public class InternetUtils {
                 result = true;
             }
         }
-        if(!result && haveDialog)
+        if (!result && haveDialog)
             new AlertDialog.Builder(context)
                     .setTitle(R.string.infor)
                     .setMessage(context.getResources().getString(R.string.not_internet))

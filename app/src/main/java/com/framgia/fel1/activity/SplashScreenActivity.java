@@ -18,7 +18,7 @@ import com.framgia.fel1.model.User;
  * Created by PhongTran on 04/06/2016.
  */
 public class SplashScreenActivity extends Activity {
-    private ProgressBar mProgressBarSplash;
+    //private ProgressBar mProgressBarSplash;
     private int mStatusProgrees;
     private Handler mHandlerProgrees = new Handler();
     private static final int MAX_PROGRESSBAR = 100;
@@ -40,34 +40,34 @@ public class SplashScreenActivity extends Activity {
     }
 
     private void loadProgreesBar() {
-        mProgressBarSplash.setProgress(PROGRESSBAR);
-        mProgressBarSplash.setMax(MAX_PROGRESSBAR);
+//        mProgressBarSplash.setProgress(PROGRESSBAR);
+//        mProgressBarSplash.setMax(MAX_PROGRESSBAR);
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (mStatusProgrees < MAX_PROGRESSBAR) {
-                    mStatusProgrees = loadStatus();
+//                while (mStatusProgrees < MAX_PROGRESSBAR) {
+//                    mStatusProgrees = loadStatus();
                     try {
-                        Thread.sleep(50);
+                        Thread.sleep(3000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    mHandlerProgrees.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            mProgressBarSplash.setProgress(mStatusProgrees);
-                        }
-                    });
-                }
-                if (mStatusProgrees >= MAX_PROGRESSBAR) {
-                    if(mRemember){
+//                    mHandlerProgrees.post(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            mProgressBarSplash.setProgress(mStatusProgrees);
+//                        }
+//                    });
+//                }
+//                if (mStatusProgrees >= MAX_PROGRESSBAR) {
+                    if (mRemember) {
                         mIntent = new Intent(SplashScreenActivity.this, HomeActivity.class);
-                    }else {
+                    } else {
                         mIntent = new Intent(SplashScreenActivity.this, LoginActivity.class);
                     }
-                        startActivity(mIntent);
-                        finish();
-                }
+                    startActivity(mIntent);
+                    finish();
+//                }
             }
         }).start();
     }
@@ -80,6 +80,6 @@ public class SplashScreenActivity extends Activity {
     }
 
     private void initView() {
-        mProgressBarSplash = (ProgressBar) findViewById(R.id.progressbar_splashscreen);
+       // mProgressBarSplash = (ProgressBar) findViewById(R.id.progressbar_splashscreen);
     }
 }

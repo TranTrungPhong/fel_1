@@ -1,4 +1,5 @@
 package com.framgia.fel1.util;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -19,9 +20,9 @@ public class TaskFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if(mCallbacks == null ) {
+        if (mCallbacks == null) {
             Activity activity;
-            if ( context instanceof Activity ) {
+            if (context instanceof Activity) {
                 activity = (Activity) context;
                 mCallbacks = (TaskCallbacks) activity;
             }
@@ -51,7 +52,7 @@ public class TaskFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            if ( mCallbacks != null ) {
+            if (mCallbacks != null) {
                 mCallbacks.onPreExecute();
             }
         }
@@ -60,7 +61,7 @@ public class TaskFragment extends Fragment {
         protected String doInBackground(String... params) {
             Log.d(TAG, params.toString());
             String response = null;
-            if ( mCallbacks != null ) {
+            if (mCallbacks != null) {
                 response = mCallbacks.onBackGround(params);
             }
             return response;
@@ -68,21 +69,21 @@ public class TaskFragment extends Fragment {
 
         @Override
         protected void onProgressUpdate(String... params) {
-            if ( mCallbacks != null ) {
+            if (mCallbacks != null) {
                 mCallbacks.onProgressUpdate(params[0]);
             }
         }
 
         @Override
         protected void onCancelled() {
-            if ( mCallbacks != null ) {
+            if (mCallbacks != null) {
                 mCallbacks.onCancelled();
             }
         }
 
         @Override
         protected void onPostExecute(String response) {
-            if ( mCallbacks != null ) {
+            if (mCallbacks != null) {
                 mCallbacks.onPostExecute(response);
             }
         }

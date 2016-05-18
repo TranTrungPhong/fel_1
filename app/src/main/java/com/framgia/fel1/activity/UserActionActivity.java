@@ -5,8 +5,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -31,8 +33,7 @@ import java.util.List;
 /**
  * Created by PhongTran on 05/09/2016.
  */
-public class UserActionActivity extends Activity {
-    private Button mButtonBack;
+public class UserActionActivity extends AppCompatActivity {
     private RecyclerView mRecyclerViewUserAction;
     private TextView mTextViewNameUser;
     private TextView mTextViewEmailUser;
@@ -41,6 +42,7 @@ public class UserActionActivity extends Activity {
     private List<UserActivity> mListActivities = new ArrayList<>();
     private UserActionAdapter mUserActionAdapter;
     private SharedPreferences mSharedPreferences;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +60,18 @@ public class UserActionActivity extends Activity {
     }
 
     private void initView() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_lesson);
+        setSupportActionBar(mToolbar);
+        mToolbar.setTitle(null);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mMySqliteHelper = new MySqliteHelper(this);
         mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
         int id = mSharedPreferences.getInt(Const.ID, -1);
-        if(id != -1)
+        if (id != -1)
             mUser = mMySqliteHelper.getUser(id);
         else finish();
-        mButtonBack = (Button) findViewById(R.id.button_back);
         mRecyclerViewUserAction = (RecyclerView) findViewById(R.id.recycle_view_activities);
         mRecyclerViewUserAction.setLayoutManager(new LinearLayoutManager(UserActionActivity.this));
         mTextViewNameUser = (TextView) findViewById(R.id.text_name_user);
@@ -73,19 +80,19 @@ public class UserActionActivity extends Activity {
         mTextViewEmailUser.setText(mUser.getEmail().toString());
         mUserActionAdapter = new UserActionAdapter(this, mListActivities);
         mRecyclerViewUserAction.setAdapter(mUserActionAdapter);
-        mButtonBack.setOnClickListener(new View.OnClickListener() {
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                onBackPressed();
             }
         });
     }
 
-    public class LoadActionUser extends AsyncTask<String,String,String>{
+    public class LoadActionUser extends AsyncTask<String, String, String> {
 
         @Override
         protected String doInBackground(String... params) {
-            String url = APIService.URL_SHOW_USER+mUser.getId()+Const.JSON_TYPE + "?" + Const.AUTH_TOKEN + "=" + mUser.getAuthToken();
+            String url = APIService.URL_SHOW_USER + mUser.getId() + Const.JSON_TYPE + "?" + Const.AUTH_TOKEN + "=" + mUser.getAuthToken();
             String response = HttpRequest.getJSON(url);
             return response;
         }
@@ -104,10 +111,6 @@ public class UserActionActivity extends Activity {
             } else {
                 Toast.makeText(UserActionActivity.this, R.string.response_done, Toast.LENGTH_SHORT).show();
                 try {
-//                    ArrayCategory arrayCategory = new ArrayCategory(response);
-//                    mListCategory.clear();
-//                    mListCategory.addAll(arrayCategory.getCategoryList());
-//                    mHomeAdapter.notifyDataSetChanged();
                     User user = new User(response);
                     mListActivities.clear();
                     mListActivities.addAll(user.getActivities());
