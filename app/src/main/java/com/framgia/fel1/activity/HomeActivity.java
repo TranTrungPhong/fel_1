@@ -37,6 +37,7 @@ import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
 import com.framgia.fel1.util.ShowImage;
 import com.framgia.fel1.util.TaskFragment;
+import com.framgia.fel1.widget.CircularImageView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,7 +67,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButtonSignUp;
     private Button mButtonShowWordList;
     private Button mButtonShowActivity;
-    private ImageView mImageViewAvatar;
+    private CircularImageView mImageViewAvatar;
     private TextView mTextViewName;
     private TextView mTextViewEmail;
     private RecyclerView mRecyclerViewCategory;
@@ -116,16 +117,16 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         mButtonUpdate = (Button) findViewById(R.id.button_update_show_user);
         mButtonShowWordList = (Button) findViewById(R.id.button_wordlist_show_user);
         mButtonShowActivity = (Button) findViewById(R.id.button_show_activities);
-        mImageViewAvatar = (ImageView) findViewById(R.id.image_show_user_avatar);
+        mImageViewAvatar = (CircularImageView) findViewById(R.id.image_show_user_avatar);
         mTextViewName = (TextView) findViewById(R.id.text_show_user_name);
         mTextViewEmail = (TextView) findViewById(R.id.text_show_user_email);
         mRecyclerViewCategory = (RecyclerView) findViewById(R.id.listview_lesson_learned);
         mRecyclerViewCategory.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mHomeAdapter = new HomeAdapter(this, mListCategory);
         mRecyclerViewCategory.setAdapter(mHomeAdapter);
-        mRecyclerViewCategory.addItemDecoration(new DividerItemDecoration(this,
-                                                        DividerItemDecoration.VERTICAL_LIST,
-                                                        R.drawable.divider_category_list));
+//        mRecyclerViewCategory.addItemDecoration(new DividerItemDecoration(this,
+//                                                        DividerItemDecoration.VERTICAL_LIST,
+//                                                        R.drawable.divider_category_list));
         mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
         int id = mSharedPreferences.getInt(Const.ID, -1);
         if(id != -1)

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/background_all"
     android:orientation="vertical"
     tools:context="com.framgia.fel1.activity.ResultActivity">
     <android.support.v7.widget.Toolbar
@@ -18,19 +18,22 @@
             android:id="@+id/text_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
+            android:layout_gravity="left"
             android:gravity="center"
             android:text="@string/title_result_lesson"
-            android:textColor="@color/textColorLogin"
+            android:textColor="@color/colorTextTitle"
+            android:textSize="@dimen/abc_text_size_title_material_toolbar"/>
+        <TextView
+            android:id="@+id/text_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/colorTextTitle"
+            android:elevation="@dimen/cardview_title_elevation"
+            android:layout_gravity="right"
+            android:padding="@dimen/abc_list_item_padding_horizontal_material"
             android:textSize="@dimen/abc_text_size_title_material_toolbar"/>
     </android.support.v7.widget.Toolbar>
-    <TextView
-        android:id="@+id/text_result"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:padding="@dimen/abc_list_item_padding_horizontal_material"
-        android:textSize="@dimen/abc_text_size_headline_material"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"

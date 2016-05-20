@@ -136,9 +136,9 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
         mLessonLearnedAdapter = new LessonLearnedAdapter(this, mLearnedLessonsList);
         mRecyclerLessonLearned.setAdapter(mLessonLearnedAdapter);
         mLessonLearnedAdapter.notifyDataSetChanged();
-        mRecyclerLessonLearned.addItemDecoration(new DividerItemDecoration(this,
-                                                     DividerItemDecoration.VERTICAL_LIST,
-                                                     R.drawable.divider_category_list));
+//        mRecyclerLessonLearned.addItemDecoration(new DividerItemDecoration(this,
+//                                                     DividerItemDecoration.VERTICAL_LIST,
+//                                                     R.drawable.divider_category_list));
     }
 
     private void createNewLesson() {

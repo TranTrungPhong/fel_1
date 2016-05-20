@@ -88,9 +88,9 @@ public class ResultActivity extends AppCompatActivity
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(ResultActivity.this));
         mRecyclerView.setAdapter(mResultAdapter);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
-                                                                  DividerItemDecoration.VERTICAL_LIST,
-                                                                  R.drawable.divider_word_list));
+//        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
+//                                                                  DividerItemDecoration.VERTICAL_LIST,
+//                                                                  R.drawable.divider_word_list));
     }
 
     private void setData() {

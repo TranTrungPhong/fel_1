@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">#1f9f27</color>
     <color name="colorBackgroundLogin">#757575</color>
     <color name="textColorLogin">#FAFAFA</color>
     <color name="bgButtonLogin">#E65100</color>
@@ -15,4 +15,11 @@
     <color name="bg_right_answer">#daedd0</color>
     <color name="divider_category">#cfdacf</color>
     <color name="item_recycle_color">#ffa8a8</color>
+    <color name="colorStartShadow">#d1d1d1</color>
+    <color name="colorEndShadow">#6a711010</color>
+    <color name="colorTextTitle">#FFFFFF</color>
+    <color name="colorBackgroundQuestion">#565c5c5c</color>
+    <color name="colorTextDark">#3c3c3c</color>
+    <color name="colorBg">#F9F9F9</color>
+    <color name="colorIcon">#fefffe</color>
 </resources>

@@ -1,6 +1,7 @@
 package com.framgia.fel1.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -65,7 +66,8 @@ public class MyItemRecyclerViewAdapter
             case 0:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word, parent,
                                                                         false);
-                view.setBackgroundResource(R.color.gray);
+//                ((CardView) view.findViewById(R.id.card_view)).setCardBackgroundColor(
+//                        mContext.getResources().getColor(R.color.gray));
                 break;
             case 1:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word, parent,
@@ -73,14 +75,13 @@ public class MyItemRecyclerViewAdapter
                 break;
             case 2:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word_learned,
-                                                                        parent,
-                                                                        false);
-                view.setBackgroundResource(R.color.gray);
+                                                                        parent, false);
+//                ((CardView) view.findViewById(R.id.card_view)).setCardBackgroundColor(
+//                        mContext.getResources().getColor(R.color.gray));
                 break;
             case 3:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word_learned,
-                                                                        parent,
-                                                                        false);
+                                                                        parent, false);
                 break;
             default:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word, parent,
@@ -92,6 +93,8 @@ public class MyItemRecyclerViewAdapter
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
+        //        if( holder.getItemViewType() == 0 || holder.getItemViewType() == 2)
+        //            holder.mCardView.setCardBackgroundColor(mContext.);
         holder.mItem = mListFiltered.get(position);
         holder.mContentView.setText(mListFiltered.get(position).getContent());
         holder.mDetailView.setText(mListFiltered.get(position).getDetail());
@@ -124,11 +127,13 @@ public class MyItemRecyclerViewAdapter
         public final View mView;
         public final TextView mContentView;
         public final TextView mDetailView;
+        public final CardView mCardView;
         public ItemList2 mItem;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
+            mCardView = (CardView) view.findViewById(R.id.card_view);
             mContentView = (TextView) view.findViewById(R.id.text_content);
             mDetailView = (TextView) view.findViewById(R.id.text_detail);
         }
