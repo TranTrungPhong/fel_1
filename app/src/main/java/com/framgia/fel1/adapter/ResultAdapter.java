@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
 import com.framgia.fel1.R;
 import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.Answer;
@@ -17,6 +18,7 @@ import com.framgia.fel1.model.Lesson;
 import com.framgia.fel1.model.Word;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
+
 import java.util.List;
 
 /**
@@ -36,7 +38,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
         mLesson = lesson;
         mValues = items;
         mSqliteHelper = new MySqliteHelper(context);
-        if ( context instanceof OnListFragmentInteractionListener ) {
+        if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(
@@ -48,10 +50,10 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
     public int getItemViewType(int position) {
         for (Answer answer : mValues.get(position).getAnswers()) {
 
-            if ( answer.getCorrect() && mSqliteHelper.getIdAnswerFromResult(mLesson.getId(),
-                                                                            mValues.get(
-                                                                                    position).getId()) ==
-                    answer.getId() )
+            if (answer.getCorrect() && mSqliteHelper.getIdAnswerFromResult(mLesson.getId(),
+                    mValues.get(
+                            position).getId()) ==
+                    answer.getId())
                 return 1; // correct answer
         }
         return 0; // incorrect answer
@@ -60,7 +62,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_result, parent,
-                                                                     false);
+                false);
         switch (viewType) {
             case 0: // incorrect
                 view.setBackgroundResource(R.color.bg_wrong_answer);
@@ -81,13 +83,13 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
                         holder.mRadioButton4};
         int i = 0;
         for (RadioButton radioButton : arrRadioButton) {
-            if ( mValues.get(position).getAnswers().size() > i ) {
+            if (mValues.get(position).getAnswers().size() > i) {
                 Answer answer = mValues.get(position).getAnswers().get(i);
                 radioButton.setText(answer.getContent());
                 radioButton.setChecked(mSqliteHelper
-                                               .getIdAnswerFromResult(mLesson.getId(),
-                                                                      mValues.get(position).getId())
-                                               == answer.getId());
+                        .getIdAnswerFromResult(mLesson.getId(),
+                                mValues.get(position).getId())
+                        == answer.getId());
             }
             i++;
         }
@@ -97,7 +99,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
         holder.mImageSpeak.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ( null != mListener ) {
+                if (null != mListener) {
                     mListener.onClickSpeakListener(position, holder.mItem);
                 }
             }
@@ -106,16 +108,20 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ViewHolder
 
     @Override
     public int getItemCount() {
-        if ( mValues != null ) { return mValues.size(); } else { return 0; }
+        if (mValues != null) {
+            return mValues.size();
+        } else {
+            return 0;
+        }
     }
 
     public String getCountCorrect() {
-        for(int i = 0; i < getItemCount(); i++) {
+        for (int i = 0; i < getItemCount(); i++) {
             for (Answer answer : mValues.get(i).getAnswers()) {
 
-                if ( answer.getCorrect() &&
+                if (answer.getCorrect() &&
                         mSqliteHelper.getIdAnswerFromResult(mLesson.getId(),
-                                                            mValues.get(i).getId()) == answer.getId() )
+                                mValues.get(i).getId()) == answer.getId())
                     mCountCorrectAnswer++;
             }
         }

@@ -6,7 +6,7 @@
     style="@style/AlertDialog.AppCompat.Light"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackgroundLogin"
+    android:background="@drawable/background_all"
     tools:showIn="@layout/activity_update_profile"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.framgia.fel1.activity.UpdateProfileActivity">

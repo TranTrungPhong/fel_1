@@ -4,7 +4,7 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background="@color/colorBackgroundLogin"
+              android:background="@drawable/background_all"
               android:orientation="vertical"
               android:padding="@dimen/padding_20">
 
@@ -68,7 +68,7 @@
             android:layout_toRightOf="@id/image_show_user_avatar"
             android:gravity="center_vertical"
             android:text="@string/name_user"
-            android:textColor="@android:color/white"
+            android:textColor="@color/textColorLogin"
             android:textSize="@dimen/text_size_20"/>
 
         <TextView
@@ -79,7 +79,7 @@
             android:layout_toRightOf="@id/image_show_user_avatar"
             android:gravity="center_vertical"
             android:text="@string/email_user"
-            android:textColor="@android:color/white"
+            android:textColor="@color/textColorLogin"
             android:textSize="@dimen/text_size_10"/>
 
         <Button
@@ -99,7 +99,7 @@
         android:layout_height="@dimen/height_40"
         android:gravity="center_vertical"
         android:text="@string/lession_learned"
-        android:textColor="@android:color/white"
+        android:textColor="@color/textColorLogin"
         android:textSize="@dimen/text_size_20"/>
 
     <LinearLayout

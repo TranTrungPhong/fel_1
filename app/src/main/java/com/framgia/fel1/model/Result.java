@@ -1,4 +1,5 @@
 package com.framgia.fel1.model;
+
 /**
  * Created by vuduychuong1994 on 5/3/16.
  */
@@ -19,6 +20,7 @@ public class Result {
         mIdWord = idWord;
         mIdAnswer = idAnswer;
     }
+
     public Result(int idUser, int idLesson, int idWord, int idAnswer) {
         mIdUser = idUser;
         mIdLesson = idLesson;

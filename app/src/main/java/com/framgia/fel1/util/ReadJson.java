@@ -40,14 +40,14 @@ public class ReadJson {
                 JSONArray value = jsonObject.getJSONArray(key);
                 for (int i = 0; i < value.length(); i++) {
                     message.append(value.get(i));
-                    if ( i < value.length() - 1 ) {
+                    if (i < value.length() - 1) {
                         message.append(", ");
                     }
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            if ( iter.hasNext() )
+            if (iter.hasNext())
                 message.append("\n");
         }
         return message.toString();
@@ -72,8 +72,8 @@ public class ReadJson {
 
         JSONArray jsonArrayWords = rootWord.getJSONArray(Const.WORDS);
         List<Word> listWords = new ArrayList<>();
-        int firstWordIndex = perpage*(page-1)+1;
-        int lastWordIndex = perpage*page;
+        int firstWordIndex = perpage * (page - 1) + 1;
+        int lastWordIndex = perpage * page;
         for (int i = firstWordIndex; i <= lastWordIndex; i++) {
             JSONObject jsonWordObject = jsonArrayWords.optJSONObject(i);
             int idWord = jsonWordObject.optInt(Const.ID);
@@ -92,7 +92,7 @@ public class ReadJson {
             Word word = new Word(idWord, idLesson, resultId, content, answersList);
             listWords.add(word);
         }
-        lesson = new Lesson(idLesson,nameLesson,listWords);
+        lesson = new Lesson(idLesson, nameLesson, listWords);
         return lesson;
     }
 

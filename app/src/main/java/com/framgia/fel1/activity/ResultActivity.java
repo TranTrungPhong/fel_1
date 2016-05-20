@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
+
 import com.framgia.fel1.R;
 import com.framgia.fel1.adapter.ResultAdapter;
 import com.framgia.fel1.constant.Const;
@@ -17,6 +18,7 @@ import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.Lesson;
 import com.framgia.fel1.model.Word;
 import com.framgia.fel1.util.DividerItemDecoration;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -58,7 +60,7 @@ public class ResultActivity extends AppCompatActivity
 
     @Override
     protected void onPause() {
-        if(mTextToSpeech != null) {
+        if (mTextToSpeech != null) {
             mTextToSpeech.stop();
             mTextToSpeech.shutdown();
         }
@@ -67,7 +69,7 @@ public class ResultActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        if(mTextToSpeech != null) {
+        if (mTextToSpeech != null) {
             mTextToSpeech.stop();
             mTextToSpeech.shutdown();
         }
@@ -89,12 +91,12 @@ public class ResultActivity extends AppCompatActivity
         mRecyclerView.setLayoutManager(new LinearLayoutManager(ResultActivity.this));
         mRecyclerView.setAdapter(mResultAdapter);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
-                                                                  DividerItemDecoration.VERTICAL_LIST,
-                                                                  R.drawable.divider_word_list));
+                DividerItemDecoration.VERTICAL_LIST,
+                R.drawable.divider_word_list));
     }
 
     private void setData() {
-        if ( mLesson != null ) {
+        if (mLesson != null) {
             mWordList.clear();
             mSqliteHelper = new MySqliteHelper(ResultActivity.this);
             mWordList.addAll(mSqliteHelper.getListWordByLesson(mLesson.getId()));
@@ -121,7 +123,7 @@ public class ResultActivity extends AppCompatActivity
     @Override
     public void onClickSpeakListener(int position, Word word) {
         //TODO: Speaking word
-        if ( Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             String utteranceId = this.hashCode() + "";
             mTextToSpeech.speak(word.getContent(), TextToSpeech.QUEUE_FLUSH, null, utteranceId);
         } else {

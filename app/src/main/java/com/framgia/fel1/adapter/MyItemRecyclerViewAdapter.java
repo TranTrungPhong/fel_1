@@ -37,7 +37,7 @@ public class MyItemRecyclerViewAdapter
         mValues = items;
         mListFiltered = items;
         mSqliteHelper = new MySqliteHelper(context);
-        if ( context instanceof OnListFragmentInteractionListener ) {
+        if (context instanceof OnListFragmentInteractionListener) {
             mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(
@@ -51,8 +51,8 @@ public class MyItemRecyclerViewAdapter
         ItemList2 item = mListFiltered.get(position);
         MySqliteHelper sqliteHelper = new MySqliteHelper(mContext);
         Word word = sqliteHelper.getWord(Integer.parseInt(item.getId()));
-        if ( word.getId() == Integer.parseInt(item.getId()) && word.getResultId() != 0 &&
-                mFilterString.equals(Const.ALL_WORD) ) {
+        if (word.getId() == Integer.parseInt(item.getId()) && word.getResultId() != 0 &&
+                mFilterString.equals(Const.ALL_WORD)) {
             type += 2;
         }
         return type;
@@ -64,27 +64,27 @@ public class MyItemRecyclerViewAdapter
         switch (viewType) {
             case 0:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word, parent,
-                                                                        false);
+                        false);
                 view.setBackgroundResource(R.color.gray);
                 break;
             case 1:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word, parent,
-                                                                        false);
+                        false);
                 break;
             case 2:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word_learned,
-                                                                        parent,
-                                                                        false);
+                        parent,
+                        false);
                 view.setBackgroundResource(R.color.gray);
                 break;
             case 3:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word_learned,
-                                                                        parent,
-                                                                        false);
+                        parent,
+                        false);
                 break;
             default:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word, parent,
-                                                                        false);
+                        false);
                 break;
         }
         return new ViewHolder(view);
@@ -99,7 +99,7 @@ public class MyItemRecyclerViewAdapter
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ( null != mListener ) {
+                if (null != mListener) {
                     mListener.onListFragmentInteraction(position, holder.mItem);
                 }
             }
@@ -108,7 +108,11 @@ public class MyItemRecyclerViewAdapter
 
     @Override
     public int getItemCount() {
-        if ( mListFiltered != null ) { return mListFiltered.size(); } else { return 0; }
+        if (mListFiltered != null) {
+            return mListFiltered.size();
+        } else {
+            return 0;
+        }
     }
 
     public List<ItemList2> getListFiltered() {
@@ -155,13 +159,13 @@ public class MyItemRecyclerViewAdapter
                         resultList.add(item);
                         break;
                     case Const.LEARNED:
-                        if ( word.getId() == Integer.parseInt(item.getId()) &&
-                                word.getResultId() != 0 ) {
+                        if (word.getId() == Integer.parseInt(item.getId()) &&
+                                word.getResultId() != 0) {
                             resultList.add(item);
                         }
                         break;
                     case Const.NO_LEARN:
-                        if ( word.getResultId() == 0 ) {
+                        if (word.getResultId() == 0) {
                             resultList.add(item);
                         }
                         break;

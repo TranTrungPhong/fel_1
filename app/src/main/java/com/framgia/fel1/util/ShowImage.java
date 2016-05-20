@@ -29,9 +29,9 @@ public class ShowImage extends AsyncTask<String, Void, Bitmap> {
         try {
 
             Log.d(TAG, "doInBackground: " + url);
-            if(url.equals("")){
+            if (url.equals("")) {
                 return null;
-            }else {
+            } else {
                 InputStream in = new java.net.URL(url).openStream();
                 bitmap = BitmapFactory.decodeStream(in);
             }
@@ -45,7 +45,7 @@ public class ShowImage extends AsyncTask<String, Void, Bitmap> {
 
     protected void onPostExecute(Bitmap result) {
 //        if (!hasError) {
-        if(result != null){
+        if (result != null) {
             mImageView.setImageBitmap(result);
         }
     }

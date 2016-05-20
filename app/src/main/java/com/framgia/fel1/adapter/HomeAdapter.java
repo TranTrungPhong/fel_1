@@ -34,7 +34,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.CategoryViewHo
 
     @Override
     public CategoryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_category, parent,false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_category, parent, false);
         CategoryViewHolder categoryViewHolder = new CategoryViewHolder(view);
         return categoryViewHolder;
     }
@@ -64,6 +64,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.CategoryViewHo
         private TextView mTextCategoryId;
         private final View mView;
         private Category mCategory;
+
         public CategoryViewHolder(View itemView) {
             super(itemView);
             mView = itemView;

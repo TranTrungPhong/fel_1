@@ -1,8 +1,10 @@
 package com.framgia.fel1.model;
 
 import com.framgia.fel1.constant.Const;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.List;
 /**
  * Created by vuduychuong1994 on 4/14/16.
  */
-public class Lesson implements Serializable{
+public class Lesson implements Serializable {
     private int mId;
     private int mIdCategory;
     private String mName;
@@ -24,6 +26,7 @@ public class Lesson implements Serializable{
         mName = name;
         mWords = words;
     }
+
     public Lesson(int id, int idCategory, String name, List<Word> words) {
         mId = id;
         mIdCategory = idCategory;

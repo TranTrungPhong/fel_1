@@ -138,7 +138,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public long addUser(User user) throws SQLiteConstraintException {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        if ( user != null ) {
+        if (user != null) {
             cv.put(COLUMN_ID, user.getId());
             cv.put(COLUMN_NAME, user.getName());
             cv.put(COLUMN_EMAIL, user.getEmail());
@@ -161,8 +161,8 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor =
                 db.query(TABLE_USER, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)},
-                         null, null, null);
-        if ( cursor != null && cursor.moveToFirst() ) {
+                        null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
             user.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
             user.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
             user.setEmail(cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL)));
@@ -173,7 +173,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             user.setUpdatedAt(cursor.getString(cursor.getColumnIndex(COLUMN_UPDATED_AT)));
             user.setLearnedWords(cursor.getInt(cursor.getColumnIndex(COLUMN_LEARNED_WORDS)));
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         db.close();
         return user;
@@ -183,7 +183,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public long updateUser(User user) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        if ( user != null ) {
+        if (user != null) {
             cv.put(COLUMN_NAME, user.getName());
             cv.put(COLUMN_EMAIL, user.getEmail());
             cv.put(COLUMN_AVATAR, user.getAvatar());
@@ -194,7 +194,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_LEARNED_WORDS, user.getLearnedWords());
         }
         long numRow = db.update(TABLE_USER, cv, COLUMN_ID + " = ?",
-                                new String[]{String.valueOf(user.getId())});
+                new String[]{String.valueOf(user.getId())});
         db.close();
         return numRow;
     }
@@ -206,7 +206,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             throws SQLiteConstraintException {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        if ( userActivity != null ) {
+        if (userActivity != null) {
             cv.put(COLUMN_ID, userActivity.getId());
             cv.put(COLUMN_ID_USER, idUser);
             cv.put(COLUMN_CONTENT, userActivity.getContent());
@@ -222,13 +222,13 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         UserActivity userActivity = new UserActivity();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_USER_ACTIVITY, null, COLUMN_ID + " = ?",
-                                 new String[]{String.valueOf(id)}, null, null, null);
-        if ( cursor != null && cursor.moveToFirst() ) {
+                new String[]{String.valueOf(id)}, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
             userActivity.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
             userActivity.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
             userActivity.setCreated_at(cursor.getString(cursor.getColumnIndex(COLUMN_CREATED_AT)));
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         db.close();
         return userActivity;
@@ -238,13 +238,13 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public long updateUserActivity(UserActivity userActivity) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        if ( userActivity != null ) {
+        if (userActivity != null) {
             cv.put(COLUMN_ID, userActivity.getId());
             cv.put(COLUMN_CONTENT, userActivity.getContent());
             cv.put(COLUMN_CREATED_AT, userActivity.getCreated_at());
         }
         long numRow = db.update(TABLE_USER_ACTIVITY, cv, COLUMN_ID + " = ?",
-                                new String[]{String.valueOf(userActivity.getId())});
+                new String[]{String.valueOf(userActivity.getId())});
         db.close();
         return numRow;
     }
@@ -255,7 +255,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public long addCategory(Category category) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        if ( category != null ) {
+        if (category != null) {
             cv.put(COLUMN_ID, category.getId());
             cv.put(COLUMN_NAME, category.getName());
             cv.put(COLUMN_PHOTO, category.getPhoto());
@@ -272,14 +272,14 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor =
                 db.query(TABLE_CATEGORY, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)},
-                         null, null, null);
-        if ( cursor != null && cursor.moveToFirst() ) {
+                        null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
             category.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
             category.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
             category.setPhoto(cursor.getString(cursor.getColumnIndex(COLUMN_PHOTO)));
             category.setLearnWords(cursor.getString(cursor.getColumnIndex(COLUMN_LEARNED_WORDS)));
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         db.close();
         return category;
@@ -289,14 +289,14 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public long updateCategory(Category category) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        if ( category != null ) {
+        if (category != null) {
             cv.put(COLUMN_ID, category.getId());
             cv.put(COLUMN_NAME, category.getName());
             cv.put(COLUMN_PHOTO, category.getPhoto());
             cv.put(COLUMN_LEARNED_WORDS, category.getLearnWords());
         }
         long numRow = db.update(TABLE_CATEGORY, cv, COLUMN_ID + " = ?",
-                                new String[]{String.valueOf(category.getId())});
+                new String[]{String.valueOf(category.getId())});
         db.close();
         return numRow;
     }
@@ -307,9 +307,9 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public long addLesson(Lesson lesson) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        if ( lesson != null ) {
+        if (lesson != null) {
             cv.put(COLUMN_ID, lesson.getId());
-            cv.put(COLUMN_ID_CATEGORY,lesson.getmIdCategory());
+            cv.put(COLUMN_ID_CATEGORY, lesson.getmIdCategory());
             cv.put(COLUMN_NAME, lesson.getName());
         }
         long id = db.insertOrThrow(TABLE_LESSON, null, cv);
@@ -323,12 +323,12 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor =
                 db.query(TABLE_LESSON, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)},
-                         null, null, null);
-        if ( cursor != null && cursor.moveToFirst() ) {
+                        null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
             lesson.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
             lesson.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         db.close();
         return lesson;
@@ -338,12 +338,12 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public long updateLesson(Lesson lesson) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        if ( lesson != null ) {
+        if (lesson != null) {
             cv.put(COLUMN_ID, lesson.getId());
             cv.put(COLUMN_NAME, lesson.getName());
         }
         long numRow = db.update(TABLE_LESSON, cv, COLUMN_ID + " = ?",
-                                new String[]{String.valueOf(lesson.getId())});
+                new String[]{String.valueOf(lesson.getId())});
         db.close();
         return numRow;
     }
@@ -354,7 +354,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public long addWord(Word word) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        if ( word != null ) {
+        if (word != null) {
             cv.put(COLUMN_ID, word.getId());
             cv.put(COLUMN_LESSON_ID, word.getLessonId());
             cv.put(COLUMN_RESULT_ID, word.getResultId());
@@ -371,14 +371,14 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor =
                 db.query(TABLE_WORD, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)},
-                         null, null, null);
-        if ( cursor != null && cursor.moveToFirst() ) {
+                        null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
             word.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
             word.setLessonId(cursor.getInt(cursor.getColumnIndex(COLUMN_LESSON_ID)));
             word.setResultId(cursor.getInt(cursor.getColumnIndex(COLUMN_RESULT_ID)));
             word.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         db.close();
         return word;
@@ -388,7 +388,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         List<Word> wordList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_WORD, null, null, null, null, null, null);
-        if ( cursor.getCount() > 0 && cursor.moveToFirst() ) {
+        if (cursor.getCount() > 0 && cursor.moveToFirst()) {
             do {
                 Word word = new Word();
                 word.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
@@ -399,7 +399,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             }
             while (cursor.moveToNext());
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         db.close();
         return wordList;
@@ -409,8 +409,8 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         List<Word> wordList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_RESULT, null, COLUMN_ID_LESSON + " = ?",
-                                 new String[]{String.valueOf(idLesson)}, null, null, null);
-        if ( cursor.getCount() > 0 && cursor.moveToFirst() ) {
+                new String[]{String.valueOf(idLesson)}, null, null, null);
+        if (cursor.getCount() > 0 && cursor.moveToFirst()) {
             do {
                 Word word = getWord(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_WORD)));
                 word.setAnswers(getListAnswerByWord(word.getId()));
@@ -418,7 +418,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             }
             while (cursor.moveToNext());
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         db.close();
         return wordList;
@@ -428,14 +428,14 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public long updateWord(Word word) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        if ( word != null ) {
+        if (word != null) {
             cv.put(COLUMN_ID, word.getId());
             cv.put(COLUMN_LESSON_ID, word.getLessonId());
             cv.put(COLUMN_RESULT_ID, word.getResultId());
             cv.put(COLUMN_CONTENT, word.getContent());
         }
         long numRow = db.update(TABLE_WORD, cv, COLUMN_ID + " = ?",
-                                new String[]{String.valueOf(word.getId())});
+                new String[]{String.valueOf(word.getId())});
         db.close();
         return numRow;
     }
@@ -446,7 +446,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public long addAnswer(Answer answer) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        if ( answer != null ) {
+        if (answer != null) {
             cv.put(COLUMN_ID, answer.getId());
             cv.put(COLUMN_WORD_ID, answer.getWordId());
             cv.put(COLUMN_CONTENT, answer.getContent());
@@ -463,14 +463,14 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor =
                 db.query(TABLE_ANSWER, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)},
-                         null, null, null);
-        if ( cursor != null && cursor.moveToFirst() ) {
+                        null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
             answer.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
             answer.setWordId(cursor.getInt(cursor.getColumnIndex(COLUMN_WORD_ID)));
             answer.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
             answer.setCorrect(cursor.getInt(cursor.getColumnIndex(COLUMN_IS_CORRECT)) == 1);
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         db.close();
         return answer;
@@ -480,8 +480,8 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         List<Answer> answerList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_ANSWER, null, COLUMN_WORD_ID + " = ?",
-                                 new String[]{String.valueOf(idWord)}, null, null, null);
-        if ( cursor.getCount() > 0 && cursor.moveToFirst() ) {
+                new String[]{String.valueOf(idWord)}, null, null, null);
+        if (cursor.getCount() > 0 && cursor.moveToFirst()) {
             do {
                 Answer answer = new Answer();
                 answer.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
@@ -492,7 +492,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             }
             while (cursor.moveToNext());
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         db.close();
         return answerList;
@@ -502,14 +502,14 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public long updateAnswer(Answer answer) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        if ( answer != null ) {
+        if (answer != null) {
             cv.put(COLUMN_ID, answer.getId());
             cv.put(COLUMN_WORD_ID, answer.getWordId());
             cv.put(COLUMN_CONTENT, answer.getContent());
             cv.put(COLUMN_IS_CORRECT, answer.getCorrect());
         }
         long numRow = db.update(TABLE_ANSWER, cv, COLUMN_ID + " = ?",
-                                new String[]{String.valueOf(answer.getId())});
+                new String[]{String.valueOf(answer.getId())});
         db.close();
         return numRow;
     }
@@ -520,7 +520,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public long addResult(Result result) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        if ( result != null ) {
+        if (result != null) {
             //cv.put(COLUMN_ID, result.getId());
             cv.put(COLUMN_ID_USER, result.getIdUser());
             cv.put(COLUMN_ID_LESSON, result.getIdLesson());
@@ -538,14 +538,14 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor =
                 db.query(TABLE_RESULT, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)},
-                         null, null, null);
-        if ( cursor != null && cursor.moveToFirst() ) {
+                        null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
             result.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
             result.setIdUser(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_USER)));
             result.setIdLesson(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_LESSON)));
             result.setIdAnswer(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_ANSWER)));
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         db.close();
         return result;
@@ -555,7 +555,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
     public long updateResult(Result result) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        if ( result != null ) {
+        if (result != null) {
             cv.put(COLUMN_ID, result.getId());
             cv.put(COLUMN_ID_USER, result.getIdUser());
             cv.put(COLUMN_ID_LESSON, result.getIdLesson());
@@ -563,7 +563,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             cv.put(COLUMN_ID_ANSWER, result.getIdAnswer());
         }
         long numRow = db.update(TABLE_RESULT, cv, COLUMN_ID + " = ?",
-                                new String[]{String.valueOf(result.getId())});
+                new String[]{String.valueOf(result.getId())});
         db.close();
         return numRow;
     }
@@ -595,8 +595,8 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         List<Lesson> lessonsList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_LESSON, null, null, null, null, null, null);
-        if ( cursor != null && cursor.moveToFirst() ) {
-            while (! cursor.isAfterLast()) {
+        if (cursor != null && cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
                 Lesson lesson = new Lesson();
                 lesson.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
                 lesson.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
@@ -604,7 +604,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
                 cursor.moveToNext();
             }
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         db.close();
         return lessonsList;
@@ -615,9 +615,9 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor =
                 db.query(TABLE_LESSON, null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)},
-                         null, null, null);
-        if ( cursor != null && cursor.moveToFirst() ) {
-            while (! cursor.isAfterLast()) {
+                        null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
                 Lesson lesson = new Lesson();
                 lesson.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
                 lesson.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
@@ -625,20 +625,21 @@ public class MySqliteHelper extends SQLiteOpenHelper {
                 cursor.moveToNext();
             }
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         db.close();
         return lessonsList;
     }
+
     public List<Lesson> getListLesson(int idLesson, int idCategory) throws SQLiteException {
         List<Lesson> lessonsList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor =
                 db.query(TABLE_LESSON, null, COLUMN_ID + " = ? AND " + COLUMN_ID_CATEGORY + " = ?"
-                        , new String[]{String.valueOf(idLesson),String.valueOf(idCategory)},
+                        , new String[]{String.valueOf(idLesson), String.valueOf(idCategory)},
                         null, null, null);
-        if ( cursor != null && cursor.moveToFirst() ) {
-            while (! cursor.isAfterLast()) {
+        if (cursor != null && cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
                 Lesson lesson = new Lesson();
                 lesson.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
                 lesson.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
@@ -646,7 +647,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
                 cursor.moveToNext();
             }
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         db.close();
         return lessonsList;
@@ -656,7 +657,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         User user = new User();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_USER, null, null, null, null, null, null);
-        if ( cursor != null && cursor.moveToFirst() ) {
+        if (cursor != null && cursor.moveToFirst()) {
             user.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
             user.setName(cursor.getString(cursor.getColumnIndex(COLUMN_NAME)));
             user.setEmail(cursor.getString(cursor.getColumnIndex(COLUMN_EMAIL)));
@@ -667,7 +668,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
             user.setUpdatedAt(cursor.getString(cursor.getColumnIndex(COLUMN_UPDATED_AT)));
             user.setLearnedWords(cursor.getInt(cursor.getColumnIndex(COLUMN_LEARNED_WORDS)));
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         db.close();
         return user;
@@ -678,8 +679,8 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor =
                 db.query(TABLE_USER_ACTIVITY, null, null, null, null, null, Const.ID + " DESC");
-        if ( cursor != null && cursor.moveToFirst() ) {
-            while (! cursor.isAfterLast()) {
+        if (cursor != null && cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
                 UserActivity userActivity = new UserActivity();
                 userActivity.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
                 userActivity.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
@@ -689,7 +690,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
                 cursor.moveToNext();
             }
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         db.close();
         return activityList;
@@ -699,9 +700,9 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         List<UserActivity> activityList = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(TABLE_USER_ACTIVITY, null, COLUMN_ID_USER + " = ?",
-                                 new String[]{String.valueOf(id)}, null, null, Const.ID + " DESC");
-        if ( cursor != null && cursor.moveToFirst() ) {
-            while (! cursor.isAfterLast()) {
+                new String[]{String.valueOf(id)}, null, null, Const.ID + " DESC");
+        if (cursor != null && cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
                 UserActivity userActivity = new UserActivity();
                 userActivity.setId(cursor.getInt(cursor.getColumnIndex(COLUMN_ID)));
                 userActivity.setContent(cursor.getString(cursor.getColumnIndex(COLUMN_CONTENT)));
@@ -711,7 +712,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
                 cursor.moveToNext();
             }
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         db.close();
         return activityList;
@@ -722,35 +723,35 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         List<Result> mListResults = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query(true, TABLE_RESULT, new String[]{COLUMN_ID_LESSON},
-                                 COLUMN_ID_USER + " = ?", new String[]{String.valueOf(idUser)},
-                                 null, null, null, null);
-        if ( cursor != null && cursor.moveToFirst() ) {
-            while (! cursor.isAfterLast()) {
+                COLUMN_ID_USER + " = ?", new String[]{String.valueOf(idUser)},
+                null, null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            while (!cursor.isAfterLast()) {
                 Result result = new Result();
                 result.setIdLesson(cursor.getInt(cursor.getColumnIndex(COLUMN_ID_LESSON)));
                 mListResults.add(result);
                 cursor.moveToNext();
             }
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         db.close();
         return mListResults;
     }
 
     public int getIdAnswerFromResult(int idLesson, int idWord) {
-        int idAnswer = - 1;
+        int idAnswer = -1;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor =
                 db.query(true, TABLE_RESULT, new String[]{COLUMN_ID_ANSWER}, COLUMN_ID_LESSON +
-                                 "=? AND " + COLUMN_ID_WORD + "=?",
-                         new String[]{String.valueOf(idLesson), String.valueOf(idWord)}, null, null,
-                         null, null);
-        if ( cursor != null && cursor.moveToFirst() ) {
+                                "=? AND " + COLUMN_ID_WORD + "=?",
+                        new String[]{String.valueOf(idLesson), String.valueOf(idWord)}, null, null,
+                        null, null);
+        if (cursor != null && cursor.moveToFirst()) {
             idAnswer = cursor.getInt(cursor.getColumnIndex(COLUMN_ID_ANSWER));
             cursor.moveToNext();
         }
-        if ( cursor != null )
+        if (cursor != null)
             cursor.close();
         cursor.close();
         db.close();

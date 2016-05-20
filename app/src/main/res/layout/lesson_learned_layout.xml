@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/colorBackgroundLogin"
+    android:background="@drawable/background_all"
     android:orientation="vertical"
     tools:context="com.framgia.fel1.activity.LearnedLessonActivity">
 
@@ -22,7 +22,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="@string/lesson"
-            android:textColor="@color/textColorLogin"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/text_size_20"/>
     </android.support.v7.widget.Toolbar>
 

@@ -1,8 +1,10 @@
 package com.framgia.fel1.model;
 
 import com.framgia.fel1.constant.Const;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.Serializable;
 
 /**

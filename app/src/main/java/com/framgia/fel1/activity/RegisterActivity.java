@@ -27,9 +27,11 @@ import com.framgia.fel1.util.ReadJson;
 import com.framgia.fel1.util.TaskFragment;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -53,7 +55,7 @@ public class RegisterActivity extends AppCompatActivity implements TaskFragment.
         setContentView(R.layout.activity_register);
         FragmentManager fm = getSupportFragmentManager();
         mTaskFragment = (TaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
-        if ( mTaskFragment == null ) {
+        if (mTaskFragment == null) {
             mTaskFragment = new TaskFragment();
             fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
             mTaskFragment.onAttach((Context) this);
@@ -83,7 +85,7 @@ public class RegisterActivity extends AppCompatActivity implements TaskFragment.
                         Color.GRAY).sizeRes(R.dimen.icon_size), null, null, null);
         mEditEmail.setCompoundDrawables(new IconicsDrawable(RegisterActivity.this).icon(
                 FontAwesome.Icon.faw_envelope).color(Color.GRAY).sizeRes(R.dimen.icon_size), null,
-                                        null, null);
+                null, null);
         mEditPassword.setCompoundDrawables(
                 new IconicsDrawable(RegisterActivity.this).icon(FontAwesome.Icon.faw_lock).color(
                         Color.GRAY).sizeRes(R.dimen.icon_size), null, null, null);
@@ -96,13 +98,13 @@ public class RegisterActivity extends AppCompatActivity implements TaskFragment.
         mButtonRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ( CheckRequire.checkEmail(getApplicationContext(), mEditEmail) &&
+                if (CheckRequire.checkEmail(getApplicationContext(), mEditEmail) &&
                         CheckRequire.checkPassword(getApplicationContext(), mEditPassword,
-                                                   mEditPasswordConfirmation) ) {
+                                mEditPasswordConfirmation)) {
                     mEditEmail.setError(null);
                     mEditPassword.setError(null);
                     mEditPasswordConfirmation.setError(null);
-                    if ( InternetUtils.isInternetConnected(RegisterActivity.this) ) {
+                    if (InternetUtils.isInternetConnected(RegisterActivity.this)) {
                         String[] param = new String[]{mEditName.getText().toString(),
                                 mEditEmail.getText().toString(), mEditPassword.getText().toString(),
                                 mEditPasswordConfirmation.getText().toString()};
@@ -128,7 +130,7 @@ public class RegisterActivity extends AppCompatActivity implements TaskFragment.
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if(savedInstanceState.getInt(Const.CONTENT_LOADING, View.INVISIBLE) == View.VISIBLE) {
+        if (savedInstanceState.getInt(Const.CONTENT_LOADING, View.INVISIBLE) == View.VISIBLE) {
             mLayoutLoading.setVisibility(View.VISIBLE);
             mLayoutContent.setVisibility(View.GONE);
         }
@@ -153,7 +155,7 @@ public class RegisterActivity extends AppCompatActivity implements TaskFragment.
             String response = null;
             try {
                 response = HttpRequest.postJsonRequest(APIService.URL_API_SIGNUP, object,
-                                                       APIService.METHOD_POST);
+                        APIService.METHOD_POST);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -178,13 +180,13 @@ public class RegisterActivity extends AppCompatActivity implements TaskFragment.
     public void onPostExecute(String response) {
         mLayoutLoading.setVisibility(View.GONE);
         mLayoutContent.setVisibility(View.VISIBLE);
-        if ( response != null ) {
+        if (response != null) {
             try {
                 User user = new User(response);
-                if ( user.getId() != 0 ) {
+                if (user.getId() != 0) {
 
                     Toast.makeText(RegisterActivity.this, R.string.register_successfully,
-                                   Toast.LENGTH_SHORT).show();
+                            Toast.LENGTH_SHORT).show();
                     mSharedPreferences =
                             getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = mSharedPreferences.edit();
@@ -199,7 +201,7 @@ public class RegisterActivity extends AppCompatActivity implements TaskFragment.
             } catch (JSONException e) {
                 e.printStackTrace();
                 Toast.makeText(RegisterActivity.this, R.string.register_error,
-                               Toast.LENGTH_SHORT).show();
+                        Toast.LENGTH_SHORT).show();
                 Log.d(TAG, response.toString());
             }
         }

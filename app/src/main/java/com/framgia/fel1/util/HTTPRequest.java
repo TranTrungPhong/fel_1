@@ -42,7 +42,7 @@ public class HttpRequest {
             int indexHttpResult = connect.getResponseCode();
             Log.d("phong", indexHttpResult + " ");
             StringBuilder sb = new StringBuilder();
-            if ( indexHttpResult == HttpURLConnection.HTTP_OK ) {
+            if (indexHttpResult == HttpURLConnection.HTTP_OK) {
                 BufferedReader br = new BufferedReader(
                         new InputStreamReader(connect.getInputStream(), "utf-8"));
                 String line = null;
@@ -71,16 +71,16 @@ public class HttpRequest {
         InputStream inputStream;
         httpUrl = new URL(url);
         connect = (HttpURLConnection) httpUrl.openConnection();
-        if(!method.equals(APIService.METHOD_PATCH))
+        if (!method.equals(APIService.METHOD_PATCH))
             connect.setRequestMethod(method);
         connect.setDoInput(true);
-        if(jsonObject1 != null)
+        if (jsonObject1 != null)
             connect.setDoOutput(true);
         else connect.setDoOutput(false);
-        if(method.equals(APIService.METHOD_PATCH))
+        if (method.equals(APIService.METHOD_PATCH))
             connect.setRequestProperty("X-HTTP-Method-Override", method);
         connect.setRequestProperty("Content-Type", "application/json");
-        if(jsonObject1 != null) {
+        if (jsonObject1 != null) {
             DataOutputStream out = new DataOutputStream(connect.getOutputStream());
             out.write(jsonObject1.toString().getBytes());
             Log.d(TAG, jsonObject1.toString());
@@ -107,7 +107,7 @@ public class HttpRequest {
             }
             br.close();
         } finally {
-            if ( connect != null )
+            if (connect != null)
                 connect.disconnect();
         }
         return sb.toString();

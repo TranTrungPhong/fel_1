@@ -1,9 +1,12 @@
 package com.framgia.fel1.util;
+
 import android.content.Context;
 import android.util.Patterns;
 import android.widget.TextView;
+
 import com.framgia.fel1.R;
 import com.framgia.fel1.constant.Const;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
