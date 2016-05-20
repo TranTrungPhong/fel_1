@@ -15,52 +15,82 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="80dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/ic_logo_framgia" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="__________"
+            android:typeface="serif"
+            android:textColor="@color/textColorLogin"
+            android:textSize="@dimen/text_size_24" />
 
         <TextView
             android:id="@+id/text_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/titleApp"
+            android:gravity="center_vertical"
+            android:layout_marginTop="@dimen/text_size_20"
+            android:text="Log in with email address"
             android:textColor="@color/textColorLogin"
-            android:textSize="@dimen/title_size_60"/>
+            android:typeface="serif"
+            android:textSize="@dimen/text_size_20"/>
 
-        <EditText
-            android:id="@+id/edit_username_login"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/height_70"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@drawable/border_view"
-            android:drawableLeft="@drawable/ic_account"
-            android:drawablePadding="@dimen/drawable_padding"
-            android:hint="@string/username_login"
-            android:padding="@dimen/activity_horizontal_margin"/>
+            android:orientation="vertical"
+            android:padding="@dimen/text_size_20"
+            android:layout_marginTop="@dimen/activity_marginLeft_40"
+            android:background="#65c9d6"
+            android:layout_height="wrap_content">
+            <EditText
+                android:id="@+id/edit_username_login"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_70"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@drawable/border_view"
+                android:drawableLeft="@drawable/ic_account"
+                android:drawablePadding="@dimen/drawable_padding"
+                android:hint="@string/username_login"
+                android:inputType="textEmailAddress"
+                android:singleLine="true"
+                android:lines="1"
+                android:padding="@dimen/activity_horizontal_margin"/>
 
-        <EditText
-            android:id="@+id/edit_password_login"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/height_70"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:background="@drawable/border_view"
-            android:drawableLeft="@drawable/ic_lock"
-            android:drawablePadding="@dimen/drawable_padding"
-            android:hint="@string/password_login"
-            android:inputType="textPassword"
-            android:padding="@dimen/activity_horizontal_margin"/>
+            <EditText
+                android:id="@+id/edit_password_login"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_70"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:background="@drawable/border_view"
+                android:drawableLeft="@drawable/ic_lock"
+                android:drawablePadding="@dimen/drawable_padding"
+                android:hint="@string/password_login"
+                android:inputType="textPassword"
+                android:singleLine="true"
+                android:lines="1"
+                android:padding="@dimen/activity_horizontal_margin"/>
 
-        <android.support.v7.widget.AppCompatCheckBox
-            android:id="@+id/chechbox_remember"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/remember_login"
-            android:textColor="@android:color/white"/>
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/chechbox_remember"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_vertical_margin"
+                android:text="@string/remember_login"
+                android:layout_gravity="center"
+                android:textStyle="italic"
+                android:textColor="@android:color/white"/>
+        </LinearLayout>
 
         <Button
             android:id="@+id/button_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_marginTop_80"
+            android:layout_marginTop="@dimen/activity_marginTop_40"
             android:background="@drawable/button_background"
             android:text="@string/text_login"
             android:textColor="@android:color/white"/>
@@ -69,9 +99,10 @@
             android:id="@+id/text_sign_up"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:text="@string/text_SignUp"
+            android:layout_marginTop="@dimen/margin_16"
+            android:text="Sig Up Now (Free)"
             android:textColor="@android:color/white"
+            android:textStyle="italic"
             android:textSize="@dimen/text_size_15"/>
     </LinearLayout>
 

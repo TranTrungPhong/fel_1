@@ -1,6 +1,5 @@
 package com.framgia.fel1.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -9,17 +8,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +31,6 @@ import com.framgia.fel1.model.ArrayCategory;
 import com.framgia.fel1.model.Category;
 import com.framgia.fel1.model.User;
 import com.framgia.fel1.util.BitmapUtil;
-import com.framgia.fel1.util.DividerItemDecoration;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
 import com.framgia.fel1.util.ShowImage;
@@ -44,9 +42,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -58,7 +54,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG_TASK_FRAGMENT = "task_fragment";
     private static final String LOADCATEGORY_TAG = "load_category_tag";
     private static final String SIGOUT_TAG = "sig_out_tag";
-    private static final String SHOWIMAGE_TAG = "show_image_tag";
     private static final String ISCATEGORY = "ISCATEGORY";
     private static final String CONTENT_BITMAP = "bitmap";
     private static String GET_TAG = LOADCATEGORY_TAG;
@@ -81,7 +76,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressDialog mProgressDialog;
     private ProgressDialog progressDialog;
     private static boolean isCategoryLoad = false;
-    private static boolean isAvatar = false;
     private Bundle mBundle = new Bundle();
     private boolean isLoadImage = false;
     private Bitmap mBitmapAvatar = null;
@@ -111,6 +105,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
+        progressDialog = new ProgressDialog(HomeActivity.this);
         mMySqliteHelper = new MySqliteHelper(this);
         mProgressDialog = new ProgressDialog(HomeActivity.this);
         mButtonSignUp = (Button) findViewById(R.id.button_sign_out_show_user);
@@ -118,23 +113,24 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         mButtonShowWordList = (Button) findViewById(R.id.button_wordlist_show_user);
         mButtonShowActivity = (Button) findViewById(R.id.button_show_activities);
         mImageViewAvatar = (CircularImageView) findViewById(R.id.image_show_user_avatar);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setAlpha(254);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            mImageViewAvatar.setLayerPaint(paint);
+        }
         mTextViewName = (TextView) findViewById(R.id.text_show_user_name);
         mTextViewEmail = (TextView) findViewById(R.id.text_show_user_email);
         mRecyclerViewCategory = (RecyclerView) findViewById(R.id.listview_lesson_learned);
         mRecyclerViewCategory.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
         mHomeAdapter = new HomeAdapter(this, mListCategory);
         mRecyclerViewCategory.setAdapter(mHomeAdapter);
-//        mRecyclerViewCategory.addItemDecoration(new DividerItemDecoration(this,
-//                                                        DividerItemDecoration.VERTICAL_LIST,
-//                                                        R.drawable.divider_category_list));
         mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
         int id = mSharedPreferences.getInt(Const.ID, -1);
         if(id != -1)
             mUser = mMySqliteHelper.getUser(id);
         else
             finish();
-        //Intent intent = getIntent();
-        //mUser = (User) intent.getSerializableExtra(Const.USER);
         if( !isLoadImage )
             if(InternetUtils.isInternetConnected(HomeActivity.this, false)) {
                 isLoadImage = !isLoadImage;
@@ -145,25 +141,10 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         mTextViewName.setText(mUser.getName());
         mTextViewEmail.setText(mUser.getEmail());
         mAuthToken = mUser.getAuthToken();
-//        new LoadCategory().execute();
         GET_TAG = LOADCATEGORY_TAG;
         if(!isCategoryLoad){
-            progressDialog = new ProgressDialog(HomeActivity.this);
             progressDialog.setTitle(getResources().getString(R.string.loading));
             progressDialog.show();
-            new Thread(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    progressDialog.dismiss();
-                }
-            }).start();
             mTaskFragment.startInBackground(new String[]{TAG_TASK_FRAGMENT});
         }
         if(!mBundle.getBoolean(ISCATEGORY, false)){
@@ -231,7 +212,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         editor.remove(Const.ID);
         editor.apply();
         if( InternetUtils.isInternetConnected(HomeActivity.this)) {
-//            new SignOutRequest().execute();
             GET_TAG = SIGOUT_TAG;
             mTaskFragment.startInBackground(new String[]{TAG_TASK_FRAGMENT});
         }
@@ -315,6 +295,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onPostExecute(String response) {
         if(GET_TAG == LOADCATEGORY_TAG){
+            if(progressDialog!= null && progressDialog.isShowing())
+                progressDialog.dismiss();
             if (response == null) {
                 Toast.makeText(HomeActivity.this, R.string.response_null, Toast.LENGTH_SHORT)
                         .show();
@@ -337,7 +319,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         }else if(GET_TAG == SIGOUT_TAG ){
-            if(mProgressDialog.isShowing())
+            if(mProgressDialog!= null && mProgressDialog.isShowing())
                 mProgressDialog.dismiss();
             if ( response == null ) {
                 Toast.makeText(HomeActivity.this, R.string.response_null, Toast.LENGTH_SHORT).show();
@@ -361,6 +343,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                             .LENGTH_SHORT)
                             .show();
                 }
+                mSharedPreferences =
+                        getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = mSharedPreferences.edit();
+                editor.putString(Const.EMAIL, mUser.getEmail());
+                editor.apply();
                 Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                 startActivity(intent);
                 finish();
@@ -382,7 +369,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             byte[] byteArray = byteArrayOutputStream.toByteArray();
             outState.putByteArray(CONTENT_BITMAP, byteArray);
         }
-//        outState.putString("image",mUser.getAvatar());
     }
 
     @Override
@@ -399,17 +385,6 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
             mBitmapAvatar = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
         if(mBitmapAvatar != null)
             mImageViewAvatar.setImageBitmap(mBitmapAvatar);
-//        InputStream in = null;
-//        try {
-//            in = new java.net.URL(savedInstanceState.getString("image")).openStream();
-//            Bitmap bitmap = BitmapFactory.decodeStream(in);
-//            mImageViewAvatar.setImageBitmap(bitmap);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            mImageViewAvatar.setImageBitmap(BitmapUtil.decodeSampledBitmapFromFile(savedInstanceState.getString("image"), 100, 100));
-//        }
-//        isAvatar = true;
-//        if(savedInstanceState)
     }
     private class LoadCategory extends AsyncTask<String, String, String> {
 

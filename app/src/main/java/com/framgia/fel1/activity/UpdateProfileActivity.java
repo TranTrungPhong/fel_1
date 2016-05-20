@@ -10,9 +10,11 @@ import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
@@ -132,6 +134,12 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
         mEditPasswordConfirmation = (EditText) findViewById(R.id.edit_password_confirmation);
         mEditName = (EditText) findViewById(R.id.edit_name);
         mImageAvatar = (CircularImageView) findViewById(R.id.image_avatar);
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setAlpha(254);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            mImageAvatar.setLayerPaint(paint);
+        }
         if( !isLoadImage )
             if(InternetUtils.isInternetConnected(UpdateProfileActivity.this, false)) {
                 new ShowImage(mImageAvatar).execute(mUser.getAvatar());

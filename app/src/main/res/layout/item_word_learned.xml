@@ -13,6 +13,7 @@
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
+                  android:elevation="10dp"
                   android:orientation="horizontal">
 
         <TextView
@@ -22,6 +23,7 @@
             android:layout_margin="@dimen/text_margin"
             android:layout_weight="1"
             android:alpha="0.3"
+            android:elevation="2dp"
             android:textAppearance="?attr/textAppearanceListItem"/>
 
         <TextView
@@ -30,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             android:layout_weight="1"
+            android:elevation="2dp"
             android:alpha="0.3"
             android:textAppearance="?attr/textAppearanceListItem"/>
     </LinearLayout>
