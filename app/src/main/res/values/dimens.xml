@@ -31,4 +31,5 @@
     <dimen name="dropdown_offset">40dp</dimen>
     <dimen name="width_100">100dp</dimen>
     <dimen name="margin_10">10dp</dimen>
+    <dimen name="cardview_title_elevation">5dp</dimen>
 </resources>

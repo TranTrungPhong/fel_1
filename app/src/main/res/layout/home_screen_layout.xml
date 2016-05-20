@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/colorBackgroundLogin"
-              android:orientation="vertical"
-              android:padding="@dimen/padding_20">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_all"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/height_30"
-        android:layout_marginBottom="@dimen/margin_16"
+        android:layout_height="@dimen/abc_action_bar_default_height_material"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:orientation="horizontal"
         android:weightSum="3">
 
@@ -24,23 +23,27 @@
             android:text="@string/sign_out"
             android:textColor="@android:color/white"
             android:textSize="@dimen/text_size_10"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"/>
 
         <Button
             android:id="@+id/button_wordlist_show_user"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/fab_margin"
             android:layout_weight="1"
             android:background="@drawable/button_background"
             android:text="@string/word_list"
             android:textColor="@android:color/white"
             android:textSize="@dimen/text_size_10"/>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"/>
 
         <Button
             android:id="@+id/button_show_activities"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/fab_margin"
             android:layout_weight="1"
             android:background="@drawable/button_background"
             android:text="@string/activities"
@@ -50,15 +53,17 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/padding_20"
+        android:paddingRight="@dimen/padding_20">
 
-        <ImageView
+        <com.framgia.fel1.widget.CircularImageView
             android:id="@+id/image_show_user_avatar"
             android:layout_width="@dimen/width_150"
             android:layout_height="@dimen/width_150"
             android:layout_alignParentLeft="true"
             android:layout_marginRight="@dimen/margin_16"
-            android:scaleType="fitCenter"
+            android:scaleType="centerCrop"
             android:src="@android:drawable/ic_menu_gallery"/>
 
         <TextView
@@ -104,13 +109,14 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg_recycle"
-        android:padding="@dimen/padding_20">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/listview_lesson_learned"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
     </LinearLayout>
+
+
 </LinearLayout>

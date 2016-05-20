@@ -39,6 +39,7 @@ import com.framgia.fel1.util.InternetUtils;
 import com.framgia.fel1.util.ReadJson;
 import com.framgia.fel1.util.ShowImage;
 import com.framgia.fel1.util.TaskFragment;
+import com.framgia.fel1.widget.CircularImageView;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 import org.json.JSONException;
@@ -58,7 +59,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
     private EditText mEditNewPassword;
     private EditText mEditPasswordConfirmation;
     private EditText mEditName;
-    private ImageView mImageAvatar;
+    private CircularImageView mImageAvatar;
     private User mUser;
     private Intent mData;
     private Bitmap mBitmapAvatar = null;
@@ -130,7 +131,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
         mEditNewPassword = (EditText) findViewById(R.id.edit_new_password);
         mEditPasswordConfirmation = (EditText) findViewById(R.id.edit_password_confirmation);
         mEditName = (EditText) findViewById(R.id.edit_name);
-        mImageAvatar = (ImageView) findViewById(R.id.image_avatar);
+        mImageAvatar = (CircularImageView) findViewById(R.id.image_avatar);
         if( !isLoadImage )
             if(InternetUtils.isInternetConnected(UpdateProfileActivity.this, false)) {
                 new ShowImage(mImageAvatar).execute(mUser.getAvatar());
@@ -138,7 +139,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
             }
         mFab.setImageDrawable(new IconicsDrawable(UpdateProfileActivity.this)
                                       .icon(FontAwesome.Icon.faw_check)
-                                      .color(Color.GREEN));
+                                      .color(getResources().getColor(R.color.colorIcon)));
         mEditName.setCompoundDrawables(new IconicsDrawable(UpdateProfileActivity.this)
                                                .icon(FontAwesome.Icon.faw_user)
                                                .color(Color.GRAY)

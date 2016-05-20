@@ -1,12 +1,18 @@
 package com.framgia.fel1.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 import com.framgia.fel1.R;
+import com.framgia.fel1.adapter.CustomSpinnerAdapter;
 import com.framgia.fel1.adapter.MyItemRecyclerViewAdapter;
 import com.framgia.fel1.constant.APIService;
 import com.framgia.fel1.constant.Const;
@@ -49,6 +56,9 @@ public class WordListActivity extends AppCompatActivity
     public static final String TAG = "WordListActivity";
     private static final String TAG_TASK_FRAGMENT = "task_fragment";
     private static final String LIST_POSITION = "list_position";
+    private static final int EXPORT_PDF = 1;
+    private static final int EXPORT_CSV = 2;
+    private static final int EXPORT_TSV = 3;
     private TaskFragment mTaskFragment;
     private static final int THRESHOLD_ITEM_COUNT = 15;
     private RecyclerView mRecyclerView;
@@ -69,6 +79,7 @@ public class WordListActivity extends AppCompatActivity
     private int mVisibleItemCount;
     private LinearLayoutManager mLayoutManager;
     private int mPage = 1;
+    private int mFormatExport = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,9 +106,9 @@ public class WordListActivity extends AppCompatActivity
         mMyItemRecyclerViewAdapter =
                 new MyItemRecyclerViewAdapter(WordListActivity.this, mListItem);
         mRecyclerView.setAdapter(mMyItemRecyclerViewAdapter);
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(WordListActivity.this,
-                                                                  DividerItemDecoration.VERTICAL_LIST,
-                                                                  R.drawable.divider_word_list));
+        //        mRecyclerView.addItemDecoration(new DividerItemDecoration(WordListActivity.this,
+        //                                                                  DividerItemDecoration.VERTICAL_LIST,
+        //                                                                  R.drawable.divider_word_list));
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle(null);
@@ -117,10 +128,10 @@ public class WordListActivity extends AppCompatActivity
         else
             finish();
         mLayoutLoad.setVisibility(View.VISIBLE);
-        if ( mMySqliteHelper.countTable(MySqliteHelper.TABLE_WORD) == 0 && InternetUtils
-                .isInternetConnected(WordListActivity.this))
-            mTaskFragment.startInBackground(new String[]{String.valueOf(mCategoryId),
-                    String.valueOf(mPage)});
+        if ( mMySqliteHelper.countTable(MySqliteHelper.TABLE_WORD) == 0 &&
+                InternetUtils.isInternetConnected(WordListActivity.this) )
+            mTaskFragment.startInBackground(
+                    new String[]{String.valueOf(mCategoryId), String.valueOf(mPage)});
         else {
             mLayoutLoad.setVisibility(View.GONE);
             mIsLoadingMore = false;
@@ -148,11 +159,17 @@ public class WordListActivity extends AppCompatActivity
         mListSpinner.add(Const.ALL_WORD);
         mListSpinner.add(Const.LEARNED);
         mListSpinner.add(Const.NO_LEARN);
-        ArrayAdapter<String> adapterSpinner =
-                new ArrayAdapter(WordListActivity.this, android.R.layout.simple_list_item_1,
-                                 mListSpinner);
-        adapterSpinner.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-        mSpinner.setAdapter(adapterSpinner);
+        ArrayList<String> mSpinnerItems = new ArrayList<>();
+        mSpinnerItems.add("All word");
+        mSpinnerItems.add("Learned");
+        mSpinnerItems.add("No learn");
+//        ArrayAdapter<String> adapterSpinner =
+//                new ArrayAdapter(WordListActivity.this, android.R.layout.simple_list_item_1,
+//                                 mSpinnerItems);
+        CustomSpinnerAdapter customSpinnerAdapter =
+                new CustomSpinnerAdapter(WordListActivity.this, mSpinnerItems);
+//        adapterSpinner.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+        mSpinner.setAdapter(customSpinnerAdapter);
     }
 
     private void setEvent() {
@@ -165,7 +182,7 @@ public class WordListActivity extends AppCompatActivity
         mSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String filterString = parent.getItemAtPosition(position).toString();
+                String filterString = mListSpinner.get(position);
                 mMyItemRecyclerViewAdapter.getFilter().filter(filterString);
                 if ( mMyItemRecyclerViewAdapter.getListFiltered().size() > 0 ) {
                     mRecyclerView.smoothScrollToPosition(0);
@@ -191,10 +208,11 @@ public class WordListActivity extends AppCompatActivity
                     if ( mIsLoadingMore ) {
                         if ( (mVisibleItemCount + mPastVisiblesItems + THRESHOLD_ITEM_COUNT) >=
                                 mListItem.size() ) {
-                            if ( ! mIsLoading && InternetUtils.isInternetConnected
-                                    (WordListActivity.this))
-                                mTaskFragment.startInBackground(new String[]{String.valueOf(mCategoryId),
-                                        String.valueOf(mPage)});
+                            if ( ! mIsLoading &&
+                                    InternetUtils.isInternetConnected(WordListActivity.this) )
+                                mTaskFragment.startInBackground(
+                                        new String[]{String.valueOf(mCategoryId),
+                                                String.valueOf(mPage)});
                         }
                     }
                 }
@@ -212,8 +230,14 @@ public class WordListActivity extends AppCompatActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_export_pdf:
+                mFormatExport = EXPORT_PDF;
                 try {
-                    exportPdf();
+                    boolean exportAble = true;
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        exportAble = checkWritePermission();
+                    }
+                    if(exportAble)
+                        exportPdf();
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(WordListActivity.this, R.string.error_export_pdf,
@@ -225,8 +249,14 @@ public class WordListActivity extends AppCompatActivity
                 }
                 return true;
             case R.id.action_export_csv:
+                mFormatExport = EXPORT_CSV;
                 try {
-                    exportCsv();
+                    boolean exportAble = true;
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        exportAble = checkWritePermission();
+                    }
+                    if(exportAble)
+                        exportCsv();
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(WordListActivity.this, R.string.error_export_csv,
@@ -234,8 +264,14 @@ public class WordListActivity extends AppCompatActivity
                 }
                 return true;
             case R.id.action_export_tsv:
+                mFormatExport = EXPORT_TSV;
                 try {
-                    exportTsv();
+                    boolean exportAble = true;
+                    if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        exportAble = checkWritePermission();
+                    }
+                    if(exportAble)
+                        exportTsv();
                 } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(WordListActivity.this, R.string.error_export_tsv,
@@ -243,7 +279,7 @@ public class WordListActivity extends AppCompatActivity
                 }
                 return true;
             case R.id.action_sync:
-                if(InternetUtils.isInternetConnected(WordListActivity.this)) {
+                if ( InternetUtils.isInternetConnected(WordListActivity.this) ) {
                     mLayoutLoad.setVisibility(View.VISIBLE);
                     mListItem.clear();
                     mIsLoadingMore = true;
@@ -305,6 +341,10 @@ public class WordListActivity extends AppCompatActivity
     }
 
     private void exportPdf() throws IOException, DocumentException {
+        int permissionCheck = ContextCompat.checkSelfPermission(WordListActivity.this,
+                                                                Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+
         String fileName;
         if ( mData.getStringExtra(Const.CATEGORY_ID) != null ) {
             fileName = Const.CATEGORY + "_" + mData.getStringExtra(Const.CATEGORY_ID) + "_" +
@@ -326,6 +366,71 @@ public class WordListActivity extends AppCompatActivity
         } else {
             Toast.makeText(WordListActivity.this, R.string.error_export_pdf,
                            Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private boolean checkWritePermission() {
+        // Here, thisActivity is the current activity
+        if (android.support.v4.app.ActivityCompat.checkSelfPermission(WordListActivity.this,
+                                              Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(WordListActivity.this,
+                                                                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                Log.d(TAG, "checking");
+                // Show an expanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+
+            } else {
+
+                ActivityCompat.requestPermissions(WordListActivity.this,
+                                                  new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                                                  Const.MY_PERMISSIONS_REQUEST_WRITE_STORAGE);
+            }
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case Const.MY_PERMISSIONS_REQUEST_WRITE_STORAGE:
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d(TAG, "permission OK");
+                    try {
+                    switch (mFormatExport){
+                        case EXPORT_PDF:
+                            exportPdf();
+                            break;
+                        case EXPORT_CSV:
+                            exportCsv();
+                            break;
+                        case EXPORT_TSV:
+                            exportTsv();
+                            break;
+                    }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (DocumentException e) {
+                        e.printStackTrace();
+                    }
+
+
+                } else {
+                    Log.d(TAG, "permission failed");
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+               return;
+
         }
     }
 
@@ -374,9 +479,9 @@ public class WordListActivity extends AppCompatActivity
                     Word word = new Word(wordListArray.getJSONObject(i));
                     try {
                         mMySqliteHelper.addWord(word);
-                    } catch (SQLiteConstraintException e){
+                    } catch (SQLiteConstraintException e) {
                         e.printStackTrace();
-//                        mMySqliteHelper.updateWord(word);
+                        //                        mMySqliteHelper.updateWord(word);
                     }
                     if ( word != null ) {
                         for (int j = 0; j < word.getAnswers().size(); j++) {
@@ -384,7 +489,7 @@ public class WordListActivity extends AppCompatActivity
                             answer.setWordId(word.getId());
                             try {
                                 mMySqliteHelper.addAnswer(answer);
-                            } catch (SQLiteConstraintException e){
+                            } catch (SQLiteConstraintException e) {
                                 e.printStackTrace();
                                 mMySqliteHelper.updateAnswer(answer);
                             }
@@ -419,8 +524,8 @@ public class WordListActivity extends AppCompatActivity
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        int position = savedInstanceState.getInt(LIST_POSITION, -1);
-        if(position != -1)
+        int position = savedInstanceState.getInt(LIST_POSITION, - 1);
+        if ( position != - 1 )
             mRecyclerView.smoothScrollToPosition(position);
     }
 

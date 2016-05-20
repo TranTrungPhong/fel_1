@@ -10,10 +10,12 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -36,6 +38,8 @@ import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
 import com.framgia.fel1.util.ReadJson;
 import com.framgia.fel1.util.TaskFragment;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.iconics.IconicsDrawable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,8 +68,8 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
     private MySqliteHelper mMySqliteHelper;
     private TextToSpeech mTextToSpeech;
     private TextView mTextNameNewLess;
-    private Button mButtonSubmit;
-    private Button mButtonCancel;
+//    private Button mButtonSubmit;
+//    private Button mButtonCancel;
     private String mNameCategory;
     private ReadJson mReadJson;
     private String mAuthToken;
@@ -81,6 +85,8 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
     private List<String> mListResuiltId = new ArrayList<>();
     private static final String ISLESSON = "ISLESSON";
     public static boolean isLessonLoad = false;
+    private FloatingActionButton mFabSubmit;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,18 +142,33 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void initView() {
+        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        mFabSubmit = (FloatingActionButton) findViewById(R.id.fab_submit);
+        mFabSubmit.setImageDrawable(new IconicsDrawable(this).icon(FontAwesome.Icon.faw_check)
+                                            .sizeRes(R.dimen.icon_size)
+                                            .color(getResources().getColor(R.color.colorIcon)));
         progressDialog = new ProgressDialog(NewLessonActivity.this);
         progressDialog.setMessage(getResources().getString(R.string.loading));
         mMySqliteHelper = new MySqliteHelper(this);
-        mButtonSubmit = (Button) findViewById(R.id.button_submit);
-        mButtonCancel = (Button) findViewById(R.id.button_cancel);
+//        mButtonSubmit = (Button) findViewById(R.id.button_submit);
+//        mButtonCancel = (Button) findViewById(R.id.button_cancel);
         mTextNameNewLess = (TextView) findViewById(R.id.text_name_new_lesson);
         mListViewWordNewLesson = (RecyclerView) findViewById(R.id.listview_word_new_lesson);
         mNewLessonAdapter = new NewLessonAdapter(this, mListWordNewLesson);
         mListViewWordNewLesson.setAdapter(mNewLessonAdapter);
         mListViewWordNewLesson.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-        mButtonSubmit.setOnClickListener(this);
-        mButtonCancel.setOnClickListener(this);
+//        mButtonSubmit.setOnClickListener(this);
+//        mButtonCancel.setOnClickListener(this);
+        mFabSubmit.setOnClickListener(this);
     }
 
     private void initData() {
@@ -210,7 +231,7 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.button_submit:
+            case R.id.fab_submit:
 //                mCountLesson++;
 //                if(mCountLesson <= Const.COUNT_LESSON){
                 Log.i("FFFFFFFFFFFFFFF","Category ID : "+mLesson.getmIdCategory());
@@ -254,11 +275,11 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
                     mTaskFragment.startInBackground(new String[]{TAG_TASK_FRAGMENT});
                 }
                 break;
-            case R.id.button_cancel:
-                isLessonLoad = false;
-                finish();
-                onCancelled();
-                break;
+//            case R.id.button_cancel:
+//                isLessonLoad = false;
+//                finish();
+//                onCancelled();
+//                break;
             case R.id.text_content_word_new:
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     String utteranceId = this.hashCode() + "";

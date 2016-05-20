@@ -56,4 +56,5 @@ public interface Const {
     String RESULT_ATTRIBUTES = "results_attributes";
     String URL_UPDATE_LESSON = "https://manh-nt.herokuapp.com/lessons/";
     String CONTENT_LOADING = "content_loading";
+    int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 543;
 }
