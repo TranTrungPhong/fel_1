@@ -43,7 +43,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by PhongTran on 04/15/2016.
@@ -62,7 +62,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     private Button mButtonSignUp;
     private Button mButtonShowWordList;
     private Button mButtonShowActivity;
-    private CircularImageView mImageViewAvatar;
+    private CircleImageView mImageViewAvatar;
     private TextView mTextViewName;
     private TextView mTextViewEmail;
     private RecyclerView mRecyclerViewCategory;
@@ -112,7 +112,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
         mButtonUpdate = (Button) findViewById(R.id.button_update_show_user);
         mButtonShowWordList = (Button) findViewById(R.id.button_wordlist_show_user);
         mButtonShowActivity = (Button) findViewById(R.id.button_show_activities);
-        mImageViewAvatar = (CircularImageView) findViewById(R.id.image_show_user_avatar);
+        mImageViewAvatar = (CircleImageView) findViewById(R.id.image_show_user_avatar);
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setAlpha(254);

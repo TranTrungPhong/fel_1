@@ -61,7 +61,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
     private EditText mEditNewPassword;
     private EditText mEditPasswordConfirmation;
     private EditText mEditName;
-    private CircularImageView mImageAvatar;
+    private de.hdodenhof.circleimageview.CircleImageView mImageAvatar;
     private User mUser;
     private Intent mData;
     private Bitmap mBitmapAvatar = null;
@@ -112,6 +112,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
                     cursor.close();
                     mBitmapAvatar = BitmapUtil.decodeSampledBitmapFromFile(picturePath, 100, 100);
                     mImageAvatar.setImageBitmap(mBitmapAvatar);
+                    mImageAvatar.setScaleType(ImageView.ScaleType.CENTER_CROP);
                     isChangedAvatar = true;
                 } else {
                     isChangedAvatar = false;
@@ -133,7 +134,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
         mEditNewPassword = (EditText) findViewById(R.id.edit_new_password);
         mEditPasswordConfirmation = (EditText) findViewById(R.id.edit_password_confirmation);
         mEditName = (EditText) findViewById(R.id.edit_name);
-        mImageAvatar = (CircularImageView) findViewById(R.id.image_avatar);
+        mImageAvatar = (de.hdodenhof.circleimageview.CircleImageView) findViewById(R.id.image_avatar);
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         paint.setAlpha(254);
@@ -339,8 +340,9 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
         byte[] byteArray = savedInstanceState.getByteArray(CONTENT_BITMAP);
         if(byteArray != null)
             mBitmapAvatar = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        if(mBitmapAvatar != null)
+        if(mBitmapAvatar != null) {
             mImageAvatar.setImageBitmap(mBitmapAvatar);
+        }
     }
 
     private class UpdateRequest extends AsyncTask<String, String, String> {

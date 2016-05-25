@@ -60,7 +60,7 @@
                 android:drawablePadding="@dimen/drawable_padding"
                 android:padding="@dimen/activity_horizontal_margin"
                 android:inputType="textPersonName"/>
-            <com.framgia.fel1.widget.CircularImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/image_avatar"
                 android:layout_width="@android:dimen/thumbnail_width"
                 android:layout_height="@android:dimen/thumbnail_width"
