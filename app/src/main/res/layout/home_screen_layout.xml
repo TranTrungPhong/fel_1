@@ -57,7 +57,7 @@
         android:paddingLeft="@dimen/padding_20"
         android:paddingRight="@dimen/padding_20">
 
-        <com.framgia.fel1.widget.CircularImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/image_show_user_avatar"
             android:layout_width="@dimen/width_150"
             android:layout_height="@dimen/width_150"
