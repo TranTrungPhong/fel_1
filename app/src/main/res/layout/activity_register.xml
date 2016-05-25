@@ -14,29 +14,56 @@
 
         <LinearLayout
             android:id="@+id/layout_content"
+            android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="@dimen/abc_action_bar_default_height_material"
             android:layout_marginBottom="@dimen/activity_marginTop_40"
             android:orientation="vertical">
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/abc_action_bar_default_height_material"
-                android:layout_marginBottom="@dimen/activity_marginTop_80"
-                android:background="@color/colorPrimary"
-                app:theme="@style/Base.V7.Theme.AppCompat">
+            <!--<android.support.v7.widget.Toolbar-->
+                <!--android:id="@+id/toolbar"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="@dimen/abc_action_bar_default_height_material"-->
+                <!--android:layout_marginBottom="@dimen/activity_marginTop_80"-->
+                <!--android:background="@color/colorPrimary"-->
+                <!--app:theme="@style/Base.V7.Theme.AppCompat">-->
 
-                <TextView
-                    android:id="@+id/text_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="@string/register"
-                    android:textColor="@color/textColorLogin"
-                    android:textSize="@dimen/text_size_20"/>
-            </android.support.v7.widget.Toolbar>
+                <!--<TextView-->
+                    <!--android:id="@+id/text_title"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:gravity="center"-->
+                    <!--android:text="@string/register"-->
+                    <!--android:textColor="@color/textColorLogin"-->
+                    <!--android:textSize="@dimen/text_size_20"/>-->
+            <!--</android.support.v7.widget.Toolbar>-->
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/text_size_20"
+                android:background="@drawable/ic_logo_framgia" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="__________"
+                android:layout_marginLeft="@dimen/text_size_20"
+                android:typeface="serif"
+                android:textColor="@color/textColorLogin"
+                android:textSize="@dimen/text_size_24" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/text_size_20"
+                android:layout_marginTop="@dimen/text_size_20"
+                android:text="Sig Up with your Email Address"
+                android:textColor="@color/textColorLogin"
+                android:typeface="serif"
+                android:textSize="@dimen/text_size_20"/>
 
             <EditText
                 android:id="@+id/edit_name"
@@ -45,7 +72,7 @@
                 android:layout_margin="@dimen/activity_horizontal_margin"
                 android:background="@drawable/border_view"
                 android:drawablePadding="@dimen/drawable_padding"
-                android:hint="@string/name"
+                android:hint="(E.g. Nguyen Van A)"
                 android:inputType="textPersonName"
                 android:padding="@dimen/activity_horizontal_margin"/>
 
@@ -58,7 +85,7 @@
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:background="@drawable/border_view"
                 android:drawablePadding="@dimen/drawable_padding"
-                android:hint="@string/email"
+                android:hint="(E.g. mail@example.com)"
                 android:inputType="textEmailAddress"
                 android:padding="@dimen/activity_horizontal_margin"/>
 
@@ -94,6 +121,7 @@
                 android:layout_height="@dimen/abc_action_button_min_height_material"
                 android:layout_marginBottom="@dimen/activity_horizontal_margin"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                android:layout_marginTop="@dimen/text_size_20"
                 android:layout_marginRight="@dimen/activity_horizontal_margin"
                 android:background="@drawable/button_background"
                 android:text="@string/register"
@@ -107,6 +135,7 @@
         android:layout_height="match_parent"
         android:alpha="0.8"
         android:background="@android:color/darker_gray"
+        android:visibility="gone"
         android:gravity="center">
 
         <ProgressBar

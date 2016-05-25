@@ -96,16 +96,19 @@
             android:background="@drawable/button_background"
             android:text="@string/update"
             android:textColor="@android:color/white"
+            style="?android:attr/borderlessButtonStyle"
             android:textSize="@dimen/text_size_10"/>
     </RelativeLayout>
 
     <TextView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/height_40"
         android:gravity="center_vertical"
         android:text="@string/lession_learned"
         android:textColor="@android:color/white"
-        android:textSize="@dimen/text_size_20"/>
+        android:layout_gravity="center"
+        android:textStyle="bold"
+        android:textSize="@dimen/text_size_30"/>
 
     <LinearLayout
         android:layout_width="match_parent"

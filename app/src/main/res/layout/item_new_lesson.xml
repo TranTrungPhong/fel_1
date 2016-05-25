@@ -12,6 +12,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:elevation="10dp"
         android:background="@color/colorBackgroundQuestion">
 
         <TextView
@@ -39,6 +40,7 @@
         android:id="@+id/radiogroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:elevation="10dp"
         android:orientation="vertical">
 
         <RadioButton
@@ -49,6 +51,7 @@
             android:padding="@dimen/drawable_padding"
             android:paddingLeft="@dimen/padding_50"
             android:textColor="@color/colorTextDark"
+            android:checked="false"
             android:textSize="@dimen/text_size_10"/>
 
         <RadioButton
@@ -59,6 +62,7 @@
             android:padding="@dimen/drawable_padding"
             android:paddingLeft="@dimen/padding_50"
             android:textColor="@color/colorTextDark"
+            android:checked="false"
             android:textSize="@dimen/text_size_10"/>
 
         <RadioButton
@@ -68,6 +72,7 @@
             android:layout_weight="1"
             android:padding="@dimen/drawable_padding"
             android:paddingLeft="@dimen/padding_50"
+            android:checked="false"
             android:textColor="@color/colorTextDark"
             android:textSize="@dimen/text_size_10"/>
 
@@ -78,6 +83,7 @@
             android:layout_weight="1"
             android:padding="@dimen/drawable_padding"
             android:paddingLeft="@dimen/padding_50"
+            android:checked="false"
             android:textColor="@color/colorTextDark"
             android:textSize="@dimen/text_size_10"/>
     </RadioGroup>

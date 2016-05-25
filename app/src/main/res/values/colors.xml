@@ -5,12 +5,12 @@
     <color name="colorAccent">#1f9f27</color>
     <color name="colorBackgroundLogin">#757575</color>
     <color name="textColorLogin">#FAFAFA</color>
-    <color name="bgButtonLogin">#E65100</color>
     <color name="ColorHint">#bc2556</color>
     <color name="colorText">#00BFA5</color>
     <color name="gray">#f0f0f0</color>
     <color name="colorsplash">#757575</color>
     <color name="bgButtonLoginSelected">#a63a00</color>
+    <color name="bgButtonLogin">#fa8647</color>
     <color name="bg_wrong_answer">#efd7d7</color>
     <color name="bg_right_answer">#daedd0</color>
     <color name="divider_category">#cfdacf</color>

@@ -37,7 +37,7 @@ public class RegisterActivity extends AppCompatActivity implements TaskFragment.
     private static final String TAG = "RegisterActivity";
     private static final String TAG_TASK_FRAGMENT = "task_fragment";
     private TaskFragment mTaskFragment;
-    private Toolbar mToolbar;
+//    private Toolbar mToolbar;
     private EditText mEditName;
     private EditText mEditEmail;
     private EditText mEditPassword;
@@ -63,12 +63,12 @@ public class RegisterActivity extends AppCompatActivity implements TaskFragment.
     }
 
     private void initView() {
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        mToolbar.setTitle(null);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        mToolbar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(mToolbar);
+//        mToolbar.setTitle(null);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        getSupportActionBar().setDisplayShowHomeEnabled(true);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mEditName = (EditText) findViewById(R.id.edit_name);
         mEditEmail = (EditText) findViewById(R.id.edit_email);
         mEditPassword = (EditText) findViewById(R.id.edit_password);
@@ -111,12 +111,12 @@ public class RegisterActivity extends AppCompatActivity implements TaskFragment.
                 }
             }
         });
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+//        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onBackPressed();
+//            }
+//        });
     }
 
     @Override

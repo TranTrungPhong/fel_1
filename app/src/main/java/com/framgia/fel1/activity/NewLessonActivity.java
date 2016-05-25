@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.framgia.fel1.R;
@@ -142,6 +143,11 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void initView() {
+        SharedPreferences mSharedPreferences =
+                getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        editor.putInt(Const.ANSWER_TAG, 1);
+        editor.apply();
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -232,9 +238,14 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.fab_submit:
-//                mCountLesson++;
-//                if(mCountLesson <= Const.COUNT_LESSON){
-                Log.i("FFFFFFFFFFFFFFF","Category ID : "+mLesson.getmIdCategory());
+                mFabSubmit.setEnabled(false);
+                SharedPreferences mSharedPreferences =
+                        getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = mSharedPreferences.edit();
+                editor.putInt(Const.ANSWER_TAG, 1);
+                editor.apply();
+                RadioGroup radioGroup = ( RadioGroup ) findViewById(R.id.radiogroup);
+                radioGroup.clearCheck();
                     for (Word word : mLesson.getWords()) {
                         Result mResult = new Result(
                                 mUser.getId(),
@@ -326,8 +337,6 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
                         mUser.getAuthToken();
                 try {
                     response = HttpRequest.postJsonRequest(url, null, APIService.METHOD_POST);
-                    Log.i("Response create : " , response);
-                    Log.i("Response create url: " , url);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -339,9 +348,7 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
                     JSONObject jsonObjectWord = new JSONObject();
                     try {
                         jsonObjectWord.put(Const.ID, String.valueOf(mListResuiltId.get(i)));
-                        Log.i("AAAAAAAAA",mListResuiltId.get(i)+"");
                         jsonObjectWord.put(Const.ANSWER_ID, String.valueOf(mListWordAns.get(i).getResultId()));
-                        Log.i("AAAAAAAAA","B : "+mListWordAns.get(i).getResultId()+"");
                         jsonArray.put(String.valueOf(i), jsonObjectWord);
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -358,9 +365,6 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
                 }
                 String urlPost = Const.URL_UPDATE_LESSON + mLesson.getId() + Const.JSON_TYPE + "?" +
                         Const.AUTH_TOKEN + "=" + mUser.getAuthToken();
-//                String response = null;
-                Log.i("FFFFFFFFFFF",jsonObjectPost.toString());
-                Log.i("FFFFFFFFFFF","url : "+urlPost);
                 try {
                     response = HttpRequest.postJsonRequest(urlPost, jsonObjectPost, APIService.METHOD_PATCH);
                 } catch (IOException e) {
@@ -409,7 +413,6 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
                             JSONObject jsonWord = jsonArrayWord.optJSONObject(i);
                             int idWord = jsonWord.optInt(Const.ID);
                             int resultIdWord = jsonWord.optInt(Const.RESULT_ID);
-                            Log.i("AAAAAAAAA",resultIdWord+"");
                             mListResuiltId.add(String.valueOf(resultIdWord));
                             String contentWord = jsonWord.optString(Const.CONTENT);
                             JSONArray jsonArrayAnswer = jsonWord.optJSONArray(Const.ANSWERS);
@@ -431,6 +434,7 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
                         mTextNameNewLess.setText(mLesson.getName());
                         mListWordNewLesson.clear();
                         mListWordNewLesson.addAll(mLesson.getWords());
+                        mNewLessonAdapter.clearCheck();
                         mNewLessonAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -456,6 +460,7 @@ public class NewLessonActivity extends AppCompatActivity implements View.OnClick
                 if (InternetUtils.isInternetConnected(NewLessonActivity.this)) {
                     mTaskFragment.startInBackground(new String[]{TAG_TASK_FRAGMENT});
                 }
+                mFabSubmit.setEnabled(true);
                 break;
             default:
                 break;
