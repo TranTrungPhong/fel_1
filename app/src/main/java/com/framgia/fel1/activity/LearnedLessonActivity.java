@@ -35,8 +35,8 @@ import java.util.List;
 /**
  * Created by PhongTran on 04/18/2016.
  */
-public class LearnedLessonActivity extends AppCompatActivity implements View.OnClickListener,
-        LessonLearnedAdapter.OnClickItemLessonLearned {
+public class LearnedLessonActivity extends AppCompatActivity
+        implements View.OnClickListener, LessonLearnedAdapter.OnClickItemLessonLearned {
     private RecyclerView mRecyclerLessonLearned;
     private LessonLearnedAdapter mLessonLearnedAdapter;
     private Button mButtonCreateLesson;
@@ -79,7 +79,8 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
         mLearnedLessonsList.clear();
         mLearnedLessonsListResume.clear();
         for (Result result: mListResult) {
-            mLearnedLessonsListResume.addAll(mMySqliteHelper.getListLesson(result.getIdLesson(),mCategorId));
+            mLearnedLessonsListResume
+                    .addAll(mMySqliteHelper.getListLesson(result.getIdLesson(),mCategorId));
         }
         mLearnedLessonsList.addAll(mLearnedLessonsListResume);
         if (mLessonLearnedAdapter != null) {
@@ -112,7 +113,6 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
 
     private void initData() {
         Intent receiveIntent = getIntent();
-        //mUser = (User) receiveIntent.getSerializableExtra(Const.USER);
         mAuthToken = receiveIntent.getStringExtra(Const.AUTH_TOKEN);
         mNameCategory = receiveIntent.getStringExtra(Const.NAME);
         mCategorId = receiveIntent.getIntExtra(Const.ID, -1);
@@ -127,18 +127,12 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
         }
         mLearnedLessonsList.clear();
         for (Result result: mListResult) {
-            mLearnedLessonsList.addAll(mMySqliteHelper.getListLesson(result.getIdLesson(), mCategorId));
+            mLearnedLessonsList
+                    .addAll(mMySqliteHelper.getListLesson(result.getIdLesson(), mCategorId));
         }
-
-//        Log.i("FFFFFFFF","Result  : "+mResult.getId());
-//        Log.i("FFFFFFFF","Id USer : "+mUser.getId());
-//        Log.i("FFFFFFFF","Id Lesson : "+mResult.getIdLesson());
         mLessonLearnedAdapter = new LessonLearnedAdapter(this, mLearnedLessonsList);
         mRecyclerLessonLearned.setAdapter(mLessonLearnedAdapter);
         mLessonLearnedAdapter.notifyDataSetChanged();
-//        mRecyclerLessonLearned.addItemDecoration(new DividerItemDecoration(this,
-//                                                     DividerItemDecoration.VERTICAL_LIST,
-//                                                     R.drawable.divider_category_list));
     }
 
     private void createNewLesson() {
@@ -187,15 +181,12 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.button_create_lesson:
-//                mAlertDialog.show();
                 NewLessonActivity.isLessonLoad = false;
                 final Intent intent = new Intent(LearnedLessonActivity.this,
                         NewLessonActivity.class);
                 intent.putExtra(Const.AUTH_TOKEN, mAuthToken);
                 intent.putExtra(Const.NAME, mNameCategory);
                 intent.putExtra(Const.CATEGORY_ID, mCategorId);
-//                intent.putExtra(APIService.PAGE, page);
-//                intent.putExtra(APIService.PER_PAGE, perPage);
                 startActivity(intent);
                 break;
             case R.id.button_word_list:
@@ -209,10 +200,8 @@ public class LearnedLessonActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClickItemLessonLearned(int position, Lesson lesson) {
-        // TODO call lesson or word list
         Intent intent = new Intent(LearnedLessonActivity.this, ResultActivity.class);
         intent.putExtra(Const.LESSON, lesson);
-        //intent.putExtra(Const.USER, mUser);
         progressDialog.setMessage(getResources().getString(R.string.loading));
         progressDialog.show();
         new Thread(new Runnable()
