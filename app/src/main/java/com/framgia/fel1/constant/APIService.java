@@ -8,7 +8,7 @@ public class APIService {
     public static final String URL_API_SIGNUP = "https://manh-nt.herokuapp.com/users.json";
     public static final String URL_API_SIGNOUT = "https://manh-nt.herokuapp.com/logout.json";
     public static final String URL_GET_CATEGORY = "https://manh-nt.herokuapp.com/categories.json";
-    public static final String URL_CREAT_LESSION = "https://manh-nt.herokuapp.com/categories/1/lessons.json";
+    public static final String URL_CREAT_LESSION = "https://manh-nt.herokuapp.com/categories/";
     public static final String URL_UPDATE_LESSION = "https://manh-nt.herokuapp.com/lessons/3.json";
     public static final String URL_WORD_LIST = "https://manh-nt.herokuapp.com/words.json";
     public static final String URL_SHOW_USER = "https://manh-nt.herokuapp.com/users/";

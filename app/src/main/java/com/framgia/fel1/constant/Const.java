@@ -58,4 +58,7 @@ public interface Const {
     String CONTENT_LOADING = "content_loading";
     int MY_PERMISSIONS_REQUEST_WRITE_STORAGE = 543;
     String ANSWER_TAG = "answer_tag";
+    String LIST = "list";
+    String LESSON_ANS = "lesson_ans";
+    String ISLESSON = "ISLESSON";
 }
