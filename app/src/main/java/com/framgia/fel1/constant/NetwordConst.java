@@ -3,12 +3,12 @@ package com.framgia.fel1.constant;
 /**
  * Created by phongtran on 14/04/2016.
  */
-public class APIService {
+public class NetwordConst {
     public static final String URL_API_SIGNIN = "https://manh-nt.herokuapp.com/login.json";
     public static final String URL_API_SIGNUP = "https://manh-nt.herokuapp.com/users.json";
     public static final String URL_API_SIGNOUT = "https://manh-nt.herokuapp.com/logout.json";
     public static final String URL_GET_CATEGORY = "https://manh-nt.herokuapp.com/categories.json";
-    public static final String URL_CREAT_LESSION = "https://manh-nt.herokuapp.com/categories/";
+    public static final String URL_CREATE_LESSION = "https://manh-nt.herokuapp.com/categories/";
     public static final String URL_UPDATE_LESSION = "https://manh-nt.herokuapp.com/lessons/3.json";
     public static final String URL_WORD_LIST = "https://manh-nt.herokuapp.com/words.json";
     public static final String URL_SHOW_USER = "https://manh-nt.herokuapp.com/users/";

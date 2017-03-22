@@ -2,12 +2,12 @@ package com.framgia.fel1.model;
 /**
  * Created by vuduychuong1994 on 5/2/16.
  */
-public class ItemList2 {
+public class ItemWord {
     private String id;
     private String content;
     private String detail;
 
-    public ItemList2(String id, String content, String detail) {
+    public ItemWord(String id, String content, String detail) {
         this.id = id;
         this.content = content;
         this.detail = detail;

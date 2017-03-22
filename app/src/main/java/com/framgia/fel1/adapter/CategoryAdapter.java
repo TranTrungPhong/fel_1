@@ -15,12 +15,12 @@ import java.util.List;
 /**
  * Created by PhongTran on 05/02/2016.
  */
-public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.CategoryViewHolder> {
+public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder> {
     private List<Category> mListCategory;
     private Context mContext;
     private OnListCategoryClickItem mCategoryClickItem;
 
-    public HomeAdapter(Context context, List<Category> categoryList) {
+    public CategoryAdapter(Context context, List<Category> categoryList) {
         this.mContext = context;
         this.mListCategory = categoryList;
         if (context instanceof OnListCategoryClickItem) {

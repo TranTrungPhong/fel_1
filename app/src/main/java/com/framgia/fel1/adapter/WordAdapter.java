@@ -23,17 +23,17 @@ import java.util.List;
  * {@link RecyclerView.Adapter} that can display a {@link ItemList2} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}. for your data type.
  */
-public class MyItemRecyclerViewAdapter
-        extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> implements Filterable {
+public class WordAdapter
+        extends RecyclerView.Adapter<WordAdapter.ViewHolder> implements Filterable {
     private Context mContext;
     private List<ItemList2> mValues;
     private List<ItemList2> mListFiltered = new ArrayList<>();
     private OnListFragmentInteractionListener mListener;
     private ItemFilter mFilter = new ItemFilter();
     private MySqliteHelper mSqliteHelper;
-    private String mFilterString = Const.ALL_WORD;
+    private String mFilterString = Const.FILTER_ALL_WORDS;
 
-    public MyItemRecyclerViewAdapter(Context context, List<ItemList2> items) {
+    public WordAdapter(Context context, List<ItemList2> items) {
         mContext = context;
         mValues = items;
         mListFiltered = items;
@@ -53,7 +53,7 @@ public class MyItemRecyclerViewAdapter
         MySqliteHelper sqliteHelper = new MySqliteHelper(mContext);
         Word word = sqliteHelper.getWord(Integer.parseInt(item.getId()));
         if ( word.getId() == Integer.parseInt(item.getId()) && word.getResultId() != 0 &&
-                mFilterString.equals(Const.ALL_WORD) ) {
+                mFilterString.equals(Const.FILTER_ALL_WORDS) ) {
             type += 2;
         }
         return type;
@@ -156,16 +156,16 @@ public class MyItemRecyclerViewAdapter
             for (ItemList2 item : list) {
                 Word word = mSqliteHelper.getWord(Integer.parseInt(item.getId()));
                 switch (state.toString()) {
-                    case Const.ALL_WORD:
+                    case Const.FILTER_ALL_WORDS:
                         resultList.add(item);
                         break;
-                    case Const.LEARNED:
+                    case Const.FILTER_LEARNED_WORDS:
                         if ( word.getId() == Integer.parseInt(item.getId()) &&
                                 word.getResultId() != 0 ) {
                             resultList.add(item);
                         }
                         break;
-                    case Const.NO_LEARN:
+                    case Const.FILTER_NEW_WORDS:
                         if ( word.getResultId() == 0 ) {
                             resultList.add(item);
                         }
