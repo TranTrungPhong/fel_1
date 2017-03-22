@@ -53,17 +53,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by PhongTran on 04/15/2016.
  */
 public class HomeActivity extends BaseActivity
-        implements View.OnClickListener, CategoryAdapter.OnListCategoryClickItem,
-        TaskFragment.TaskCallbacks, NavigationView.OnNavigationItemSelectedListener,
+        implements View.OnClickListener, CategoryAdapter.OnListCategoryClickItem, NavigationView.OnNavigationItemSelectedListener,
         HomeContract.View {
 
-    private static final String TAG_TASK_FRAGMENT = "task_fragment";
-    private static final String LOADCATEGORY_TAG = "load_category_tag";
-    private static final String SIGOUT_TAG = "sig_out_tag";
     private static final String ISCATEGORY = "ISCATEGORY";
     private static final String CONTENT_BITMAP = "bitmap";
-    private static String sGetTag = LOADCATEGORY_TAG;
-    private TaskFragment mTaskFragment;
     private CircleImageView mImageViewAvatar;
     private TextView mTextViewName;
     private TextView mTextViewEmail;
@@ -72,16 +66,14 @@ public class HomeActivity extends BaseActivity
     private ArrayList<Category> mListCategory;
     private String mAuthToken;
     private User mUser;
-    private MySqliteHelper mMySqliteHelper;
     private Toast mToast;
-    private SharedPreferences mSharedPreferences;
     private static boolean sIsCategoryLoad;
     private boolean mIsLoadImage;
     private Bitmap mBitmapAvatar;
     private NavigationView mNavigationView;
     private DrawerLayout mDrawerLayout;
     private Toolbar mToolbar;
-    private HomePresenter mPresenter;
+    private HomeContract.Presenter mPresenter;
 
     @Override
     public int getLayoutId() {
@@ -91,7 +83,7 @@ public class HomeActivity extends BaseActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mPresenter = new HomePresenter(
-                CategoryRepository.getInstance(CategoryRemoteDataSource.getInstance()), this);
+                CategoryRepository.getInstance(CategoryRemoteDataSource.getInstance()), this, this);
         super.onCreate(savedInstanceState);
         initData();
     }
@@ -131,18 +123,9 @@ public class HomeActivity extends BaseActivity
     }
 
     private void initData() {
-        FragmentManager fm = getSupportFragmentManager();
-        mTaskFragment = (TaskFragment) fm.findFragmentByTag(TAG_TASK_FRAGMENT);
-        if (mTaskFragment == null) {
-            mTaskFragment = new TaskFragment();
-            fm.beginTransaction().add(mTaskFragment, TAG_TASK_FRAGMENT).commit();
-            mTaskFragment.onAttach((Context) this);
-        }
-        mMySqliteHelper = new MySqliteHelper(this);
-        mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
-        int id = mSharedPreferences.getInt(Const.ID, -1);
-        if (id == -1) finish();
-        mUser = mMySqliteHelper.getUser(id);
+        mUser = mPresenter.getUser();
+        if (mUser == null) finish();
+
         if (!mIsLoadImage && InternetUtils.isInternetConnected(HomeActivity.this, false)) {
             mIsLoadImage = true;
             if (!TextUtils.isEmpty(mUser.getAvatar())) {
@@ -152,7 +135,6 @@ public class HomeActivity extends BaseActivity
         mTextViewName.setText(mUser.getName());
         mTextViewEmail.setText(mUser.getEmail());
         mAuthToken = mUser.getAuthToken();
-        sGetTag = LOADCATEGORY_TAG;
         if (!sIsCategoryLoad) {
             showDialog();
             mPresenter.getListCategory(mAuthToken);
@@ -176,34 +158,24 @@ public class HomeActivity extends BaseActivity
         }
     }
 
-    private void showSignOutDialog() {
+    @Override
+    public void showSignOutDialog() {
         new AlertDialog.Builder(this).setTitle(R.string.infor).setMessage(R.string.confirrn_signout)
              .setPositiveButton(R.string.ok,
                      new DialogInterface.OnClickListener() {
                          @Override
                          public void onClick(
                                  DialogInterface dialog, int which) {
-                             onSignOut();
+                             if (InternetUtils.isInternetConnected(HomeActivity.this)) {
+                                 mPresenter.logOut(mAuthToken);
+                             } else {
+                                 mPresenter.startLoginActivity();
+                                 sIsCategoryLoad = false;
+                             }
                          }
                      })
              .setNegativeButton(R.string.cancel, null)
              .show();
-    }
-
-    private void onSignOut() {
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putBoolean(Const.REMEMBER, false);
-        editor.remove(Const.ID);
-        editor.apply();
-        if (InternetUtils.isInternetConnected(HomeActivity.this)) {
-            sGetTag = SIGOUT_TAG;
-            mTaskFragment.startInBackground(new String[]{TAG_TASK_FRAGMENT});
-        } else {
-            Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
-            sIsCategoryLoad = false;
-            startActivity(intent);
-            finish();
-        }
     }
 
     @Override
@@ -214,10 +186,7 @@ public class HomeActivity extends BaseActivity
         intentLessonLearned.putExtra(Const.NAME, mListCategory.get(position).getName());
         intentLessonLearned.putExtra(Const.USER, mUser);
         startActivity(intentLessonLearned);
-        mSharedPreferences = getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putInt(Const.CATEGORY_ID, mListCategory.get(position).getId());
-        editor.apply();
+        mPresenter.putPreference(Const.CATEGORY_ID, mListCategory.get(position).getId());
     }
 
     @Override
@@ -230,64 +199,6 @@ public class HomeActivity extends BaseActivity
             sIsCategoryLoad = false;
         } else {
             mToast.show();
-        }
-    }
-
-    @Override
-    public void onPreExecute() {
-        if (sGetTag.equals(SIGOUT_TAG)) showDialog();
-    }
-
-    @Override
-    public String onBackGround(String[] param) {
-        String response = null;
-        if (sGetTag.equals(SIGOUT_TAG)) {
-            String url = NetwordConst.URL_API_SIGNOUT + "?" +
-                    Const.AUTH_TOKEN + "=" +
-                    mUser.getAuthToken();
-            try {
-                response = HttpRequest.postJsonRequest(url, null, NetwordConst.METHOD_DELETE);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return response;
-    }
-
-    @Override
-    public void onProgressUpdate(String response) {
-        //TODO: OnProgressUpdate task
-    }
-
-    @Override
-    public void onCancelled() {
-        //TODO: OnCancelled task
-    }
-
-    @Override
-    public void onPostExecute(String response) {
-        if (sGetTag.equals(SIGOUT_TAG)) {
-            sIsCategoryLoad = false;
-            if (response == null) {
-                Toast.makeText(HomeActivity.this, R.string.response_null, Toast.LENGTH_SHORT)
-                     .show();
-                return;
-            }
-            if ((response.substring(0, response.indexOf(":")))
-                    .contains(String.valueOf(R.string.Exception)) ||
-                    (response.substring(0, response.indexOf(":")))
-                            .contains(String.valueOf(R.string.StackTrace))) {
-                Toast.makeText(HomeActivity.this, R.string.response_error, Toast.LENGTH_SHORT)
-                     .show();
-                return;
-            }
-            mSharedPreferences =
-                    getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = mSharedPreferences.edit();
-            editor.putString(Const.EMAIL, mUser.getEmail());
-            editor.apply();
-            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
-            finish();
         }
     }
 
