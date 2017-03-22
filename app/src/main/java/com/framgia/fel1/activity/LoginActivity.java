@@ -277,15 +277,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //            JSONObject jsonObject = new JSONObject();
 //            String response = null;
 //            try {
-//                jsonObject.put(APIService.SESSION_EMAIL, email);
-//                jsonObject.put(APIService.SESSION_PASWORD, password);
-//                jsonObject.put(APIService.SESSION_REMEMBER_ME, mCheckBoxRememMe);
+//                jsonObject.put(CategoryService.SESSION_EMAIL, email);
+//                jsonObject.put(CategoryService.SESSION_PASWORD, password);
+//                jsonObject.put(CategoryService.SESSION_REMEMBER_ME, mCheckBoxRememMe);
 //                JSONObject jsonObjectPost = new JSONObject();
-//                jsonObjectPost.put(APIService.SESSION, jsonObject);
+//                jsonObjectPost.put(CategoryService.SESSION, jsonObject);
 //                try {
 //                    response =
-//                            HttpRequest.postJsonRequest(APIService.URL_API_SIGNIN, jsonObjectPost,
-//                                                        APIService.METHOD_POST);
+//                            HttpRequest.postJsonRequest(CategoryService.URL_API_SIGNIN, jsonObjectPost,
+//                                                        CategoryService.METHOD_POST);
 //                } catch (IOException e) {
 //                    e.printStackTrace();
 //                }

@@ -1,5 +1,6 @@
 package com.framgia.fel1.model;
 import com.framgia.fel1.constant.Const;
+import com.google.gson.annotations.SerializedName;
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.Serializable;
@@ -9,10 +10,10 @@ import java.io.Serializable;
  */
 public class Category implements Serializable {
 
-    private int mId;
-    private String mName;
-    private String mPhoto;
-    private String mLearnWords;
+    @SerializedName("id") private int mId;
+    @SerializedName("name") private String mName;
+    @SerializedName("photo") private String mPhoto;
+    @SerializedName("learned_words") private String mLearnWords;
 
     public Category() {
     }
@@ -22,22 +23,6 @@ public class Category implements Serializable {
         mName = name;
         mPhoto = photo;
         mLearnWords = learnWords;
-    }
-
-    public Category(String jsonString) throws JSONException {
-        JSONObject jsonObject = new JSONObject(jsonString);
-        if (jsonObject.has(Const.ID)) {
-            mId = jsonObject.getInt(Const.ID);
-        }
-        if (jsonObject.has(Const.NAME)) {
-            mName = jsonObject.getString(Const.NAME);
-        }
-        if (jsonObject.has(Const.PHOTO)) {
-            mPhoto = jsonObject.getString(Const.PHOTO);
-        }
-        if (jsonObject.has(Const.LEARNED_WORDS)) {
-            mLearnWords = jsonObject.getString(Const.LEARNED_WORDS);
-        }
     }
 
     public Category(JSONObject jsonObject) throws JSONException {
