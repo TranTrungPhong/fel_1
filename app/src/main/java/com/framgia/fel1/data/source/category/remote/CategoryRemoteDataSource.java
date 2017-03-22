@@ -29,7 +29,7 @@ public class CategoryRemoteDataSource implements CategoryDataSource {
             final String authToken, @NonNull final Callback callback) {
         ServiceGenerator.createService(CategoryService.class)
                         .getCategories(authToken)
-                        .enqueue(new retrofit2.Callback() {
+                        .enqueue(new retrofit2.Callback<CategoryResponse>() {
                @Override
                public void onResponse(
                        Call<CategoryResponse> call, Response<CategoryResponse> response) {

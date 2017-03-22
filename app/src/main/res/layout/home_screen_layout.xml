@@ -1,125 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_all"
-    android:orientation="vertical">
+    android:background="@drawable/background_all">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/abc_action_bar_default_height_material"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:orientation="horizontal"
-        android:weightSum="3">
-
-        <Button
-            android:id="@+id/button_sign_out_show_user"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/button_background"
-            android:text="@string/sign_out"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_size_10"/>
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"/>
-
-        <Button
-            android:id="@+id/button_wordlist_show_user"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/button_background"
-            android:text="@string/word_list"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_size_10"/>
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"/>
-
-        <Button
-            android:id="@+id/button_show_activities"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/button_background"
-            android:text="@string/activities"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_size_10"/>
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/padding_20"
-        android:paddingRight="@dimen/padding_20">
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/image_show_user_avatar"
-            android:layout_width="@dimen/width_150"
-            android:layout_height="@dimen/width_150"
-            android:layout_alignParentLeft="true"
-            android:layout_marginRight="@dimen/margin_16"
-            android:scaleType="centerCrop"
-            android:src="@android:drawable/ic_menu_gallery"/>
-
-        <TextView
-            android:id="@+id/text_show_user_name"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/height_50"
-            android:layout_toRightOf="@id/image_show_user_avatar"
-            android:gravity="center_vertical"
-            android:text="@string/name_user"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_size_20"/>
-
-        <TextView
-            android:id="@+id/text_show_user_email"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/height_40"
-            android:layout_below="@id/text_show_user_name"
-            android:layout_toRightOf="@id/image_show_user_avatar"
-            android:gravity="center_vertical"
-            android:text="@string/email_user"
-            android:textColor="@android:color/white"
-            android:textSize="@dimen/text_size_10"/>
-
-        <Button
-            android:id="@+id/button_update_show_user"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/height_30"
-            android:layout_below="@id/text_show_user_email"
-            android:layout_toRightOf="@+id/image_show_user_avatar"
-            android:background="@drawable/button_background"
-            android:text="@string/update"
-            android:textColor="@android:color/white"
-            style="?android:attr/borderlessButtonStyle"
-            android:textSize="@dimen/text_size_10"/>
-    </RelativeLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/height_40"
-        android:gravity="center_vertical"
-        android:text="@string/lession_learned"
-        android:textColor="@android:color/white"
-        android:layout_gravity="center"
-        android:textStyle="bold"
-        android:textSize="@dimen/text_size_30"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
         android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/listview_lesson_learned"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/listview_lesson_learned"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </LinearLayout>
+
     </LinearLayout>
 
-
-</LinearLayout>
+</RelativeLayout>

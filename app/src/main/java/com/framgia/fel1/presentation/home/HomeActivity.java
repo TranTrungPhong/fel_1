@@ -185,7 +185,9 @@ public class HomeActivity extends BaseActivity
                                  DialogInterface dialog, int which) {
                              onSignOut();
                          }
-                     }).setNegativeButton(R.string.cancel, null).show();
+                     })
+             .setNegativeButton(R.string.cancel, null)
+             .show();
     }
 
     private void onSignOut() {

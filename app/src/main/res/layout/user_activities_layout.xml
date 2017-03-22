@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:background="@drawable/background_all"
               android:orientation="vertical">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_lesson"
         android:layout_width="match_parent"
@@ -12,40 +13,10 @@
         android:background="@color/colorPrimary"
         app:theme="@style/Base.V7.Theme.AppCompat">
 
-        <TextView
-            android:id="@+id/text_name_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="@dimen/margin_10"
-            android:layout_marginBottom="@dimen/cardview_title_elevation"
-            android:text="TEXT"
-            android:textColor="@color/textColorLogin"
-            android:textSize="@dimen/text_size_30" />
     </android.support.v7.widget.Toolbar>
-
-    <!--<TextView-->
-        <!--android:id="@+id/text_name_user"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:gravity="center"-->
-        <!--android:layout_marginTop="@dimen/margin_10"-->
-        <!--android:layout_marginBottom="@dimen/cardview_title_elevation"-->
-        <!--android:text="TEXT"-->
-        <!--android:textColor="@color/textColorLogin"-->
-        <!--android:textSize="@dimen/text_size_30" />-->
-
-    <TextView
-        android:id="@+id/text_email_user"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="TEXT"
-        android:textColor="@color/textColorLogin"
-        android:textSize="@dimen/text_size_20" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycle_view_activities"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 </LinearLayout>
