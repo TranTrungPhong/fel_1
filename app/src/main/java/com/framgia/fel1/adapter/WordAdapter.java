@@ -13,27 +13,27 @@ import android.widget.TextView;
 import com.framgia.fel1.R;
 import com.framgia.fel1.constant.Const;
 import com.framgia.fel1.data.MySqliteHelper;
-import com.framgia.fel1.model.ItemList2;
+import com.framgia.fel1.model.ItemWord;
 import com.framgia.fel1.model.Word;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * {@link RecyclerView.Adapter} that can display a {@link ItemList2} and makes a call to the
+ * {@link RecyclerView.Adapter} that can display a {@link ItemWord} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}. for your data type.
  */
 public class WordAdapter
         extends RecyclerView.Adapter<WordAdapter.ViewHolder> implements Filterable {
     private Context mContext;
-    private List<ItemList2> mValues;
-    private List<ItemList2> mListFiltered = new ArrayList<>();
+    private List<ItemWord> mValues;
+    private List<ItemWord> mListFiltered = new ArrayList<>();
     private OnListFragmentInteractionListener mListener;
     private ItemFilter mFilter = new ItemFilter();
     private MySqliteHelper mSqliteHelper;
     private String mFilterString = Const.FILTER_ALL_WORDS;
 
-    public WordAdapter(Context context, List<ItemList2> items) {
+    public WordAdapter(Context context, List<ItemWord> items) {
         mContext = context;
         mValues = items;
         mListFiltered = items;
@@ -49,7 +49,7 @@ public class WordAdapter
     @Override
     public int getItemViewType(int position) {
         int type = position % 2;
-        ItemList2 item = mListFiltered.get(position);
+        ItemWord item = mListFiltered.get(position);
         MySqliteHelper sqliteHelper = new MySqliteHelper(mContext);
         Word word = sqliteHelper.getWord(Integer.parseInt(item.getId()));
         if ( word.getId() == Integer.parseInt(item.getId()) && word.getResultId() != 0 &&
@@ -66,26 +66,22 @@ public class WordAdapter
             case 0:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word, parent,
                                                                         false);
-//                ((CardView) view.findViewById(R.id.card_view)).setCardBackgroundColor(
-//                        mContext.getResources().getColor(R.color.gray));
                 break;
             case 1:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word, parent,
-                                                                        false);
+                        false);
                 break;
             case 2:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word_learned,
                                                                         parent, false);
-//                ((CardView) view.findViewById(R.id.card_view)).setCardBackgroundColor(
-//                        mContext.getResources().getColor(R.color.gray));
                 break;
             case 3:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word_learned,
-                                                                        parent, false);
+                        parent, false);
                 break;
             default:
                 view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word, parent,
-                                                                        false);
+                        false);
                 break;
         }
         return new ViewHolder(view);
@@ -93,8 +89,6 @@ public class WordAdapter
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        //        if( holder.getItemViewType() == 0 || holder.getItemViewType() == 2)
-        //            holder.mCardView.setCardBackgroundColor(mContext.);
         holder.mItem = mListFiltered.get(position);
         holder.mContentView.setText(mListFiltered.get(position).getContent());
         holder.mDetailView.setText(mListFiltered.get(position).getDetail());
@@ -114,7 +108,7 @@ public class WordAdapter
         if ( mListFiltered != null ) { return mListFiltered.size(); } else { return 0; }
     }
 
-    public List<ItemList2> getListFiltered() {
+    public List<ItemWord> getListFiltered() {
         return mListFiltered;
     }
 
@@ -128,7 +122,7 @@ public class WordAdapter
         public final TextView mContentView;
         public final TextView mDetailView;
         public final CardView mCardView;
-        public ItemList2 mItem;
+        public ItemWord mItem;
 
         public ViewHolder(View view) {
             super(view);
@@ -150,10 +144,10 @@ public class WordAdapter
             //            String query = state.toString().toLowerCase();
             mFilterString = state.toString();
             FilterResults results = new FilterResults();
-            final List<ItemList2> list = mValues;
-            final List<ItemList2> resultList = new ArrayList<>(list.size());
+            final List<ItemWord> list = mValues;
+            final List<ItemWord> resultList = new ArrayList<>(list.size());
 
-            for (ItemList2 item : list) {
+            for (ItemWord item : list) {
                 Word word = mSqliteHelper.getWord(Integer.parseInt(item.getId()));
                 switch (state.toString()) {
                     case Const.FILTER_ALL_WORDS:
@@ -185,12 +179,12 @@ public class WordAdapter
         @SuppressWarnings("unchecked")
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            mListFiltered = (List<ItemList2>) results.values;
+            mListFiltered = (List<ItemWord>) results.values;
             notifyDataSetChanged();
         }
     }
 
     public interface OnListFragmentInteractionListener {
-        void onListFragmentInteraction(int position, ItemList2 item);
+        void onListFragmentInteraction(int position, ItemWord item);
     }
 }

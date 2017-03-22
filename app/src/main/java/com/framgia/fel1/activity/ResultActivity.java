@@ -83,14 +83,13 @@ public class ResultActivity extends AppCompatActivity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mData = getIntent();
         mLesson = (Lesson) mData.getSerializableExtra(Const.LESSON);
+        mToolbar.setTitle(mLesson.getName());
+
         mWordList = new ArrayList<>();
         mResultAdapter = new ResultAdapter(ResultActivity.this, mLesson, mWordList);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(ResultActivity.this));
         mRecyclerView.setAdapter(mResultAdapter);
-//        mRecyclerView.addItemDecoration(new DividerItemDecoration(this,
-//                                                                  DividerItemDecoration.VERTICAL_LIST,
-//                                                                  R.drawable.divider_word_list));
     }
 
     private void setData() {

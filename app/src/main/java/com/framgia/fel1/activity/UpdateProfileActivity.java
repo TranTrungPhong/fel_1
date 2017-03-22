@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.Bitmap;
@@ -29,11 +28,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.framgia.fel1.R;
-import com.framgia.fel1.constant.APIService;
+import com.framgia.fel1.constant.NetwordConst;
 import com.framgia.fel1.constant.Const;
 import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.User;
 import com.framgia.fel1.model.UserActivity;
+import com.framgia.fel1.presentation.home.HomeActivity;
 import com.framgia.fel1.util.BitmapUtil;
 import com.framgia.fel1.util.CheckRequire;
 import com.framgia.fel1.util.HttpRequest;
@@ -41,7 +41,6 @@ import com.framgia.fel1.util.InternetUtils;
 import com.framgia.fel1.util.ReadJson;
 import com.framgia.fel1.util.ShowImage;
 import com.framgia.fel1.util.TaskFragment;
-import com.framgia.fel1.widget.CircularImageView;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.iconics.IconicsDrawable;
 import org.json.JSONException;
@@ -250,7 +249,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
             JSONObject jsonObjectPost = new JSONObject();
             jsonObjectPost.put(Const.USER, jsonObject);
             try {
-                String url = APIService.URL_UPDATE_PROFILE + mUser.getId() + Const.JSON_TYPE
+                String url = NetwordConst.URL_UPDATE_PROFILE + mUser.getId() + Const.JSON_TYPE
                         + "?" + Const.AUTH_TOKEN + "=" + mUser.getAuthToken();
                 response = HttpRequest.postJsonRequest(url, jsonObjectPost,
                                                        "PATCH");
@@ -385,7 +384,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements TaskFrag
                 JSONObject jsonObjectPost = new JSONObject();
                 jsonObjectPost.put(Const.USER, jsonObject);
                 try {
-                    String url = APIService.URL_UPDATE_PROFILE + mUser.getId() + Const.JSON_TYPE
+                    String url = NetwordConst.URL_UPDATE_PROFILE + mUser.getId() + Const.JSON_TYPE
                             + "?" + Const.AUTH_TOKEN + "=" + mUser.getAuthToken();
                     response = HttpRequest.postJsonRequest(url, jsonObjectPost,
                             "PATCH");

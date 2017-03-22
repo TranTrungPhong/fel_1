@@ -2,7 +2,7 @@ package com.framgia.fel1.util;
 
 import android.util.Log;
 
-import com.framgia.fel1.constant.APIService;
+import com.framgia.fel1.constant.NetwordConst;
 
 import org.json.JSONObject;
 
@@ -71,13 +71,13 @@ public class HttpRequest {
         InputStream inputStream;
         httpUrl = new URL(url);
         connect = (HttpURLConnection) httpUrl.openConnection();
-        if(!method.equals(APIService.METHOD_PATCH))
+        if(!method.equals(NetwordConst.METHOD_PATCH))
             connect.setRequestMethod(method);
         connect.setDoInput(true);
         if(jsonObject1 != null)
             connect.setDoOutput(true);
         else connect.setDoOutput(false);
-        if(method.equals(APIService.METHOD_PATCH))
+        if(method.equals(NetwordConst.METHOD_PATCH))
             connect.setRequestProperty("X-HTTP-Method-Override", method);
         connect.setRequestProperty("Content-Type", "application/json");
         if(jsonObject1 != null) {
@@ -117,7 +117,7 @@ public class HttpRequest {
         try {
             URL httpUrl = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) httpUrl.openConnection();
-            connection.setRequestMethod(APIService.METHOD_GET);
+            connection.setRequestMethod(NetwordConst.METHOD_GET);
             final StringBuilder output = new StringBuilder(url);
             BufferedReader br =
                     new BufferedReader(new InputStreamReader(connection.getInputStream()));

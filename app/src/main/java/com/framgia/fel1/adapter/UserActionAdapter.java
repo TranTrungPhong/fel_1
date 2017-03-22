@@ -6,11 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.framgia.fel1.R;
 import com.framgia.fel1.model.UserActivity;
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by PhongTran on 05/09/2016.
@@ -26,16 +28,15 @@ public class UserActionAdapter extends RecyclerView.Adapter<UserActionAdapter.Us
 
     @Override
     public UserActionHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_user_activities, parent,false);
+        View view =
+                LayoutInflater.from(mContext).inflate(R.layout.item_user_activities, parent, false);
         UserActionHolder actionHolder = new UserActionHolder(view);
         return actionHolder;
     }
 
     @Override
     public void onBindViewHolder(UserActionHolder holder, int position) {
-        holder.mTextViewIdUserAction.setText(mListActivities.get(position).getCreated_at().toString());
-        holder.mTextViewAction.setText(mListActivities.get(position).getContent().toString());
-//        holder.mUserActivity = mListActivities.get(position);
+        holder.binding(mListActivities.get(position));
     }
 
     @Override
@@ -43,24 +44,31 @@ public class UserActionAdapter extends RecyclerView.Adapter<UserActionAdapter.Us
         return mListActivities == null ? 0 : mListActivities.size();
     }
 
-    public class UserActionHolder extends RecyclerView.ViewHolder{
+    public class UserActionHolder extends RecyclerView.ViewHolder {
         private TextView mTextViewIdUserAction;
         private TextView mTextViewAction;
-//        private final View mView;
-//        private UserActivity mUserActivity;
 
         public UserActionHolder(View itemView) {
             super(itemView);
-//            this.mView = itemView;
-            this.mTextViewIdUserAction = (TextView)itemView
-                    .findViewById(R.id.text_item_user_activities_id);
-            this.mTextViewAction = (TextView)itemView
-                    .findViewById(R.id.text_item_user_activities_name);
+            this.mTextViewIdUserAction =
+                    (TextView) itemView.findViewById(R.id.text_item_user_activities_id);
+            this.mTextViewAction =
+                    (TextView) itemView.findViewById(R.id.text_item_user_activities_name);
         }
-        @Override
-        public String toString() {
-            return super.toString();
+
+        public void binding(UserActivity userActivity) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+            sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm");
+            try {
+                Date convertedDate = sdf.parse(userActivity.getCreated_at());
+                mTextViewIdUserAction.setText(dateFormat.format(convertedDate));
+            } catch (ParseException e) {
+                mTextViewIdUserAction.setText(userActivity.getCreated_at());
+                e.printStackTrace();
+            }
+
+            mTextViewAction.setText(userActivity.getContent());
         }
     }
-
 }
