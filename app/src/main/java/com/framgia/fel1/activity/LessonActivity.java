@@ -369,13 +369,7 @@ public class LessonActivity extends AppCompatActivity
                     Toast.makeText(LessonActivity.this, R.string.update_done, Toast.LENGTH_SHORT)
                          .show();
                 }
-
-                //                mListWordNewLesson.clear();
-                //                GET_TAG = CREATE_LESSON_TAG;
-                //                if (InternetUtils.isInternetConnected(LessonActivity.this)) {
-                //                    mTaskFragment.startInBackground(new String[]{TAG_TASK_FRAGMENT});
-                //                }
-                //                mFabSubmit.setEnabled(true);
+                onBackPressed();
                 break;
             default:
                 break;
