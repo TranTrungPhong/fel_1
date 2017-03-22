@@ -3,28 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-    android:layout_marginRight="@dimen/activity_horizontal_margin"
-    android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layout_margin="@dimen/cardview_margin_small"
     android:background="@drawable/background_item_result"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="10dp"
         android:background="@color/colorBackgroundQuestion">
 
         <TextView
             android:id="@+id/text_question"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="4"
             android:gravity="center"
             android:paddingBottom="@dimen/abc_action_bar_overflow_padding_start_material"
             android:paddingLeft="@dimen/abc_action_bar_overflow_padding_start_material"
-            android:paddingTop="@dimen/abc_action_bar_overflow_padding_start_material"/>
+            android:paddingTop="@dimen/abc_action_bar_overflow_padding_start_material" />
 
         <ImageView
             android:id="@+id/image_speak"
@@ -32,14 +29,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right"
             android:padding="@dimen/abc_action_bar_overflow_padding_start_material"
-            android:src="@android:drawable/ic_lock_silent_mode_off"/>
+            android:src="@android:drawable/ic_lock_silent_mode_off" />
     </LinearLayout>
 
     <RadioGroup
         android:id="@+id/radio_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="10dp"
         android:orientation="vertical">
 
         <TableRow
@@ -54,7 +50,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:enabled="false"/>
+                android:enabled="false" />
 
             <RadioButton
                 android:id="@+id/radio_answer_2"
@@ -62,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:enabled="false"/>
+                android:enabled="false" />
         </TableRow>
 
         <TableRow
@@ -76,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:enabled="false"/>
+                android:enabled="false" />
 
             <RadioButton
                 android:id="@+id/radio_answer_4"
@@ -84,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:enabled="false"/>
+                android:enabled="false" />
         </TableRow>
 
 

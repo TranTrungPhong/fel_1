@@ -32,4 +32,10 @@
     <dimen name="width_100">100dp</dimen>
     <dimen name="margin_10">10dp</dimen>
     <dimen name="cardview_title_elevation">5dp</dimen>
+    <dimen name="cardview_margin_small">4dp</dimen>
+    <dimen name="layout_category_height">60dp</dimen>
+    <dimen name="nav_drawer_width">300dp</dimen>
+    <dimen name="nav_header_height">200dp</dimen>
+    <dimen name="item_user_activity_height">65dp</dimen>
+    <dimen name="height_100">100dp</dimen>
 </resources>

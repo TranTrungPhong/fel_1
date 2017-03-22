@@ -13,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/abc_action_bar_default_height_material"
         android:background="@color/colorPrimary"
-        android:elevation="@dimen/cardview_title_elevation"
         app:theme="@style/Base.V7.Theme.AppCompat">
 
         <TextView
@@ -24,63 +23,62 @@
             android:gravity="center"
             android:text="@string/title_word_list"
             android:textColor="@color/textColorLogin"
-            android:textSize="@dimen/abc_text_size_title_material_toolbar"/>
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:dropDownVerticalOffset="?attr/actionBarSize"
-            android:popupBackground="@color/textColorLogin"
-            android:spinnerMode="dropdown"/>
+            android:textSize="@dimen/abc_text_size_title_material_toolbar" />
 
     </android.support.v7.widget.Toolbar>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_all">
+        android:background="@color/gray">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <RadioGroup
+                android:id="@+id/radio_group"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/background_title_wordlist"
-                android:elevation="@dimen/cardview_title_elevation"
                 android:orientation="horizontal"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:paddingRight="@dimen/activity_horizontal_margin">
+                android:weightSum="3">
 
-                <TextView
-                    android:id="@+id/text_content"
-                    android:layout_width="0dp"
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:id="@+id/rb_new"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"
                     android:layout_weight="1"
-                    android:text="@string/word"
-                    android:textAppearance="?attr/textAppearanceListItem"
-                    android:textColor="@color/colorTextTitle"/>
+                    android:text="@string/new_words" />
 
-                <TextView
-                    android:id="@+id/text_detail"
-                    android:layout_width="0dp"
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:id="@+id/rb_learned"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"
                     android:layout_weight="1"
-                    android:text="@string/answer"
-                    android:textAppearance="?attr/textAppearanceListItem"
-                    android:textColor="@color/colorTextTitle"/>
-            </LinearLayout>
+                    android:text="@string/learned" />
+
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:id="@+id/rb_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:checked="true"
+                    android:text="@string/all" />
+
+            </RadioGroup>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="@dimen/margin_10"
+                android:background="@android:color/white"
+                />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent" />
         </LinearLayout>
 
         <LinearLayout
@@ -89,11 +87,12 @@
             android:layout_height="match_parent"
             android:background="@color/gray"
             android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <ProgressBar
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
     </FrameLayout>
