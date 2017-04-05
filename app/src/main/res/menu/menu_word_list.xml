@@ -12,7 +12,7 @@
         android:title="@string/export_tsv"/>
     <item
         android:id="@+id/action_sync"
-        android:icon="@android:drawable/ic_menu_rotate"
+        android:icon="@drawable/ic_refresh"
         app:showAsAction="ifRoom"
         android:title="@string/sync_server"/>
 

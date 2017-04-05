@@ -1,18 +1,14 @@
 package com.framgia.fel1.activity;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteConstraintException;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -22,11 +18,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.framgia.fel1.R;
-import com.framgia.fel1.constant.APIService;
+import com.framgia.fel1.constant.NetwordConst;
 import com.framgia.fel1.constant.Const;
+import com.framgia.fel1.constant.NetwordConst;
 import com.framgia.fel1.data.MySqliteHelper;
 import com.framgia.fel1.model.User;
 import com.framgia.fel1.model.UserActivity;
+import com.framgia.fel1.presentation.home.HomeActivity;
 import com.framgia.fel1.util.CheckRequire;
 import com.framgia.fel1.util.HttpRequest;
 import com.framgia.fel1.util.InternetUtils;
@@ -139,15 +137,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         JSONObject jsonObject = new JSONObject();
         String response = null;
         try {
-            jsonObject.put(APIService.SESSION_EMAIL, param[0]);
-            jsonObject.put(APIService.SESSION_PASWORD, param[1]);
-            jsonObject.put(APIService.SESSION_REMEMBER_ME, mCheckBoxRememMe);
+            jsonObject.put(NetwordConst.SESSION_EMAIL, param[0]);
+            jsonObject.put(NetwordConst.SESSION_PASWORD, param[1]);
+            jsonObject.put(NetwordConst.SESSION_REMEMBER_ME, mCheckBoxRememMe);
             JSONObject jsonObjectPost = new JSONObject();
-            jsonObjectPost.put(APIService.SESSION, jsonObject);
+            jsonObjectPost.put(NetwordConst.SESSION, jsonObject);
             try {
                 response =
-                        HttpRequest.postJsonRequest(APIService.URL_API_SIGNIN, jsonObjectPost,
-                                APIService.METHOD_POST);
+                        HttpRequest.postJsonRequest(NetwordConst.URL_API_SIGNIN, jsonObjectPost,
+                                NetwordConst.METHOD_POST);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -256,119 +254,4 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             progressDialog.show();
         }
     }
-
-//    private class LoginToServer extends AsyncTask<String, String, String> {
-//        String email = mEditTextEmail.getText().toString();
-//        String password = mEditTextPassword.getText().toString();
-//
-//        @Override
-//        protected void onPreExecute() {
-//            super.onPreExecute();
-//            progressDialog = new ProgressDialog(LoginActivity.this);
-//            progressDialog.setMessage(getResources().getString(R.string.loading));
-//            progressDialog.show();
-//        }
-//
-//        @Override
-//        protected String doInBackground(String... params) {
-////            if ( isCancelled() ) {
-////                return null;
-////            }
-//            JSONObject jsonObject = new JSONObject();
-//            String response = null;
-//            try {
-//                jsonObject.put(APIService.SESSION_EMAIL, email);
-//                jsonObject.put(APIService.SESSION_PASWORD, password);
-//                jsonObject.put(APIService.SESSION_REMEMBER_ME, mCheckBoxRememMe);
-//                JSONObject jsonObjectPost = new JSONObject();
-//                jsonObjectPost.put(APIService.SESSION, jsonObject);
-//                try {
-//                    response =
-//                            HttpRequest.postJsonRequest(APIService.URL_API_SIGNIN, jsonObjectPost,
-//                                                        APIService.METHOD_POST);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                return response;
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//                return response;
-//            }
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String s) {
-//            progressDialog.dismiss();
-//            if ( s == null ) {
-//                Toast.makeText(LoginActivity.this, R.string.tk_khongTonTai,
-//                               Toast.LENGTH_SHORT).show();
-//            } else if ( (s.substring(0, s.indexOf(":"))).contains(R.string.Exception + "") ||
-//                    (s.substring(0, s.indexOf(":"))).contains(R.string.StackTrace + "") ) {
-//                Toast.makeText(LoginActivity.this, R.string.error_login, Toast.LENGTH_SHORT).show();
-//            } else {
-//                String responseInvalid = null;
-//                try {
-//                    JSONObject jsonObject = new JSONObject(s);
-//                    responseInvalid = jsonObject.optString(getString(R.string.message_invalid));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                if ( ! responseInvalid.equals("") ) {
-//                    Toast.makeText(LoginActivity.this, responseInvalid, Toast.LENGTH_SHORT).show();
-//                } else {
-//                    Toast.makeText(LoginActivity.this, R.string.login_done,
-//                                   Toast.LENGTH_SHORT).show();
-//                    try {
-//                        JSONObject jsonObjectUser = new JSONObject(s);
-//                        JSONObject response = jsonObjectUser.optJSONObject(Const.USER);
-//                        JSONArray jsonArrayAct = response.optJSONArray(Const.ACTIVITIES);
-//                        List<UserActivity> listUserActivity = new ArrayList<>();
-//                        for (int i = 0; i < jsonArrayAct.length(); i++) {
-//                            JSONObject joActivity = jsonArrayAct.optJSONObject(i);
-//                            UserActivity userActivity = new UserActivity(
-//                                    Integer.parseInt(joActivity.optString(Const.ID)),
-//                                    joActivity.optString(Const.CONTENT),
-//                                    joActivity.optString(Const.CREATED_AT));
-//                            listUserActivity.add(userActivity);
-//                            try {
-//                                mMySqliteHelper.addUserActivity(userActivity, Integer.parseInt(
-//                                        response.getString(Const.ID)));
-//                            } catch (SQLiteConstraintException e) {
-//                                e.printStackTrace();
-//                                mMySqliteHelper.updateUserActivity(userActivity);
-//                            }
-//                        }
-//                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-//                        User user = new User(Integer.parseInt(response.getString(Const.ID)),
-//                                             response.optString(Const.NAME),
-//                                             response.optString(Const.EMAIL),
-//                                             response.optString(Const.AVATAR),
-//                                             Boolean.parseBoolean(response.optString(Const.ADMIN)),
-//                                             response.optString(Const.AUTH_TOKEN),
-//                                             response.optString(Const.CREATED_AT),
-//                                             response.optString(Const.UPDATED_AT),
-//                                             Integer.parseInt(response.optString(Const.LEARNED_WORDS)),
-//                                             listUserActivity);
-//                        try {
-//                            mMySqliteHelper.addUser(user);
-//                        } catch (SQLiteConstraintException e) {
-//                            e.printStackTrace();
-//                            mMySqliteHelper.updateUser(user);
-//                        }
-//                        mSharedPreferences =
-//                                getSharedPreferences(Const.MY_PREFERENCE, Context.MODE_PRIVATE);
-//                        SharedPreferences.Editor editor = mSharedPreferences.edit();
-//                        editor.putBoolean(Const.REMEMBER, mCheckBoxRememberMe.isChecked());
-//                        editor.putInt(Const.ID, user.getId());
-//                        editor.apply();
-//                        startActivity(intent);
-//                        finish();
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        }
-//    }
-
 }

@@ -61,4 +61,9 @@ public interface Const {
     String LIST = "list";
     String LESSON_ANS = "lesson_ans";
     String ISLESSON = "ISLESSON";
+    String FILTER_ALL_WORDS = "all_word";
+    String FILTER_NEW_WORDS = "no_learn";
+    String FILTER_LEARNED_WORDS = "learned";
+    String PATH_LESSON = "/lessons.json";
+    int DEFAULT_REQ = 100;
 }

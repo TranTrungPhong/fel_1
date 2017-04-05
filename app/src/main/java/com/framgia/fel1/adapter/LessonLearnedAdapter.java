@@ -72,11 +72,6 @@ public class LessonLearnedAdapter
             this.mTextViewNameLessonLearned =
                     (TextView) itemView.findViewById(R.id.text_name_lesson_learned);
         }
-
-        @Override
-        public String toString() {
-            return super.toString();
-        }
     }
 
     public interface OnClickItemLessonLearned {

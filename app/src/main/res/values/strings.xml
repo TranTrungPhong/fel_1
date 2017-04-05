@@ -48,13 +48,13 @@
     <string name="category_name">Category Name</string>
     <string name="id">id</string>
     <string name="confirrn_signout">You really wanna log out?</string>
-    <string name="infor">Thông báo</string>
+    <string name="infor">Notice</string>
     <string name="thoat">OK</string>
     <string name="huy">Cancel</string>
     <string name="response_null">Response category null</string>
     <string name="response_error">Response words error</string>
     <string name="response_done">Response words done</string>
-    <string name="information_dialog">Thông báo</string>
+    <string name="information_dialog">Notice</string>
     <string name="cancel">Cancel</string>
     <string name="status">Status</string>
     <string name="misspage">Input can not be blank .</string>
@@ -98,4 +98,14 @@
     <string name="corrected">Corrected :</string>
     <string name="words">Words</string>
     <string name="info_lesson">Go to result lesson .</string>
+    <string name="elearning_system">E-Learning System</string>
+    <string name="list_category">List of category</string>
+    <string name="drawer_open">Home</string>
+    <string name="drawer_close">Category</string>
+    <string name="new_words">New</string>
+    <string name="learned">Learned</string>
+    <string name="all">All</string>
+    <string name="divider_item_word_list">:</string>
+    <string name="dialog_loading_message">Loading. Please wait…</string>
+    <string name="sign_up_now">Sig Up Now (Free)</string>
 </resources>
